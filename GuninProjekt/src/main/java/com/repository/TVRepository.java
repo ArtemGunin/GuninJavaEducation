@@ -1,6 +1,5 @@
 package com.repository;
 
-import com.model.Phone;
 import com.model.TV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +44,7 @@ public class TVRepository implements CrudRepository<TV> {
         while (iterator.hasNext()) {
             final TV tv = iterator.next();
             if (tv.getId().equals(id)) {
-                LOGGER.info("Remote TV - " + tvs);
+                LOGGER.info("Remote TV - {}", tv);
                 iterator.remove();
                 return true;
             }

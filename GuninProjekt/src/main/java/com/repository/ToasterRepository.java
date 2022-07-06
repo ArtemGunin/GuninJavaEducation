@@ -44,7 +44,7 @@ public class ToasterRepository implements CrudRepository<Toaster> {
         while (iterator.hasNext()) {
             final Toaster toaster = iterator.next();
             if (toaster.getId().equals(id)) {
-                LOGGER.info("Remote toaster - " + toaster);
+                LOGGER.info("Remote toaster - {}", toaster);
                 iterator.remove();
                 return true;
             }
