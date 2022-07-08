@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+
 public class PhoneRepository implements CrudRepository<Phone> {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneRepository.class);
 
     private final List<Phone> phones;
@@ -17,6 +19,7 @@ public class PhoneRepository implements CrudRepository<Phone> {
 
     @Override
     public void save(Phone phone) {
+
         if (phone == null) {
             final IllegalArgumentException exception = new IllegalArgumentException("Cannot save a null phone");
             LOGGER.error(exception.getMessage(), exception);
@@ -36,6 +39,7 @@ public class PhoneRepository implements CrudRepository<Phone> {
                 throw exception;
             }
         }
+
     }
 
     @Override
@@ -97,12 +101,17 @@ public class PhoneRepository implements CrudRepository<Phone> {
         return phones.get(index);
     }
 
+
     private static class PhoneCopy {
         private static void copy(final Phone from, final Phone to) {
             to.setCount(from.getCount());
             to.setPrice(from.getPrice());
             to.setTitle(from.getTitle());
         }
+    }
+
+    public Phone getPhoneByIndex(int index) {
+        return phones.get(index);
     }
 
 }

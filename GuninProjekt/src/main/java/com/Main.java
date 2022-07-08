@@ -1,14 +1,17 @@
 package com;
 
 import com.model.Toaster;
+
 import com.repository.PhoneRepository;
 import com.repository.TVRepository;
 import com.repository.ToasterRepository;
+
 import com.service.PhoneService;
 import com.service.TVService;
 import com.service.ToasterService;
 
 public class Main {
+
     private static final PhoneService PHONE_SERVICE = new PhoneService(new PhoneRepository());
     private static final ToasterService TOASTER_SERVICE = new ToasterService(new ToasterRepository());
     private static final TVService TV_SERVICE = new TVService(new TVRepository());

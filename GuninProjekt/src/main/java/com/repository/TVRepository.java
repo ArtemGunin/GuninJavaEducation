@@ -17,6 +17,7 @@ public class TVRepository implements CrudRepository<TV> {
 
     @Override
     public void save(TV tv) {
+
         if (tv == null) {
             final IllegalArgumentException exception = new IllegalArgumentException("Cannot save a null tv");
             LOGGER.error(exception.getMessage(), exception);
@@ -36,6 +37,7 @@ public class TVRepository implements CrudRepository<TV> {
                 throw exception;
             }
         }
+
     }
 
     @Override

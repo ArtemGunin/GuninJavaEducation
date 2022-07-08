@@ -17,6 +17,7 @@ public class ToasterRepository implements CrudRepository<Toaster> {
 
     @Override
     public void save(Toaster toaster) {
+
         if (toaster == null) {
             final IllegalArgumentException exception = new IllegalArgumentException("Cannot save a null toaster");
             LOGGER.error(exception.getMessage(), exception);
@@ -37,7 +38,6 @@ public class ToasterRepository implements CrudRepository<Toaster> {
             }
         }
     }
-
 
     @Override
     public void saveAll(List<Toaster> toasters) {

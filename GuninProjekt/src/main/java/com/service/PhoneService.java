@@ -14,6 +14,7 @@ public class PhoneService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
     private static final Random RANDOM = new Random();
+
     private final PhoneRepository repository;
 
     public PhoneService(PhoneRepository repository) {
@@ -24,6 +25,7 @@ public class PhoneService {
         if (count < 1) {
             throw new IllegalArgumentException("count must been bigger then 0");
         }
+
         List<Phone> phones = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             phones.add(new Phone(
@@ -35,8 +37,9 @@ public class PhoneService {
             ));
             LOGGER.info("new " + phones.get(i).toString());
         }
+
         repository.saveAll(phones);
-    }
+
 
     private PhoneManufacture getRandomManufacturer() {
         final PhoneManufacture[] values = PhoneManufacture.values();
@@ -45,7 +48,9 @@ public class PhoneService {
     }
 
     public void printAll() {
+
         for (Phone phone : repository.getAll()) {
+
             System.out.println(phone);
         }
     }

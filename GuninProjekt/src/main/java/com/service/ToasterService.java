@@ -14,6 +14,7 @@ public class ToasterService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ToasterService.class);
 
     private static final Random RANDOM = new Random();
+
     private final ToasterRepository repository;
 
     public ToasterService(ToasterRepository repository) {
@@ -24,6 +25,7 @@ public class ToasterService {
         if (count < 1) {
             throw new IllegalArgumentException("count must been bigger then 0");
         }
+
         List<Toaster> toasters = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             toasters.add(new Toaster(
@@ -36,7 +38,9 @@ public class ToasterService {
             ));
             LOGGER.info("new " + toasters.get(i).toString());
         }
+
         repository.saveAll(toasters);
+
     }
 
     private ToasterManufacture getRandomManufacturer() {
@@ -46,7 +50,9 @@ public class ToasterService {
     }
 
     public void printAll() {
+
         for (Toaster toaster : repository.getAll()) {
+
             System.out.println(toaster);
         }
     }
@@ -71,6 +77,7 @@ public class ToasterService {
             throw exception;
         }
         System.out.println("Updated toaster " + repository.findById(toaster.getId()));
+
     }
 }
 

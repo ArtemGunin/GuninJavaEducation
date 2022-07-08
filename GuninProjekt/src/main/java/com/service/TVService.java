@@ -14,6 +14,7 @@ public class TVService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TVService.class);
 
     private static final Random RANDOM = new Random();
+
     private final TVRepository repository;
 
     public TVService(TVRepository repository) {
@@ -24,6 +25,7 @@ public class TVService {
         if (count < 1) {
             throw new IllegalArgumentException("count must been bigger then 0");
         }
+
         List<TV> tvs = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             tvs.add(new TV(
@@ -36,7 +38,9 @@ public class TVService {
             ));
             LOGGER.info("new " + tvs.get(i).toString());
         }
+
         repository.saveAll(tvs);
+
     }
 
     private TVManufacture getRandomManufacturer() {
@@ -46,7 +50,9 @@ public class TVService {
     }
 
     public void printAll() {
+
         for (TV tv : repository.getAll()) {
+
             System.out.println(tv);
         }
     }
@@ -71,5 +77,6 @@ public class TVService {
             throw exception;
         }
         System.out.println("Updated TV " + repository.findById(tv.getId()));
+
     }
 }
