@@ -14,9 +14,16 @@ public class TVService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TVService.class);
 
     private static final Random RANDOM = new Random();
-    private static final TVRepository REPOSITORY = new TVRepository();
+    private final TVRepository repository;
+
+    public TVService(TVRepository repository) {
+        this.repository = repository;
+    }
 
     public void createAndSaveTVs(int count) {
+        if (count < 1) {
+            throw new IllegalArgumentException("count must been bigger then 0");
+        }
         List<TV> tvs = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             tvs.add(new TV(
@@ -29,7 +36,7 @@ public class TVService {
             ));
             LOGGER.info("new " + tvs.get(i).toString());
         }
-        REPOSITORY.saveAll(tvs);
+        repository.saveAll(tvs);
     }
 
     private TVManufacture getRandomManufacturer() {
@@ -39,24 +46,30 @@ public class TVService {
     }
 
     public void printAll() {
-        for (TV tv : REPOSITORY.getAll()) {
+        for (TV tv : repository.getAll()) {
             System.out.println(tv);
         }
     }
 
+    public List<TV> getAll() {
+        return repository.getAll();
+    }
+
     public TV useTVWithIndex(int index) {
-        return REPOSITORY.getTVByIndex(index);
+        return repository.getTVByIndex(index);
     }
 
     public void deleteTV(TV tv) {
-        REPOSITORY.delete(tv.getId());
+        repository.delete(tv.getId());
     }
 
     public void updateTV(TV tv) {
-        if (REPOSITORY.update(tv)) {
-            System.out.println("Updated TV " + REPOSITORY.findById(tv.getId()));
-        } else {
-            System.out.println("The TV is missing in the database");
+        if (!repository.update(tv)) {
+            final IllegalArgumentException exception = new IllegalArgumentException(
+                    "The TV is missing in the database");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
+        System.out.println("Updated TV " + repository.findById(tv.getId()));
     }
 }
