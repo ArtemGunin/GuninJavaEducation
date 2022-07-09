@@ -17,7 +17,25 @@ public class TVRepository implements CrudRepository<TV> {
 
     @Override
     public void save(TV tv) {
-        tvs.add(tv);
+        if (tv == null) {
+            final IllegalArgumentException exception = new IllegalArgumentException("Cannot save a null tv");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        } else {
+            checkDuplicates(tv);
+            tvs.add(tv);
+        }
+    }
+
+    private void checkDuplicates(TV tv) {
+        for (TV t : tvs) {
+            if (tv.hashCode() == t.hashCode() && tv.equals(t)) {
+                final IllegalArgumentException exception = new IllegalArgumentException("Duplicate tv: " +
+                        tv.getId());
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
+        }
     }
 
     @Override

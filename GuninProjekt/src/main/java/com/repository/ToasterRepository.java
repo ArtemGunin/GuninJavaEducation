@@ -17,8 +17,27 @@ public class ToasterRepository implements CrudRepository<Toaster> {
 
     @Override
     public void save(Toaster toaster) {
-        toasters.add(toaster);
+        if (toaster == null) {
+            final IllegalArgumentException exception = new IllegalArgumentException("Cannot save a null toaster");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        } else {
+            checkDuplicates(toaster);
+            toasters.add(toaster);
+        }
     }
+
+    private void checkDuplicates(Toaster toaster) {
+        for (Toaster t : toasters) {
+            if (toaster.hashCode() == t.hashCode() && toaster.equals(t)) {
+                final IllegalArgumentException exception = new IllegalArgumentException("Duplicate tv: " +
+                        toaster.getId());
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
+        }
+    }
+
 
     @Override
     public void saveAll(List<Toaster> toasters) {

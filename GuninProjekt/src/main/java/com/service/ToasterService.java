@@ -14,9 +14,16 @@ public class ToasterService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ToasterService.class);
 
     private static final Random RANDOM = new Random();
-    private static final ToasterRepository REPOSITORY = new ToasterRepository();
+    private final ToasterRepository repository;
+
+    public ToasterService(ToasterRepository repository) {
+        this.repository = repository;
+    }
 
     public void createAndSaveToasters(int count) {
+        if (count < 1) {
+            throw new IllegalArgumentException("count must been bigger then 0");
+        }
         List<Toaster> toasters = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             toasters.add(new Toaster(
@@ -29,7 +36,7 @@ public class ToasterService {
             ));
             LOGGER.info("new " + toasters.get(i).toString());
         }
-        REPOSITORY.saveAll(toasters);
+        repository.saveAll(toasters);
     }
 
     private ToasterManufacture getRandomManufacturer() {
@@ -39,25 +46,31 @@ public class ToasterService {
     }
 
     public void printAll() {
-        for (Toaster toaster : REPOSITORY.getAll()) {
+        for (Toaster toaster : repository.getAll()) {
             System.out.println(toaster);
         }
     }
 
+    public List<Toaster> getAll() {
+        return repository.getAll();
+    }
+
     public Toaster useToasterWithIndex(int index) {
-        return REPOSITORY.getToasterByIndex(index);
+        return repository.getToasterByIndex(index);
     }
 
     public void deleteToaster(Toaster toaster) {
-        REPOSITORY.delete(toaster.getId());
+        repository.delete(toaster.getId());
     }
 
     public void updateToaster(Toaster toaster) {
-        if (REPOSITORY.update(toaster)) {
-            System.out.println("Updated toaster " + REPOSITORY.findById(toaster.getId()));
-        } else {
-            System.out.println("The toaster is missing in the database");
+        if (!repository.update(toaster)) {
+            final IllegalArgumentException exception = new IllegalArgumentException(
+                    "The toaster is missing in the database");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
+        System.out.println("Updated toaster " + repository.findById(toaster.getId()));
     }
 }
 
