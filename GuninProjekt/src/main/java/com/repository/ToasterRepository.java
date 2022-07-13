@@ -1,5 +1,6 @@
 package com.repository;
 
+import com.model.Phone;
 import com.model.Toaster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,6 @@ public class ToasterRepository implements CrudRepository<Toaster> {
             }
         }
     }
-
 
     @Override
     public void saveAll(List<Toaster> toasters) {
@@ -90,6 +90,10 @@ public class ToasterRepository implements CrudRepository<Toaster> {
         return Optional.ofNullable(result);
     }
 
+    public Toaster getToasterByIndex(int index) {
+        return toasters.get(index);
+    }
+
     private static class ToasterCopy {
         private static void copy(final Toaster from, final Toaster to) {
             to.setCount(from.getCount());
@@ -98,8 +102,12 @@ public class ToasterRepository implements CrudRepository<Toaster> {
         }
     }
 
-    public Toaster getToasterByIndex(int index) {
-        return toasters.get(index);
+    public boolean hasToaster (String id) {
+        for (Toaster toaster : toasters) {
+            if (toaster.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
-
 }

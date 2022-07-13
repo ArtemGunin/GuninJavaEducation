@@ -165,4 +165,17 @@ class PhoneRepositoryTest {
         target.saveAll(Collections.singletonList(phone));
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getPhoneByIndex(-1));
     }
+
+    @Test
+    void hasPhone() {
+        target.save(phone);
+        Assertions.assertTrue(target.hasPhone(phone.getId()));
+    }
+
+    @Test
+    void hasPhone_Negative() {
+        Phone otherPhone = new Phone("Title-2", 200, 1000.0, "Model-2", PhoneManufacture.SAMSUNG);
+        target.save(phone);
+        Assertions.assertFalse(target.hasPhone(otherPhone.getId()));
+    }
 }

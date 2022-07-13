@@ -90,10 +90,6 @@ public class PhoneRepository implements CrudRepository<Phone> {
     }
 
     public Phone getPhoneByIndex(int index) {
-        if (index >= phones.size() || index < 0) {
-            final IndexOutOfBoundsException exception = new IndexOutOfBoundsException();
-            LOGGER.error(exception.getMessage(), exception);
-        }
         return phones.get(index);
     }
 
@@ -105,4 +101,12 @@ public class PhoneRepository implements CrudRepository<Phone> {
         }
     }
 
+    public boolean hasPhone (String id) {
+        for (Phone phone : phones) {
+            if (phone.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

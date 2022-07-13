@@ -1,5 +1,6 @@
 package com.service;
 
+import com.model.Phone;
 import com.model.TV;
 import com.model.TVManufacture;
 import com.repository.TVRepository;
@@ -37,6 +38,13 @@ public class TVService {
             LOGGER.info("new " + tvs.get(i).toString());
         }
         repository.saveAll(tvs);
+    }
+
+    public void saveTV(TV tv) {
+        if (tv.getCount() == 0) {
+            tv.setCount(-1);
+        }
+        repository.save(tv);
     }
 
     private TVManufacture getRandomManufacturer() {

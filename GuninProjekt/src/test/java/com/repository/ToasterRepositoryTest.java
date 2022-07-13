@@ -1,5 +1,7 @@
 package com.repository;
 
+import com.model.Phone;
+import com.model.PhoneManufacture;
 import com.model.Toaster;
 import com.model.ToasterManufacture;
 import org.junit.jupiter.api.Assertions;
@@ -168,5 +170,18 @@ class ToasterRepositoryTest {
     void getToasterByIndex_negativeIndex() {
         target.saveAll(Collections.singletonList(toaster));
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getToasterByIndex(-1));
+    }
+    @Test
+    void hasToaster() {
+        target.save(toaster);
+        Assertions.assertTrue(target.hasToaster(toaster.getId()));
+    }
+
+    @Test
+    void hasToaster_Negative() {
+        Toaster otherToaster = new Toaster("Title-2", 200, 1000.0,
+                "Model-2", 1400, ToasterManufacture.PHILIPS);
+        target.save(toaster);
+        Assertions.assertFalse(target.hasToaster(otherToaster.getId()));
     }
 }

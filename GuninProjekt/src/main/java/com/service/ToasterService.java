@@ -1,5 +1,6 @@
 package com.service;
 
+import com.model.Phone;
 import com.model.Toaster;
 import com.model.ToasterManufacture;
 import com.repository.ToasterRepository;
@@ -39,6 +40,13 @@ public class ToasterService {
         repository.saveAll(toasters);
     }
 
+    public void saveToaster(Toaster toaster) {
+        if (toaster.getCount() == 0) {
+            toaster.setCount(-1);
+        }
+        repository.save(toaster);
+    }
+
     private ToasterManufacture getRandomManufacturer() {
         final ToasterManufacture[] values = ToasterManufacture.values();
         final int index = RANDOM.nextInt(values.length);
@@ -73,4 +81,3 @@ public class ToasterService {
         System.out.println("Updated toaster " + repository.findById(toaster.getId()));
     }
 }
-

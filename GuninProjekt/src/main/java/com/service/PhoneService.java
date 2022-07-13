@@ -38,6 +38,13 @@ public class PhoneService {
         repository.saveAll(phones);
     }
 
+    public void savePhone(Phone phone) {
+        if (phone.getCount() == 0) {
+            phone.setCount(-1);
+        }
+        repository.save(phone);
+    }
+
     private PhoneManufacture getRandomManufacturer() {
         final PhoneManufacture[] values = PhoneManufacture.values();
         final int index = RANDOM.nextInt(values.length);

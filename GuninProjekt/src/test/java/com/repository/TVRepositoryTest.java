@@ -1,5 +1,7 @@
 package com.repository;
 
+import com.model.Phone;
+import com.model.PhoneManufacture;
 import com.model.TV;
 import com.model.TVManufacture;
 import org.junit.jupiter.api.Assertions;
@@ -170,4 +172,16 @@ class TVRepositoryTest {
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getTVByIndex(-1));
     }
 
+    @Test
+    void hasTV() {
+        target.save(tv);
+        Assertions.assertTrue(target.hasTV(tv.getId()));
+    }
+
+    @Test
+    void hasTV_Negative() {
+        TV otherTV = new TV("Title-2", 200, 1000.0, "Model-2", TVManufacture.SAMSUNG, 51);
+        target.save(tv);
+        Assertions.assertFalse(target.hasTV(otherTV.getId()));
+    }
 }
