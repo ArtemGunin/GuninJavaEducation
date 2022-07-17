@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class PhoneRepository implements CrudRepository <Phone> {
+public class PhoneRepository implements CrudRepository<Phone> {
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneRepository.class);
 
     private final List<Phone> phones;
@@ -17,7 +17,25 @@ public class PhoneRepository implements CrudRepository <Phone> {
 
     @Override
     public void save(Phone phone) {
-        phones.add(phone);
+        if (phone == null) {
+            final IllegalArgumentException exception = new IllegalArgumentException("Cannot save a null phone");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        } else {
+            checkDuplicates(phone);
+            phones.add(phone);
+        }
+    }
+
+    private void checkDuplicates(Phone phone) {
+        for (Phone p : phones) {
+            if (phone.hashCode() == p.hashCode() && phone.equals(p)) {
+                final IllegalArgumentException exception = new IllegalArgumentException("Duplicate phone: " +
+                        phone.getId());
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
+        }
     }
 
     @Override
@@ -71,6 +89,10 @@ public class PhoneRepository implements CrudRepository <Phone> {
         return Optional.ofNullable(result);
     }
 
+    public Phone getPhoneByIndex(int index) {
+        return phones.get(index);
+    }
+
     private static class PhoneCopy {
         private static void copy(final Phone from, final Phone to) {
             to.setCount(from.getCount());
@@ -79,7 +101,12 @@ public class PhoneRepository implements CrudRepository <Phone> {
         }
     }
 
-    public Phone getPhoneByIndex(int index) {
-        return phones.get(index);
+    public boolean hasPhone (String id) {
+        for (Phone phone : phones) {
+            if (phone.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

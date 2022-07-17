@@ -14,9 +14,16 @@ public class PhoneService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
     private static final Random RANDOM = new Random();
-    private static final PhoneRepository REPOSITORY = new PhoneRepository();
+    private final PhoneRepository repository;
+
+    public PhoneService(PhoneRepository repository) {
+        this.repository = repository;
+    }
 
     public void createAndSavePhones(int count) {
+        if (count < 1) {
+            throw new IllegalArgumentException("count must been bigger then 0");
+        }
         List<Phone> phones = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             phones.add(new Phone(
@@ -28,7 +35,14 @@ public class PhoneService {
             ));
             LOGGER.info("new " + phones.get(i).toString());
         }
-        REPOSITORY.saveAll(phones);
+        repository.saveAll(phones);
+    }
+
+    public void savePhone(Phone phone) {
+        if (phone.getCount() == 0) {
+            phone.setCount(-1);
+        }
+        repository.save(phone);
     }
 
     private PhoneManufacture getRandomManufacturer() {
@@ -38,24 +52,30 @@ public class PhoneService {
     }
 
     public void printAll() {
-        for (Phone phone : REPOSITORY.getAll()) {
+        for (Phone phone : repository.getAll()) {
             System.out.println(phone);
         }
     }
 
+    public List<Phone> getAll() {
+        return repository.getAll();
+    }
+
     public Phone usePhoneWithIndex(int index) {
-        return REPOSITORY.getPhoneByIndex(index);
+        return repository.getPhoneByIndex(index);
     }
 
     public void deletePhone(Phone phone) {
-        REPOSITORY.delete(phone.getId());
+        repository.delete(phone.getId());
     }
 
     public void updatePhone(Phone phone) {
-        if (REPOSITORY.update(phone)) {
-            System.out.println("Updated phone " + REPOSITORY.findById(phone.getId()));
-        } else {
-            System.out.println("The phone is missing in the database");
+        if (!repository.update(phone)) {
+            final IllegalArgumentException exception = new IllegalArgumentException(
+                    "The phone is missing in the database");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
+        System.out.println("Updated phone " + repository.findById(phone.getId()));
     }
 }

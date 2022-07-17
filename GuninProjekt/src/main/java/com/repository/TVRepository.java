@@ -1,5 +1,6 @@
 package com.repository;
 
+import com.model.Phone;
 import com.model.TV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,25 @@ public class TVRepository implements CrudRepository<TV> {
 
     @Override
     public void save(TV tv) {
-        tvs.add(tv);
+        if (tv == null) {
+            final IllegalArgumentException exception = new IllegalArgumentException("Cannot save a null tv");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        } else {
+            checkDuplicates(tv);
+            tvs.add(tv);
+        }
+    }
+
+    private void checkDuplicates(TV tv) {
+        for (TV t : tvs) {
+            if (tv.hashCode() == t.hashCode() && tv.equals(t)) {
+                final IllegalArgumentException exception = new IllegalArgumentException("Duplicate tv: " +
+                        tv.getId());
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
+        }
     }
 
     @Override
@@ -71,6 +90,10 @@ public class TVRepository implements CrudRepository<TV> {
         return Optional.ofNullable(result);
     }
 
+    public TV getTVByIndex(int index) {
+        return tvs.get(index);
+    }
+
     private static class TVCopy {
         private static void copy(final TV from, final TV to) {
             to.setCount(from.getCount());
@@ -79,7 +102,12 @@ public class TVRepository implements CrudRepository<TV> {
         }
     }
 
-    public TV getTVByIndex(int index) {
-        return tvs.get(index);
+    public boolean hasTV (String id) {
+        for (TV tv : tvs) {
+            if (tv.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
