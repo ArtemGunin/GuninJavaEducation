@@ -24,7 +24,7 @@ class PhoneRepositoryTest {
                 random.nextDouble() * 1000,
                 "Model-" + random.nextInt(10),
                 Manufacturer.SAMSUNG
-        );
+        );                
     }
 
     @Test

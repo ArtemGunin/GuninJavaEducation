@@ -29,4 +29,11 @@ public abstract class Product {
         this.price = price;
         this.type = type;
     }
+
+    protected Product(String id, String title, int count, double price) {
+        this.id = id;
+        this.title = title;
+        this.count = count;
+        this.price = price;
+    }
 }
