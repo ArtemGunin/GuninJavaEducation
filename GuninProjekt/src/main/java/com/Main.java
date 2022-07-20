@@ -31,5 +31,12 @@ public class Main {
 
         TV_SERVICE.deleteTV(TV_SERVICE.useTVWithIndex(5));
         TV_SERVICE.printAll();
+
+
+        PHONE_SERVICE.createAndSavePhones(2);
+        PHONE_SERVICE.printAll();
+        System.out.println("Add\n\n\n");
+        PHONE_SERVICE.createAndSavePhones(1);
+        PHONE_SERVICE.printAll();
     }
 }

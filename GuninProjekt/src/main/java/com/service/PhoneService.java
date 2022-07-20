@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class PhoneService {
@@ -77,5 +78,78 @@ public class PhoneService {
             throw exception;
         }
         System.out.println("Updated phone " + repository.findById(phone.getId()));
+    }
+
+    public void resetPhoneIfPresent(String id) {
+        repository.findById(id).ifPresent(originalPhone -> {
+            originalPhone.setCount(0);
+            originalPhone.setPrice(0.0);
+            originalPhone.setTitle("Custom");
+        });
+    }
+
+    public boolean phoneIsPresent(String id) {
+        return repository.findById(id).isPresent();
+    }
+
+    public Phone getPhoneOrCreate(String id) {
+        return repository.findById(id).orElse(createPhoneWithId(id));
+    }
+
+    public void savePhoneOrCreate(Phone phone) {
+        final Optional<Phone> phoneOptional = Optional.ofNullable(phone);
+        repository.save(phoneOptional.orElseGet(this::createDefaultPhone));
+    }
+
+    public Phone getPhoneWithModifiedId(String originalId, String newId) {
+        Phone copiedPhone = repository.findById(originalId).orElseThrow(()
+                -> new IllegalArgumentException("The base does not contain a phone with this id - " + originalId));
+        return new Phone(newId,
+                copiedPhone.getTitle(),
+                copiedPhone.getCount(),
+                copiedPhone.getPrice(),
+                copiedPhone.getModel(),
+                copiedPhone.getPhoneManufacturer());
+    }
+
+    public void updatePhoneOrCreateDefault(Phone phone) {
+        final Optional<Phone> phoneOptional = Optional.ofNullable(phone);
+        phoneOptional.ifPresentOrElse(
+                updatedPhone -> {
+                    if (repository.hasPhone(updatedPhone.getId())) {
+                        repository.update(updatedPhone);
+                    } else {
+                        repository.save(createDefaultPhone());
+                    }
+                },
+                ()
+                        -> repository.save(createDefaultPhone())
+        );
+    }
+
+    public Double getCoastOfPhones(String id) {
+        return repository.findById(id)
+                .map(phone -> phone.getPrice() * phone.getCount())
+                .orElseThrow(() -> new IllegalArgumentException
+                        ("The base does not contain a phone with this id - " + id));
+    }
+
+    public Boolean phonePriceMiddleBounds(String id, double lowPrice, double highPrice) {
+        return repository.findById(id).filter(phone -> phone.getPrice() >= lowPrice)
+                .filter(phone -> phone.getPrice() < highPrice)
+                .isPresent();
+    }
+
+    public Phone getPhoneWithIdOrCreatedIfPhoneMiss(String id) {
+        return repository.findById(id).or(() -> Optional.of(createPhoneWithId(id))).orElseThrow(()
+                -> new IllegalArgumentException("Can not return phone"));
+    }
+
+    public Phone createDefaultPhone() {
+        return new Phone("Custom", 0, 0.0, "Model", PhoneManufacture.SONY);
+    }
+
+    public Phone createPhoneWithId(String id) {
+        return new Phone(id, "Custom", 0, 0.0, "Model", PhoneManufacture.SONY);
     }
 }
