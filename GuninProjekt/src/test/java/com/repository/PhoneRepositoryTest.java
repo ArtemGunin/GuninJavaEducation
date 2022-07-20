@@ -1,7 +1,7 @@
 package com.repository;
 
 import com.model.Phone;
-import com.model.PhoneManufacture;
+import com.model.Manufacturer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class PhoneRepositoryTest {
                 random.nextInt(500),
                 random.nextDouble() * 1000,
                 "Model-" + random.nextInt(10),
-                PhoneManufacture.SAMSUNG
+                Manufacturer.SAMSUNG
         );
     }
 
@@ -59,7 +59,7 @@ class PhoneRepositoryTest {
 
     @Test
     void saveAll_manyPhones() {
-        final Phone otherPhone = new Phone("Title", 300, 700.0, "Model", PhoneManufacture.SONY);
+        final Phone otherPhone = new Phone("Title", 300, 700.0, "Model", Manufacturer.SONY);
         target.saveAll(List.of(phone, otherPhone));
         final List<Phone> phones = target.getAll();
         Assertions.assertEquals(2, phones.size());
@@ -96,7 +96,7 @@ class PhoneRepositoryTest {
     @Test
     void update_noPhone() {
         target.save(phone);
-        final Phone noPhone = new Phone("Title", 200, 1500, "Model", PhoneManufacture.APPLE);
+        final Phone noPhone = new Phone("Title", 200, 1500, "Model", Manufacturer.APPLE);
         final boolean result = target.update(noPhone);
 
         Assertions.assertFalse(result);
@@ -118,7 +118,7 @@ class PhoneRepositoryTest {
     @Test
     void delete_noPhone() {
         target.save(phone);
-        final Phone noPhone = new Phone("Title", 400, 1200, "Model", PhoneManufacture.SONY);
+        final Phone noPhone = new Phone("Title", 400, 1200, "Model", Manufacturer.SONY);
         final boolean result = target.delete(noPhone.getId());
         Assertions.assertFalse(result);
         final List<Phone> actualResult = target.getAll();
@@ -150,32 +150,32 @@ class PhoneRepositoryTest {
     @Test
     void getPhoneByIndex() {
         target.save(phone);
-        final Phone result = target.getPhoneByIndex(0);
-        Assertions.assertEquals(phone.getId(), result.getId());
+        final Optional<Phone> result = target.getByIndex(0);
+        Assertions.assertEquals(Optional.of(phone), result);
     }
 
     @Test
     void getPhoneByIndex_biggerIndex() {
         target.saveAll(Collections.singletonList(phone));
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getPhoneByIndex(1));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getByIndex(1));
     }
 
     @Test
     void getPhoneByIndex_negativeIndex() {
         target.saveAll(Collections.singletonList(phone));
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getPhoneByIndex(-1));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getByIndex(-1));
     }
 
     @Test
     void hasPhone() {
         target.save(phone);
-        Assertions.assertTrue(target.hasPhone(phone.getId()));
+        Assertions.assertTrue(target.hasProduct(phone.getId()));
     }
 
     @Test
     void hasPhone_Negative() {
-        Phone otherPhone = new Phone("Title-2", 200, 1000.0, "Model-2", PhoneManufacture.SAMSUNG);
+        Phone otherPhone = new Phone("Title-2", 200, 1000.0, "Model-2", Manufacturer.SAMSUNG);
         target.save(phone);
-        Assertions.assertFalse(target.hasPhone(otherPhone.getId()));
+        Assertions.assertFalse(target.hasProduct(otherPhone.getId()));
     }
 }

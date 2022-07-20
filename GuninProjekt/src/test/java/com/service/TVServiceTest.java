@@ -1,20 +1,15 @@
+
 package com.service;
 
+import com.model.Manufacturer;
 import com.model.TV;
-import com.model.TVManufacture;
-import com.model.Toaster;
-import com.model.ToasterManufacture;
 import com.repository.TVRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.argThat;
+import java.util.Optional;
 
 class TVServiceTest {
 
@@ -28,116 +23,47 @@ class TVServiceTest {
     }
 
     @Test
-    void createAndSaveTVs_negativeCount() {
+    void createProduct() {
+        Assertions.assertNotNull(target.createProduct());
+    }
+
+    @Test
+    void getProductWithModifiedId() {
+        final TV tv = target.createProductWithId("000");
+        Mockito.when(repository.findById("000")).thenReturn(Optional.of(tv));
+        TV modifiedPhone = target.getProductWithModifiedId("000", "123");
+        Assertions.assertEquals("123", modifiedPhone.getId());
+        Assertions.assertEquals(tv.getTitle(), modifiedPhone.getTitle());
+        Assertions.assertEquals(tv.getPrice(), modifiedPhone.getPrice());
+    }
+
+    @Test
+    void getProductWithModifiedId_throwing() {
+        Mockito.when(repository.findById("123")).thenReturn(Optional.empty());
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> target.createAndSaveTVs(-1));
+                () -> target.getProductWithModifiedId("123", "321"));
     }
 
     @Test
-    void createAndSaveTVs_zeroCount() {
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> target.createAndSaveTVs(0));
+    void createAndSaveDefaultProduct() {
+        TV actual = target.createDefaultProduct();
+        Assertions.assertEquals("Custom", actual.getTitle());
+        Assertions.assertEquals(0, actual.getCount());
+        Assertions.assertEquals(0.0, actual.getPrice());
+        Assertions.assertEquals("Model", actual.getModel());
+        Assertions.assertEquals(Manufacturer.SONY, actual.getManufacturer());
+        Assertions.assertEquals(0, actual.getDiagonal());
     }
 
     @Test
-    void createAndSaveTVs() {
-        target.createAndSaveTVs(2);
-        Mockito.verify(repository).saveAll(Mockito.anyList());
-    }
-
-    @Test
-    void printAll() {
-        target.printAll();
-        Mockito.verify(repository).getAll();
-    }
-
-    @Test
-    void saveTV() {
-        final TV tv = new TV("Title", 100, 1000.0,
-                "Model", TVManufacture.HISENSE,1375);
-        target.saveTV(tv);
-
-        ArgumentCaptor<TV> argument = ArgumentCaptor.forClass(TV.class);
-        Mockito.verify(repository).save(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-    }
-
-    @Test
-    void saveTV_zeroCount() {
-        final TV tv = new TV("Title", 0, 1000.0,
-                "Model", TVManufacture.SONY, 700);
-        target.saveTV(tv);
-
-        ArgumentCaptor<TV> argument = ArgumentCaptor.forClass(TV.class);
-        Mockito.verify(repository).save(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-        Assertions.assertEquals(-1, argument.getValue().getCount());
-    }
-
-    @Test
-    void countOfPrintAllCalls() {
-        target = Mockito.mock(TVService.class);
-        target.getAll();
-        target.printAll();
-        target.printAll();
-        target.printAll();
-        Mockito.verify(target, Mockito.times(3)).printAll();
-    }
-
-    @Test
-    void getAll() {
-        target.getAll();
-        Mockito.verify(repository).getAll();
-    }
-
-    @Test
-    void getAll_CallReaMethod() {
-        target.getAll();
-        Mockito.doCallRealMethod().when(repository).getAll();
-        Mockito.verify(repository).getAll();
-    }
-
-    @Test
-    void deleteTV_ArgumentMatcher() {
-        TV tv = new TV("Title-1", 300, 700.0,
-                "Model-1", TVManufacture.SAMSUNG, 900);
-        TV otherTV = new TV("Title-2", 200, 1000.0,
-                "Model-2", TVManufacture.SONY, 1100);
-        target.saveTV(tv);
-        target.saveTV(otherTV);
-        target.deleteTV(tv);
-
-        ArgumentMatcher<String> hasTVWithId =
-                matchesTVId -> matchesTVId.equals(otherTV.getId());
-        Mockito.when(repository.hasTV(argThat(hasTVWithId))).thenReturn(true);
-        Assertions.assertFalse(repository.hasTV(tv.getId()));
-        Assertions.assertTrue(repository.hasTV(otherTV.getId()));
-    }
-
-    @Test
-    void deleteTV_ArgumentCaptor() {
-        TV tv = new TV("Title-1", 300, 700.0,
-                "Model-1", TVManufacture.HISENSE, 850);
-        TV otherTV = new TV("Title-2", 200, 1000.0,
-                "Model-2", TVManufacture.SONY, 1000);
-        target.saveTV(tv);
-        target.saveTV(otherTV);
-        target.deleteTV(tv);
-
-        ArgumentCaptor<TV> tvArgumentCaptor =
-                ArgumentCaptor.forClass(TV.class);
-        Mockito.when(repository.update(tvArgumentCaptor.capture())).thenReturn(true);
-        Assertions.assertFalse(repository.hasTV(tv.getId()));
-    }
-
-    @Test
-    void updateTV_throwing() {
-        TV tv = new TV("Title", 300, 700,
-                "Model", TVManufacture.SONY, 975);
-        TV otherTV = new TV("Title-1", 200, 1000.0,
-                "Model-1", TVManufacture.SAMSUNG, 135);
-        target.saveTV(otherTV);
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> target.updateTV(tv));
+    void createAndSaveProductWithId() {
+        TV actual = target.createProductWithId("123");
+        Assertions.assertEquals("123", actual.getId());
+        Assertions.assertEquals("Custom", actual.getTitle());
+        Assertions.assertEquals(0, actual.getCount());
+        Assertions.assertEquals(0.0, actual.getPrice());
+        Assertions.assertEquals("Model", actual.getModel());
+        Assertions.assertEquals(Manufacturer.SONY, actual.getManufacturer());
+        Assertions.assertEquals(0, actual.getDiagonal());
     }
 }

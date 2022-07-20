@@ -15,28 +15,28 @@ public class Main {
 
 
     public static void main(String[] args) {
-        PHONE_SERVICE.createAndSavePhones(10);
+
+        PHONE_SERVICE.createAndSaveProducts(10);
         PHONE_SERVICE.printAll();
-        TOASTER_SERVICE.createAndSaveToasters(10);
+        TOASTER_SERVICE.createAndSaveProducts(10);
         TOASTER_SERVICE.printAll();
-        TV_SERVICE.createAndSaveTVs(10);
+        TV_SERVICE.createAndSaveProducts(10);
         TV_SERVICE.printAll();
 
-        Toaster updatedToaster = TOASTER_SERVICE.useToasterWithIndex(3);
+        Toaster updatedToaster = TOASTER_SERVICE.useProductWithIndex(3);
         updatedToaster.setCount(20);
         updatedToaster.setPrice(385);
         updatedToaster.setTitle("Title-105");
-        TOASTER_SERVICE.updateToaster(updatedToaster);
+        TOASTER_SERVICE.updateProduct(updatedToaster);
         TOASTER_SERVICE.printAll();
 
-        TV_SERVICE.deleteTV(TV_SERVICE.useTVWithIndex(5));
+        TV_SERVICE.deleteProduct(TV_SERVICE.useProductWithIndex(5));
         TV_SERVICE.printAll();
 
-
-        PHONE_SERVICE.createAndSavePhones(2);
+        PHONE_SERVICE.createAndSaveProducts(2);
         PHONE_SERVICE.printAll();
         System.out.println("Add\n\n\n");
-        PHONE_SERVICE.createAndSavePhones(1);
+        PHONE_SERVICE.createAndSaveProducts(1);
         PHONE_SERVICE.printAll();
     }
 }

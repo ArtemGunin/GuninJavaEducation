@@ -1,83 +1,47 @@
 package com.service;
 
-import com.model.Phone;
+import com.model.Manufacturer;
 import com.model.Toaster;
-import com.model.ToasterManufacture;
-import com.repository.ToasterRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.repository.CrudRepository;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+public class ToasterService extends ProductService<Toaster> {
 
-public class ToasterService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ToasterService.class);
-
-    private static final Random RANDOM = new Random();
-    private final ToasterRepository repository;
-
-    public ToasterService(ToasterRepository repository) {
-        this.repository = repository;
+    public ToasterService(CrudRepository<Toaster> repository) {
+        super(repository);
     }
 
-    public void createAndSaveToasters(int count) {
-        if (count < 1) {
-            throw new IllegalArgumentException("count must been bigger then 0");
-        }
-        List<Toaster> toasters = new LinkedList<>();
-        for (int i = 0; i < count; i++) {
-            toasters.add(new Toaster(
-                    "Title-" + RANDOM.nextInt(1000),
-                    RANDOM.nextInt(500),
-                    RANDOM.nextDouble() * 1000,
-                    "Model-" + RANDOM.nextInt(10),
-                    1000 + RANDOM.nextInt(2000),
-                    getRandomManufacturer()
-            ));
-            LOGGER.info("new " + toasters.get(i).toString());
-        }
-        repository.saveAll(toasters);
+    @Override
+    protected Toaster createProduct() {
+        return new Toaster(
+                "Title-" + RANDOM.nextInt(1000),
+                RANDOM.nextInt(500),
+                RANDOM.nextDouble() * 1000,
+                "Model-" + RANDOM.nextInt(10),
+                1000 + RANDOM.nextInt(2000),
+                getRandomManufacturer()
+        );
     }
 
-    public void saveToaster(Toaster toaster) {
-        if (toaster.getCount() == 0) {
-            toaster.setCount(-1);
-        }
-        repository.save(toaster);
+    @Override
+    protected Toaster getProductWithModifiedId(String originalId, String newId) {
+        Toaster copiedToaster = repository.findById(originalId).orElseThrow(()
+                -> new IllegalArgumentException("The base does not contain a product with this id - " + originalId));
+        return new Toaster(newId,
+                copiedToaster.getTitle(),
+                copiedToaster.getCount(),
+                copiedToaster.getPrice(),
+                copiedToaster.getModel(),
+                copiedToaster.getPower(),
+                copiedToaster.getManufacturer());
     }
 
-    private ToasterManufacture getRandomManufacturer() {
-        final ToasterManufacture[] values = ToasterManufacture.values();
-        final int index = RANDOM.nextInt(values.length);
-        return values[index];
+    @Override
+    protected Toaster createDefaultProduct() {
+        return new Toaster("Custom", 0, 0.0, "Model", 0, Manufacturer.SONY);
     }
 
-    public void printAll() {
-        for (Toaster toaster : repository.getAll()) {
-            System.out.println(toaster);
-        }
-    }
-
-    public List<Toaster> getAll() {
-        return repository.getAll();
-    }
-
-    public Toaster useToasterWithIndex(int index) {
-        return repository.getToasterByIndex(index);
-    }
-
-    public void deleteToaster(Toaster toaster) {
-        repository.delete(toaster.getId());
-    }
-
-    public void updateToaster(Toaster toaster) {
-        if (!repository.update(toaster)) {
-            final IllegalArgumentException exception = new IllegalArgumentException(
-                    "The toaster is missing in the database");
-            LOGGER.error(exception.getMessage(), exception);
-            throw exception;
-        }
-        System.out.println("Updated toaster " + repository.findById(toaster.getId()));
+    @Override
+    protected Toaster createProductWithId(String id) {
+        return new Toaster(id, "Custom", 0, 0.0, "Model", 0, Manufacturer.SONY);
     }
 }

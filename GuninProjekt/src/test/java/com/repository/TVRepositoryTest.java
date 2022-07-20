@@ -1,9 +1,7 @@
 package com.repository;
 
-import com.model.Phone;
-import com.model.PhoneManufacture;
+import com.model.Manufacturer;
 import com.model.TV;
-import com.model.TVManufacture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +23,7 @@ class TVRepositoryTest {
                 random.nextInt(500),
                 random.nextDouble() * 1000,
                 "Model-" + random.nextInt(10),
-                TVManufacture.HISENSE,
+                Manufacturer.HISENSE,
                 14 + random.nextInt(52)
         );
     }
@@ -63,7 +61,7 @@ class TVRepositoryTest {
     @Test
     void saveAll_manyTVs() {
         final TV otherTV = new TV("Title", 300, 700.0,
-                "Model", TVManufacture.HISENSE, 40);
+                "Model", Manufacturer.HISENSE, 40);
         target.saveAll(List.of(tv, otherTV));
         final List<TV> tvs = target.getAll();
         Assertions.assertEquals(2, tvs.size());
@@ -101,7 +99,7 @@ class TVRepositoryTest {
     void update_noTV() {
         target.save(tv);
         final TV noTV = new TV("Title", 200, 1500,
-                "Model", TVManufacture.HISENSE, 32);
+                "Model", Manufacturer.HISENSE, 32);
         final boolean result = target.update(noTV);
 
         Assertions.assertFalse(result);
@@ -124,7 +122,7 @@ class TVRepositoryTest {
     void delete_noTV() {
         target.save(tv);
         final TV noTV = new TV("Title", 200, 1500,
-                "Model", TVManufacture.HISENSE, 32);
+                "Model", Manufacturer.HISENSE, 32);
         final boolean result = target.delete(noTV.getId());
         Assertions.assertFalse(result);
         final List<TV> actualResult = target.getAll();
@@ -156,32 +154,32 @@ class TVRepositoryTest {
     @Test
     void getTVByIndex() {
         target.save(tv);
-        final TV result = target.getTVByIndex(0);
-        Assertions.assertEquals(tv.getId(), result.getId());
+        final Optional<TV> result = target.getByIndex(0);
+        Assertions.assertEquals(Optional.ofNullable(tv), result);
     }
 
     @Test
     void getTVByIndex_biggerIndex() {
         target.saveAll(Collections.singletonList(tv));
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getTVByIndex(1));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getByIndex(1));
     }
 
     @Test
     void getPhoneByIndex_negativeIndex() {
         target.saveAll(Collections.singletonList(tv));
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getTVByIndex(-1));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getByIndex(-1));
     }
 
     @Test
     void hasTV() {
         target.save(tv);
-        Assertions.assertTrue(target.hasTV(tv.getId()));
+        Assertions.assertTrue(target.hasProduct(tv.getId()));
     }
 
     @Test
     void hasTV_Negative() {
-        TV otherTV = new TV("Title-2", 200, 1000.0, "Model-2", TVManufacture.SAMSUNG, 51);
+        TV otherTV = new TV("Title-2", 200, 1000.0, "Model-2", Manufacturer.SAMSUNG, 51);
         target.save(tv);
-        Assertions.assertFalse(target.hasTV(otherTV.getId()));
+        Assertions.assertFalse(target.hasProduct(otherTV.getId()));
     }
 }
