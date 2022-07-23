@@ -4,6 +4,7 @@ import com.model.ProductComparator;
 import com.model.ProductVersioningLinkedList;
 import com.model.product.Manufacturer;
 import com.model.product.Phone;
+
 import com.model.product.Toaster;
 import com.repository.PhoneRepository;
 import com.repository.TVRepository;
@@ -46,7 +47,7 @@ public class Main {
 
         PHONE_SERVICE.createAndSaveProducts(2);
         PHONE_SERVICE.printAll();
-        System.out.println("Add\n\n\n");
+        System.out.println("\n\nAdd\n");
         PHONE_SERVICE.createAndSaveProducts(1);
         PHONE_SERVICE.printAll();
 
