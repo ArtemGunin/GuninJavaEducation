@@ -1,6 +1,6 @@
 package com.repository;
 
-import com.model.Toaster;
+import com.model.product.Toaster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

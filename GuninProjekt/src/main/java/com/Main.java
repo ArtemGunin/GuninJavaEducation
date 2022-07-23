@@ -1,6 +1,6 @@
 package com;
 
-import com.model.Toaster;
+import com.model.product.Toaster;
 import com.repository.PhoneRepository;
 import com.repository.TVRepository;
 import com.repository.ToasterRepository;
@@ -12,7 +12,6 @@ public class Main {
     private static final PhoneService PHONE_SERVICE = new PhoneService(new PhoneRepository());
     private static final ToasterService TOASTER_SERVICE = new ToasterService(new ToasterRepository());
     private static final TVService TV_SERVICE = new TVService(new TVRepository());
-
 
     public static void main(String[] args) {
 
@@ -35,7 +34,7 @@ public class Main {
 
         PHONE_SERVICE.createAndSaveProducts(2);
         PHONE_SERVICE.printAll();
-        System.out.println("Add\n\n\n");
+        System.out.println("\n\nAdd\n");
         PHONE_SERVICE.createAndSaveProducts(1);
         PHONE_SERVICE.printAll();
     }

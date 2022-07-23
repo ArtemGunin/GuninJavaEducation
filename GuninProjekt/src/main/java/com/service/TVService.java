@@ -1,7 +1,7 @@
 package com.service;
 
-import com.model.Manufacturer;
-import com.model.TV;
+import com.model.product.Manufacturer;
+import com.model.product.TV;
 import com.repository.CrudRepository;
 
 public class TVService extends ProductService<TV> {

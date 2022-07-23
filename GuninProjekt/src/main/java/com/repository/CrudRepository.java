@@ -1,6 +1,6 @@
 package com.repository;
 
-import com.model.Product;
+import com.model.product.Product;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface CrudRepository<T extends Product> {
     void save(T t);
 
-    void saveAll(List<T> phones);
+    void saveAll(List<T> products);
 
     boolean update(T t);
 
@@ -20,5 +20,5 @@ public interface CrudRepository<T extends Product> {
 
     Optional<T> getByIndex(int index);
 
-    boolean hasProduct (String id);
+    boolean hasProduct(String id);
 }

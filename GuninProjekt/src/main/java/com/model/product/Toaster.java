@@ -1,4 +1,4 @@
-package com.model;
+package com.model.product;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ public class Toaster extends Product {
     private final Manufacturer manufacturer;
 
     public Toaster(String title, int count, double price, String model,
-            int power, Manufacturer manufacturer) {
+                   int power, Manufacturer manufacturer) {
         super(title, count, price, ProductType.TOASTER);
         this.model = model;
         this.power = power;
@@ -19,7 +19,7 @@ public class Toaster extends Product {
     }
 
     public Toaster(String id, String title, int count, double price,
-                 String model, int power, Manufacturer manufacturer) {
+                   String model, int power, Manufacturer manufacturer) {
         super(id, title, count, price, ProductType.TOASTER);
         this.model = model;
         this.power = power;

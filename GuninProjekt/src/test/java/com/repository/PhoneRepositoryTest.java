@@ -1,7 +1,7 @@
 package com.repository;
 
-import com.model.Phone;
-import com.model.Manufacturer;
+import com.model.product.Manufacturer;
+import com.model.product.Phone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class PhoneRepositoryTest {
                 random.nextDouble() * 1000,
                 "Model-" + random.nextInt(10),
                 Manufacturer.SAMSUNG
-        );                
+        );
     }
 
     @Test

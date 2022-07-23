@@ -1,7 +1,7 @@
 package com.repository;
 
-import com.model.Manufacturer;
-import com.model.Toaster;
+import com.model.product.Manufacturer;
+import com.model.product.Toaster;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -169,6 +169,7 @@ class ToasterRepositoryTest {
         target.saveAll(Collections.singletonList(toaster));
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getByIndex(-1));
     }
+
     @Test
     void hasToaster() {
         target.save(toaster);
