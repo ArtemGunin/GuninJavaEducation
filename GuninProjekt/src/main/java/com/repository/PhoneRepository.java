@@ -89,8 +89,9 @@ public class PhoneRepository implements CrudRepository<Phone> {
         return Optional.ofNullable(result);
     }
 
-    public Phone getPhoneByIndex(int index) {
-        return phones.get(index);
+    @Override
+    public Optional<Phone> getByIndex(int index) {
+        return Optional.ofNullable(phones.get(index));
     }
 
     private static class PhoneCopy {
@@ -101,7 +102,8 @@ public class PhoneRepository implements CrudRepository<Phone> {
         }
     }
 
-    public boolean hasPhone (String id) {
+    @Override
+    public boolean hasProduct(String id) {
         for (Phone phone : phones) {
             if (phone.getId().equals(id)) {
                 return true;

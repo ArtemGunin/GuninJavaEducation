@@ -1,9 +1,7 @@
 package com.repository;
 
-import com.model.Phone;
-import com.model.PhoneManufacture;
+import com.model.Manufacturer;
 import com.model.Toaster;
-import com.model.ToasterManufacture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +24,7 @@ class ToasterRepositoryTest {
                 random.nextDouble() * 1000,
                 "Model-" + random.nextInt(10),
                 1000 + random.nextInt(2000),
-                ToasterManufacture.PHILIPS
+                Manufacturer.PHILIPS
         );
     }
 
@@ -63,7 +61,7 @@ class ToasterRepositoryTest {
     @Test
     void saveAll_manyToasters() {
         final Toaster otherToaster = new Toaster("Title", 300, 700.0,
-                "Model", 2000, ToasterManufacture.PHILIPS);
+                "Model", 2000, Manufacturer.PHILIPS);
         target.saveAll(List.of(toaster, otherToaster));
         final List<Toaster> toasters = target.getAll();
         Assertions.assertEquals(2, toasters.size());
@@ -101,7 +99,7 @@ class ToasterRepositoryTest {
     void update_noToaster() {
         target.save(toaster);
         final Toaster noToaster = new Toaster("Title", 200, 1500,
-                "Model", 2000, ToasterManufacture.PHILIPS);
+                "Model", 2000, Manufacturer.PHILIPS);
         final boolean result = target.update(noToaster);
 
         Assertions.assertFalse(result);
@@ -124,7 +122,7 @@ class ToasterRepositoryTest {
     void delete_noToaster() {
         target.save(toaster);
         final Toaster noToaster = new Toaster("Title", 400, 1200,
-                "Model", 2000, ToasterManufacture.PHILIPS);
+                "Model", 2000, Manufacturer.PHILIPS);
         final boolean result = target.delete(noToaster.getId());
         Assertions.assertFalse(result);
         final List<Toaster> actualResult = target.getAll();
@@ -156,32 +154,32 @@ class ToasterRepositoryTest {
     @Test
     void getToasterByIndex() {
         target.save(toaster);
-        final Toaster result = target.getToasterByIndex(0);
-        Assertions.assertEquals(toaster.getId(), result.getId());
+        final Optional<Toaster> result = target.getByIndex(0);
+        Assertions.assertEquals(Optional.of(toaster), result);
     }
 
     @Test
     void getToasterByIndex_biggerIndex() {
         target.saveAll(Collections.singletonList(toaster));
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getToasterByIndex(1));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getByIndex(1));
     }
 
     @Test
     void getToasterByIndex_negativeIndex() {
         target.saveAll(Collections.singletonList(toaster));
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getToasterByIndex(-1));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> target.getByIndex(-1));
     }
     @Test
     void hasToaster() {
         target.save(toaster);
-        Assertions.assertTrue(target.hasToaster(toaster.getId()));
+        Assertions.assertTrue(target.hasProduct(toaster.getId()));
     }
 
     @Test
     void hasToaster_Negative() {
         Toaster otherToaster = new Toaster("Title-2", 200, 1000.0,
-                "Model-2", 1400, ToasterManufacture.PHILIPS);
+                "Model-2", 1400, Manufacturer.PHILIPS);
         target.save(toaster);
-        Assertions.assertFalse(target.hasToaster(otherToaster.getId()));
+        Assertions.assertFalse(target.hasProduct(otherToaster.getId()));
     }
 }

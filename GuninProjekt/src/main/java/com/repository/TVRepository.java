@@ -1,6 +1,5 @@
 package com.repository;
 
-import com.model.Phone;
 import com.model.TV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,8 +89,9 @@ public class TVRepository implements CrudRepository<TV> {
         return Optional.ofNullable(result);
     }
 
-    public TV getTVByIndex(int index) {
-        return tvs.get(index);
+    @Override
+    public Optional<TV> getByIndex(int index) {
+        return Optional.ofNullable(tvs.get(index));
     }
 
     private static class TVCopy {
@@ -102,7 +102,8 @@ public class TVRepository implements CrudRepository<TV> {
         }
     }
 
-    public boolean hasTV (String id) {
+    @Override
+    public boolean hasProduct(String id) {
         for (TV tv : tvs) {
             if (tv.getId().equals(id)) {
                 return true;
