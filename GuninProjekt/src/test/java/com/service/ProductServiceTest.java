@@ -1,7 +1,7 @@
 package com.service;
 
-import com.model.Manufacturer;
-import com.model.TV;
+import com.model.product.Manufacturer;
+import com.model.product.TV;
 import com.repository.TVRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -265,18 +265,18 @@ class ProductServiceTest {
         Assertions.assertEquals(tv.getPrice(), originalTV.getPrice());
     }
 
-        @Test
-        void updatePhoneOrCreateDefault_IfCreateDefault() {
-            Mockito.when(repository.hasProduct("123")).thenReturn(false);
-            target.updateProductOrCreateDefault(target.createDefaultProduct());
-            Mockito.verify(repository).save(Mockito.any());
-        }
+    @Test
+    void updatePhoneOrCreateDefault_IfCreateDefault() {
+        Mockito.when(repository.hasProduct("123")).thenReturn(false);
+        target.updateProductOrCreateDefault(target.createDefaultProduct());
+        Mockito.verify(repository).save(Mockito.any());
+    }
 
-        @Test
-        void updatePhoneOrCreateDefault_CreateDefault() {
-            target.updateProductOrCreateDefault(null);
-            Mockito.verify(repository).save(Mockito.any());
-        }
+    @Test
+    void updatePhoneOrCreateDefault_CreateDefault() {
+        target.updateProductOrCreateDefault(null);
+        Mockito.verify(repository).save(Mockito.any());
+    }
 
     @Test
     void getCoastOfProducts() {
@@ -289,7 +289,7 @@ class ProductServiceTest {
     @Test
     void getCoastOfProducts_throwing() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () ->  target.getCoastOfProducts("123"));
+                () -> target.getCoastOfProducts("123"));
     }
 
     @Test
@@ -321,6 +321,7 @@ class ProductServiceTest {
         Assertions.assertNotEquals(tv, target.getProductWithIdOrCreatedIfProductMiss("123"));
         Assertions.assertEquals("123", target.getProductWithIdOrCreatedIfProductMiss("123").getId());
     }
+
     @Test
     void getProductWithIdOrCreatedIfProductMiss_Trowing() {
         Mockito.when(repository.findById("123")).thenReturn(null);

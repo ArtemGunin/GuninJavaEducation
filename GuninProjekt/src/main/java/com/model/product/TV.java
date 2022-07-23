@@ -1,4 +1,4 @@
-package com.model;
+package com.model.product;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public class TV extends Product {
     }
 
     public TV(String id, String title, int count, double price,
-                 String model, Manufacturer manufacturer, int diagonal) {
+              String model, Manufacturer manufacturer, int diagonal) {
         super(id, title, count, price, ProductType.TV);
         this.model = model;
         this.manufacturer = manufacturer;

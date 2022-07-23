@@ -1,6 +1,6 @@
 package com.repository;
 
-import com.model.Phone;
+import com.model.product.Phone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package com.model;
+package com.model.product;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,13 +21,6 @@ public class Phone extends Product {
         super(id, title, count, price, ProductType.PHONE);
         this.model = model;
         this.manufacturer = manufacturer;
-    }
-
-    public Phone(String id, String title, int count, double price,
-                 String model, PhoneManufacture phoneManufacturer) {
-        super(id, title, count, price);
-        this.model = model;
-        this.phoneManufacturer = phoneManufacturer;
     }
 
     @Override

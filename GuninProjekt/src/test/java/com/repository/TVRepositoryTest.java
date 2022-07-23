@@ -1,7 +1,7 @@
 package com.repository;
 
-import com.model.Manufacturer;
-import com.model.TV;
+import com.model.product.Manufacturer;
+import com.model.product.TV;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

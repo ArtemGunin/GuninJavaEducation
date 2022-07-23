@@ -1,6 +1,6 @@
 package com.service;
 
-import com.model.TV;
+import com.model.product.TV;
 import com.repository.TVRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package com.repository;
 
-import com.model.TV;
+import com.model.product.TV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

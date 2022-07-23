@@ -1,7 +1,7 @@
 package com.service;
 
-import com.model.Manufacturer;
-import com.model.Phone;
+import com.model.product.Manufacturer;
+import com.model.product.Phone;
 import com.repository.CrudRepository;
 
 public class PhoneService extends ProductService<Phone> {
@@ -43,5 +43,4 @@ public class PhoneService extends ProductService<Phone> {
     public Phone createProductWithId(String id) {
         return new Phone(id, "Custom", 0, 0.0, "Model", Manufacturer.SONY);
     }
-
 }

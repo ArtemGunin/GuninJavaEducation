@@ -1,6 +1,6 @@
 package com.service;
 
-import com.model.Product;
+import com.model.product.Product;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;

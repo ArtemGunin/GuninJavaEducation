@@ -1,7 +1,7 @@
 package com.service;
 
-import com.model.Manufacturer;
-import com.model.Toaster;
+import com.model.product.Manufacturer;
+import com.model.product.Toaster;
 import com.repository.CrudRepository;
 
 public class ToasterService extends ProductService<Toaster> {
