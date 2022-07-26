@@ -11,8 +11,17 @@ public class PhoneRepository implements CrudRepository<Phone> {
 
     private final List<Phone> phones;
 
-    public PhoneRepository() {
+    private static PhoneRepository instance;
+
+    private PhoneRepository() {
         phones = new LinkedList<>();
+    }
+
+    public static PhoneRepository getInstance() {
+        if (instance == null) {
+            instance = new PhoneRepository();
+        }
+        return instance;
     }
 
     @Override

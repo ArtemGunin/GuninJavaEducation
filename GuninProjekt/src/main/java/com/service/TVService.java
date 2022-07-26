@@ -3,11 +3,28 @@ package com.service;
 import com.model.product.Manufacturer;
 import com.model.product.TV;
 import com.repository.CrudRepository;
+import com.repository.TVRepository;
 
 public class TVService extends ProductService<TV> {
 
-    public TVService(CrudRepository<TV> repository) {
+    private static TVService instance;
+
+    private TVService(CrudRepository<TV> repository) {
         super(repository);
+    }
+
+    public static TVService getInstance() {
+        if (instance == null) {
+            instance = new TVService(TVRepository.getInstance());
+        }
+        return instance;
+    }
+
+    public static TVService getInstance(final TVRepository repository) {
+        if (instance == null) {
+            instance = new TVService(repository);
+        }
+        return instance;
     }
 
     @Override

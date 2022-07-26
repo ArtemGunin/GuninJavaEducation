@@ -18,7 +18,7 @@ class ToasterServiceTest {
     @BeforeEach
     void setUp() {
         repository = Mockito.mock(ToasterRepository.class);
-        target = new ToasterService(repository);
+        target = ToasterService.getInstance(repository);
     }
 
     @Test

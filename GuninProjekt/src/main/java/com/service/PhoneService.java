@@ -3,11 +3,28 @@ package com.service;
 import com.model.product.Manufacturer;
 import com.model.product.Phone;
 import com.repository.CrudRepository;
+import com.repository.PhoneRepository;
 
 public class PhoneService extends ProductService<Phone> {
 
-    public PhoneService(CrudRepository<Phone> repository) {
+    private static PhoneService instance;
+
+    private PhoneService(CrudRepository<Phone> repository) {
         super(repository);
+    }
+
+    public static PhoneService getInstance() {
+        if (instance == null) {
+            instance = new PhoneService(PhoneRepository.getInstance());
+        }
+        return instance;
+    }
+
+    public static PhoneService getInstance(final PhoneRepository repository) {
+        if (instance == null) {
+            instance = new PhoneService(repository);
+        }
+        return instance;
     }
 
     @Override
