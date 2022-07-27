@@ -2,6 +2,7 @@ package com.repository;
 
 import com.model.product.Manufacturer;
 import com.model.product.Phone;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class PhoneRepositoryTest {
     @BeforeEach
     void setUp() {
         final Random random = new Random();
-        target = new PhoneRepository();
+        target = PhoneRepository.getInstance();
         phone = new Phone(
                 "Title-" + random.nextInt(1000),
                 random.nextInt(500),
@@ -25,6 +26,11 @@ class PhoneRepositoryTest {
                 "Model-" + random.nextInt(10),
                 Manufacturer.SAMSUNG
         );
+    }
+
+    @AfterEach
+    void tearDown() {
+        target = PhoneRepository.getInstance();
     }
 
     @Test

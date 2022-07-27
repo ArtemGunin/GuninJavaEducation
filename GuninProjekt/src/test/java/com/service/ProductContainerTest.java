@@ -10,24 +10,11 @@ import org.mockito.Mockito;
 class ProductContainerTest {
 
     private ProductService<TV> target;
-    private TVRepository repository;
 
     @BeforeEach
     void setUp() {
-        repository = Mockito.mock(TVRepository.class);
-        target = new TVService(repository) {
-            @Override
-            protected TV createProduct() {
-                return new TV(
-                        "Title-" + RANDOM.nextInt(1000),
-                        RANDOM.nextInt(500),
-                        RANDOM.nextDouble() * 1000,
-                        "Model-" + RANDOM.nextInt(10),
-                        getRandomManufacturer(),
-                        14 + RANDOM.nextInt(52)
-                );
-            }
-        };
+        TVRepository repository = Mockito.mock(TVRepository.class);
+        target = TVService.getInstance(repository);
     }
 
     @Test

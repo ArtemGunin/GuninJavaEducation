@@ -11,8 +11,17 @@ public class ToasterRepository implements CrudRepository<Toaster> {
 
     private final List<Toaster> toasters;
 
-    public ToasterRepository() {
+    private static ToasterRepository instance;
+
+    private ToasterRepository() {
         toasters = new LinkedList<>();
+    }
+
+    public static ToasterRepository getInstance() {
+        if (instance == null) {
+            instance = new ToasterRepository();
+        }
+        return instance;
     }
 
     @Override

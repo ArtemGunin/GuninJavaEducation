@@ -11,8 +11,17 @@ public class TVRepository implements CrudRepository<TV> {
 
     private final List<TV> tvs;
 
-    public TVRepository() {
+    private static TVRepository instance;
+
+    private TVRepository() {
         tvs = new LinkedList<>();
+    }
+
+    public static TVRepository getInstance() {
+        if (instance == null) {
+            instance = new TVRepository();
+        }
+        return instance;
     }
 
     @Override

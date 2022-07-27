@@ -17,7 +17,7 @@ class TVRepositoryTest {
     @BeforeEach
     void setUp() {
         final Random random = new Random();
-        target = new TVRepository();
+        target = TVRepository.getInstance();
         tv = new TV(
                 "Title-" + random.nextInt(1000),
                 random.nextInt(500),
