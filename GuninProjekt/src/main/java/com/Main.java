@@ -1,15 +1,12 @@
 package com;
 
-import com.model.command.ConsoleMenu;
-import com.verification.BinaryTreeDisplayed;
+import com.verification.StreamOperations;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        BinaryTreeDisplayed.displayed();
-
-        ConsoleMenu.menu();
-
+        StreamOperations streamOperations = new StreamOperations();
+        streamOperations.operations();
     }
 }
