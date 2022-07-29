@@ -63,10 +63,10 @@ public class SimpleBinaryTree<E extends Product> {
     }
 
     private void traverseNodes(StringBuilder stringBuilder,
-                              String padding,
-                              String pointer,
-                              Node<E> node,
-                              boolean hasRightSibling) {
+                               String padding,
+                               String pointer,
+                               Node<E> node,
+                               boolean hasRightSibling) {
 
         if (node != null) {
             stringBuilder.append("\n");

@@ -65,7 +65,7 @@ public class StreamOperations {
         productContainer.put("model", "Model - 563");
         productContainer.put("manufacturer", Manufacturer.SAMSUNG);
         Product product = PHONE_SERVICE.createProductFromMap(productContainer);
-        System.out.println(product);
+        System.out.println("Created product: \n" + product);
         System.out.println("***".repeat(10));
     }
 }
