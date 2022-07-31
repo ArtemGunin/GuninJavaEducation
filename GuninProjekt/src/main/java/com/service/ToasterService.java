@@ -3,11 +3,28 @@ package com.service;
 import com.model.product.Manufacturer;
 import com.model.product.Toaster;
 import com.repository.CrudRepository;
+import com.repository.ToasterRepository;
 
 public class ToasterService extends ProductService<Toaster> {
 
-    public ToasterService(CrudRepository<Toaster> repository) {
+    private static ToasterService instance;
+
+    private ToasterService(CrudRepository<Toaster> repository) {
         super(repository);
+    }
+
+    public static ToasterService getInstance() {
+        if (instance == null) {
+            instance = new ToasterService(ToasterRepository.getInstance());
+        }
+        return instance;
+    }
+
+    public static ToasterService getInstance(final ToasterRepository repository) {
+        if (instance == null) {
+            instance = new ToasterService(repository);
+        }
+        return instance;
     }
 
     @Override

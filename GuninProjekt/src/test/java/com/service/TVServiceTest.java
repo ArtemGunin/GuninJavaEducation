@@ -18,7 +18,7 @@ class TVServiceTest {
     @BeforeEach
     void setUp() {
         repository = Mockito.mock(TVRepository.class);
-        target = new TVService(repository);
+        target = TVService.getInstance(repository);
     }
 
     @Test
