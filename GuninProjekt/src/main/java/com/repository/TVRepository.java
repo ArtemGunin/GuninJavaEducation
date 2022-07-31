@@ -31,19 +31,7 @@ public class TVRepository implements CrudRepository<TV> {
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         } else {
-            checkDuplicates(tv);
             tvs.add(tv);
-        }
-    }
-
-    private void checkDuplicates(TV tv) {
-        for (TV t : tvs) {
-            if (tv.hashCode() == t.hashCode() && tv.equals(t)) {
-                final IllegalArgumentException exception = new IllegalArgumentException("Duplicate tv: " +
-                        tv.getId());
-                LOGGER.error(exception.getMessage(), exception);
-                throw exception;
-            }
         }
     }
 

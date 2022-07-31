@@ -3,12 +3,15 @@ package com.model.product;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class Toaster extends Product {
     private final String model;
     private final int power;
     private final Manufacturer manufacturer;
+    private List<String> details;
 
     public Toaster(String title, int count, double price, String model,
                    int power, Manufacturer manufacturer) {
@@ -26,6 +29,15 @@ public class Toaster extends Product {
         this.manufacturer = manufacturer;
     }
 
+    public Toaster(String title, int count, double price, String model,
+                   int power, Manufacturer manufacturer, List<String> details) {
+        super(title, count, price, ProductType.TOASTER);
+        this.model = model;
+        this.power = power;
+        this.manufacturer = manufacturer;
+        this.details = details;
+    }
+
     @Override
     public String toString() {
         return "Toaster{" +
@@ -35,7 +47,7 @@ public class Toaster extends Product {
                 ", id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", count=" + count +
-                ", price=" + price +
+                ", price=" + String.format("%.2f", price) +
                 '}';
     }
 }

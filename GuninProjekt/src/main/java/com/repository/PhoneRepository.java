@@ -31,19 +31,7 @@ public class PhoneRepository implements CrudRepository<Phone> {
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         } else {
-            checkDuplicates(phone);
             phones.add(phone);
-        }
-    }
-
-    private void checkDuplicates(Phone phone) {
-        for (Phone p : phones) {
-            if (phone.hashCode() == p.hashCode() && phone.equals(p)) {
-                final IllegalArgumentException exception = new IllegalArgumentException("Duplicate phone: " +
-                        phone.getId());
-                LOGGER.error(exception.getMessage(), exception);
-                throw exception;
-            }
         }
     }
 
