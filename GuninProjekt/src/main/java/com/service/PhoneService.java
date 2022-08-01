@@ -1,9 +1,15 @@
 package com.service;
 
 import com.model.product.Manufacturer;
+import com.model.product.OperatingSystem;
 import com.model.product.Phone;
 import com.repository.CrudRepository;
 import com.repository.PhoneRepository;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 public class PhoneService extends ProductService<Phone> {
 
@@ -49,6 +55,37 @@ public class PhoneService extends ProductService<Phone> {
                 copiedPhone.getModel(),
                 copiedPhone.getManufacturer()
         );
+    }
+
+    @Override
+    public Phone createProductFromMap(Map<String, Object> container) {
+        Function<Map<String, Object>, Phone> createPhone = fields -> new Phone(
+                fields.getOrDefault("title", "Default").toString(),
+                ((Integer) fields.getOrDefault("count", 0)),
+                ((Double) fields.getOrDefault("price", 0.0)),
+                fields.getOrDefault("currency", "").toString(),
+                fields.getOrDefault("model", "Model").toString(),
+                ((Manufacturer) fields.getOrDefault("manufacturer", Manufacturer.APPLE)),
+                (LocalDateTime) fields.getOrDefault("created", LocalDateTime.now()),
+                (OperatingSystem) fields.getOrDefault("operatingSystem", new OperatingSystem()));
+        return createPhone.apply(container);
+    }
+
+    @Override
+    protected Map<String, Object> convertStringsToObjectParameters(Map<String, String> parameters) {
+        Map<String, Object> phoneContainer = new HashMap<>();
+        OperatingSystem operatingSystem = new OperatingSystem();
+        operatingSystem.setDesignation(parameters.get("designation"));
+        operatingSystem.setVersion(Integer.parseInt(parameters.get("version")));
+        phoneContainer.put("title", parameters.get("title"));
+        phoneContainer.put("count", Integer.parseInt(parameters.get("count")));
+        phoneContainer.put("price", Double.parseDouble(parameters.get("price")));
+        phoneContainer.put("currency", parameters.get("currency"));
+        phoneContainer.put("model", parameters.get("model"));
+        phoneContainer.put("manufacturer", Manufacturer.valueOf(parameters.get("manufacturer")));
+        phoneContainer.put("created", LocalDateTime.parse(parameters.get("created")));
+        phoneContainer.put("operatingSystem", operatingSystem);
+        return phoneContainer;
     }
 
     @Override

@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Title",
+    "count": "35",
+    "price": "3500",
+    "currency": "$",
+    "model": "Model",
+    "manufacturer": "SONY",
+    "created": "2022-07-28T11:36:43Z",
+    "operating-system": {
+      "designation": "Android",
+      "version": 9
+    },
+    "diagonal": 32
+  }
+]

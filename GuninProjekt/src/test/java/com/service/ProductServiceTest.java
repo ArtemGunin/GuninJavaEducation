@@ -11,6 +11,7 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -59,6 +60,16 @@ class ProductServiceTest {
                         copiedTV.getManufacturer(),
                         copiedTV.getDiagonal()
                 );
+            }
+
+            @Override
+            protected TV createProductFromMap(Map<String, Object> Container) {
+                return null;
+            }
+
+            @Override
+            protected Map<String, Object> convertStringsToObjectParameters(Map<String, String> parameters) {
+                return null;
             }
         };
     }

@@ -1,12 +1,13 @@
 package com;
 
-import com.verification.StreamOperations;
+import com.model.command.ConsoleMenu;
+
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        StreamOperations streamOperations = new StreamOperations();
-        streamOperations.operations();
+        ConsoleMenu.menu();
     }
 }

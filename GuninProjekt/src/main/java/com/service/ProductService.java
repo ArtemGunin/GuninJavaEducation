@@ -1,13 +1,20 @@
 package com.service;
 
-import com.model.product.*;
+import com.model.product.Manufacturer;
+import com.model.product.Product;
+import com.model.product.ProductType;
 import com.repository.CrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public abstract class ProductService<T extends Product> {
@@ -42,6 +49,9 @@ public abstract class ProductService<T extends Product> {
 
     protected abstract T getProductWithModifiedId(String originalId, String newId);
 
+    protected abstract T createProductFromMap(Map<String, Object> Container);
+
+    protected abstract Map<String, Object> convertStringsToObjectParameters(Map<String, String> parameters);
 
     public void saveProduct(T t) {
         if (t.getCount() == 0) {
@@ -145,7 +155,7 @@ public abstract class ProductService<T extends Product> {
                 .forEach(product -> System.out.println(product.getTitle()));
     }
 
-    public int SumCounts() {
+    public int sumCounts() {
         return repository.getAll().stream()
                 .reduce(0, (countSum, product) -> countSum + product.getCount(), Integer::sum);
     }
@@ -175,30 +185,72 @@ public abstract class ProductService<T extends Product> {
                 .allMatch(CHECK_IS_PRESENT_PRISE);
     }
 
-    public Product createProductFromMap(Map<String, Object> productContainer) {
-        Function<Map<String, Object>, Product> createProduct = fields ->
-                switch ((ProductType) fields.get("productType")) {
-                    case PHONE -> new Phone(
-                            fields.getOrDefault("title", "Default").toString(),
-                            ((Integer) fields.getOrDefault("count", 0)),
-                            ((Double) fields.getOrDefault("price", 0.0)),
-                            fields.getOrDefault("model", "Model").toString(),
-                            ((Manufacturer) fields.getOrDefault("manufacturer", Manufacturer.APPLE)));
-                    case TOASTER -> new Toaster(
-                            fields.getOrDefault("title", "Default").toString(),
-                            ((Integer) fields.getOrDefault("count", 0)),
-                            ((Double) fields.getOrDefault("price", 0.0)),
-                            fields.getOrDefault("model", "Model").toString(),
-                            ((Integer) fields.getOrDefault("power", 0)),
-                            ((Manufacturer) fields.getOrDefault("manufacturer", Manufacturer.APPLE)));
-                    case TV -> new TV(
-                            fields.getOrDefault("title", "Default").toString(),
-                            ((Integer) fields.getOrDefault("count", 0)),
-                            ((Double) fields.getOrDefault("price", 0.0)),
-                            fields.getOrDefault("model", "Model").toString(),
-                            ((Manufacturer) fields.getOrDefault("manufacturer", Manufacturer.APPLE)),
-                            ((Integer) fields.getOrDefault("power", 0)));
-                };
-        return createProduct.apply(productContainer);
+    public T createProductFromFile(String file) {
+        return createProductFromMap(
+                convertStringsToObjectParameters(
+                        getParametersFromFile(file)));
+    }
+
+    public Map<String, String> getParametersFromFile(String file) {
+        Map<String, String> parameters = new HashMap<>();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream input = classLoader.getResourceAsStream(file);
+        parameters.put("productType", getProductType(file));
+        if (file.endsWith(".xml")) {
+            getParametersFromXMLFile(input, parameters);
+        } else if (file.endsWith(".json")) {
+            getParametersFromJSONFile(input, parameters);
+        } else {
+            throw new IllegalArgumentException("Unknown file format");
+        }
+        return parameters;
+    }
+
+    public static String getProductType(String file) {
+        final String upperFileName = file.toUpperCase();
+        if (upperFileName.contains("PHONE")) {
+            return "PHONE";
+        } else if (upperFileName.contains("TOASTER")) {
+            return "TOASTER";
+        } else if (upperFileName.contains("TV")) {
+            return "TV";
+        } else {
+            throw new IllegalArgumentException("Name of file has not correct type of product");
+        }
+    }
+
+    private void getParametersFromXMLFile(InputStream inputStream, Map<String, String> parameters) {
+        final Pattern patternXMLTags = Pattern.compile("<.+>(.+)</(.+)>");
+        final Pattern patternInsideXMLTags = Pattern.compile("<.* (\\w+) ?=\\s?\"(.+)\">");
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                final Matcher matcherXMLTags = patternXMLTags.matcher(line);
+                final Matcher matcherInsideXMLTags = patternInsideXMLTags.matcher(line);
+                if (matcherXMLTags.find()) {
+                    parameters.put(matcherXMLTags.group(2), matcherXMLTags.group(1));
+                }
+                if (matcherInsideXMLTags.find()) {
+                    parameters.put(matcherInsideXMLTags.group(1), matcherInsideXMLTags.group(2));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getParametersFromJSONFile(InputStream inputStream, Map<String, String> parameters) {
+        final Pattern patternJSON = Pattern.compile("\"(.+)\": ?\"(.+)\"");
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                final Matcher matcherJSON = patternJSON.matcher(line);
+                if (matcherJSON.find()) {
+                    parameters.put(matcherJSON.group(1), matcherJSON.group(2));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

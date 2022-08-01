@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<phones>
+    <title>Title</title>
+    <count>15</count>
+    <price currency = "$">1500</price>
+    <model>Model</model>
+    <manufacturer>SAMSUNG</manufacturer>
+    <created>2022-07-25T18:58:23Z</created>
+    <operating-system>
+        <designation>Android</designation>
+        <version>11</version>
+    </operating-system>
+</phones>
