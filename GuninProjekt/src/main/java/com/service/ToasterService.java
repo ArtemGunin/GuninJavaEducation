@@ -6,7 +6,9 @@ import com.model.product.Toaster;
 import com.repository.CrudRepository;
 import com.repository.ToasterRepository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -85,7 +87,7 @@ public class ToasterService extends ProductService<Toaster> {
         phoneContainer.put("currency", parameters.get("currency"));
         phoneContainer.put("model", parameters.get("model"));
         phoneContainer.put("manufacturer", Manufacturer.valueOf(parameters.get("manufacturer")));
-        phoneContainer.put("created", LocalDateTime.parse(parameters.get("created")));
+        phoneContainer.put("created", LocalDateTime.ofInstant(Instant.parse(parameters.get("created")), ZoneId.systemDefault()));
         phoneContainer.put("body", body);
         return phoneContainer;
     }

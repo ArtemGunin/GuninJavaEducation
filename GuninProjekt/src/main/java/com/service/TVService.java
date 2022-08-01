@@ -6,7 +6,9 @@ import com.model.product.TV;
 import com.repository.CrudRepository;
 import com.repository.TVRepository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -87,7 +89,7 @@ public class TVService extends ProductService<TV> {
         phoneContainer.put("model", parameters.get("model"));
         phoneContainer.put("manufacturer", Manufacturer.valueOf(parameters.get("manufacturer")));
         phoneContainer.put("diagonal", Integer.parseInt(parameters.get("diagonal")));
-        phoneContainer.put("created", LocalDateTime.parse(parameters.get("created")));
+        phoneContainer.put("created", LocalDateTime.ofInstant(Instant.parse(parameters.get("created")), ZoneId.systemDefault()));
         phoneContainer.put("operatingSystem", operatingSystem);
         return phoneContainer;
     }

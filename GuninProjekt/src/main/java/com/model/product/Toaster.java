@@ -57,13 +57,15 @@ public class Toaster extends Product {
     @Override
     public String toString() {
         return "Toaster{" +
-                "manufacturer=" + manufacturer +
-                ", model=" + model +
-                ", power=" + power +
-                ", id='" + id + '\'' +
+                "id='" + id + '\'' +
+                ", manufacturer=" + manufacturer +
+                ", model=" + model + ",\n" +
+                "created=" + created +
                 ", title='" + title + '\'' +
                 ", count=" + count +
                 ", price=" + String.format("%.2f", price) +
-                '}';
+                ", power=" + power +
+                ", body = " + body.getColor() + " " + body.getMaterial() +
+                "}\n";
     }
 }

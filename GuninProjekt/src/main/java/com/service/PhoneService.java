@@ -6,7 +6,9 @@ import com.model.product.Phone;
 import com.repository.CrudRepository;
 import com.repository.PhoneRepository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -83,7 +85,7 @@ public class PhoneService extends ProductService<Phone> {
         phoneContainer.put("currency", parameters.get("currency"));
         phoneContainer.put("model", parameters.get("model"));
         phoneContainer.put("manufacturer", Manufacturer.valueOf(parameters.get("manufacturer")));
-        phoneContainer.put("created", LocalDateTime.parse(parameters.get("created")));
+        phoneContainer.put("created", LocalDateTime.ofInstant(Instant.parse(parameters.get("created")), ZoneId.systemDefault()));
         phoneContainer.put("operatingSystem", operatingSystem);
         return phoneContainer;
     }

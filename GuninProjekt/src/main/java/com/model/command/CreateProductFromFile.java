@@ -19,7 +19,7 @@ public class CreateProductFromFile implements Command {
 
     @Override
     public boolean execute() {
-        String createFrom = "Enter the file you want to create the product from:";
+        String createFrom = "Enter the file name you want to create the product from:";
         int userInput = -1;
         Product product = null;
         do {
@@ -53,6 +53,7 @@ public class CreateProductFromFile implements Command {
                 e.printStackTrace();
             }
             if (product != null) {
+                System.out.println("\nCreated product: \n" + product + "\n");
                 return true;
             }
         } while (userInput == -1);

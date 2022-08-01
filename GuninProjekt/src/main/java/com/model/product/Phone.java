@@ -52,12 +52,14 @@ public class Phone extends Product {
     @Override
     public String toString() {
         return "Phone{" +
-                "manufacturer=" + manufacturer +
-                ", model=" + model +
-                ", id='" + id + '\'' +
+                "id='" + id + '\'' +
+                ", manufacturer=" + manufacturer +
+                ", model=" + model + ",\n" +
+                "created=" + created +
                 ", title='" + title + '\'' +
                 ", count=" + count +
                 ", price=" + String.format("%.2f", price) +
-                '}';
+                ", operating System = " + operatingSystem.getDesignation() + " " + operatingSystem.getVersion() +
+                "}\n";
     }
 }
