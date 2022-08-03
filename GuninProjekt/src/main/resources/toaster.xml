@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<toasters>
+    <title>Title</title>
+    <count>25</count>
+    <price currency = "$">2500</price>
+    <model>Model</model>
+    <power>17</power>
+    <manufacturer>PHILIPS</manufacturer>
+    <created>2022-07-12T15:28:39Z</created>
+    <body>
+        <material>Plastic</material>
+        <color>red</color>
+    </body>
+</toasters>

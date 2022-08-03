@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Title",
+    "count": "25",
+    "price": "2500",
+    "currency": "$",
+    "model": "Model",
+    "power": "17",
+    "manufacturer": "SAMSUNG",
+    "created": "2022-07-12T15:28:39Z",
+    "body": {
+      "material": "Plastic",
+      "color": "red"
+    }
+  }
+]

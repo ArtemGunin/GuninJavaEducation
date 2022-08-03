@@ -1,9 +1,17 @@
 package com.service;
 
 import com.model.product.Manufacturer;
+import com.model.product.OperatingSystem;
 import com.model.product.TV;
 import com.repository.CrudRepository;
 import com.repository.TVRepository;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 public class TVService extends ProductService<TV> {
 
@@ -51,6 +59,39 @@ public class TVService extends ProductService<TV> {
                 copiedTV.getManufacturer(),
                 copiedTV.getDiagonal()
         );
+    }
+
+    @Override
+    public TV createProductFromMap(Map<String, Object> container) {
+        Function<Map<String, Object>, TV> createTV = fields -> new TV(
+                fields.getOrDefault("title", "Default").toString(),
+                ((Integer) fields.getOrDefault("count", 0)),
+                ((Double) fields.getOrDefault("price", 0.0)),
+                fields.getOrDefault("currency", "").toString(),
+                fields.getOrDefault("model", "Model").toString(),
+                ((Manufacturer) fields.getOrDefault("manufacturer", Manufacturer.APPLE)),
+                ((Integer) fields.getOrDefault("diagonal", 0)),
+                (LocalDateTime) fields.getOrDefault("created", LocalDateTime.now()),
+                (OperatingSystem) fields.getOrDefault("operatingSystem", new OperatingSystem()));
+        return createTV.apply(container);
+    }
+
+    @Override
+    protected Map<String, Object> convertStringsToObjectParameters(Map<String, String> parameters) {
+        Map<String, Object> phoneContainer = new HashMap<>();
+        OperatingSystem operatingSystem = new OperatingSystem();
+        operatingSystem.setDesignation(parameters.get("designation"));
+        operatingSystem.setVersion(Integer.parseInt(parameters.get("version")));
+        phoneContainer.put("title", parameters.get("title"));
+        phoneContainer.put("count", Integer.parseInt(parameters.get("count")));
+        phoneContainer.put("price", Double.parseDouble(parameters.get("price")));
+        phoneContainer.put("currency", parameters.get("currency"));
+        phoneContainer.put("model", parameters.get("model"));
+        phoneContainer.put("manufacturer", Manufacturer.valueOf(parameters.get("manufacturer")));
+        phoneContainer.put("diagonal", Integer.parseInt(parameters.get("diagonal")));
+        phoneContainer.put("created", LocalDateTime.ofInstant(Instant.parse(parameters.get("created")), ZoneId.systemDefault()));
+        phoneContainer.put("operatingSystem", operatingSystem);
+        return phoneContainer;
     }
 
     @Override

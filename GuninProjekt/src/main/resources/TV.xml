@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<TVs>
+    <title>Title</title>
+    <count>35</count>
+    <price currency = "$">3500</price>
+    <model>Model</model>
+    <manufacturer>SONY</manufacturer>
+    <created>2022-07-28T11:36:43Z</created>
+    <operating-system>
+        <designation>Android</designation>
+        <version>9</version>
+    </operating-system>
+    <diagonal>32</diagonal>
+</TVs>

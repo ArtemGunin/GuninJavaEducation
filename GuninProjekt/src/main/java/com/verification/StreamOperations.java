@@ -22,7 +22,7 @@ public class StreamOperations {
         PHONE_SERVICE.printProductsExpensiveThen(600.0);
         System.out.println("***".repeat(10));
 
-        System.out.println("Counts summary: " + PHONE_SERVICE.SumCounts());
+        System.out.println("Counts summary: " + PHONE_SERVICE.sumCounts());
         System.out.println("***".repeat(10));
 
         System.out.println("Map collection");

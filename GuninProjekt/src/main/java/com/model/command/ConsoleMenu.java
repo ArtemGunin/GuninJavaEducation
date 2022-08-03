@@ -1,11 +1,12 @@
 package com.model.command;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConsoleMenu {
 
-    public static void menu() {
+    public static void menu() throws IOException {
         boolean exit = false;
         String operation = "Choose a product operation:";
         final Commands[] values = Commands.values();

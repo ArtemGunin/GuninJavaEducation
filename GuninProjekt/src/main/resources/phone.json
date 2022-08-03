@@ -1,0 +1,15 @@
+[
+  {
+    "title": "Title",
+    "count": "15",
+    "price": "1500",
+    "currency": "$",
+    "model": "Model",
+    "manufacturer": "SAMSUNG",
+    "created": "2022-07-25T18:58:23Z",
+    "operating-system": {
+      "designation": "Android",
+      "version": "11"
+    }
+  }
+]
