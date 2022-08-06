@@ -14,18 +14,20 @@ class ToasterRepositoryTest {
 
     private Toaster toaster;
 
+
+
     @BeforeEach
     void setUp() {
         final Random random = new Random();
         target = ToasterRepository.getInstance();
-        toaster = new Toaster(
-                "Title-" + random.nextInt(1000),
-                random.nextInt(500),
-                random.nextDouble() * 1000,
-                "Model-" + random.nextInt(10),
-                1000 + random.nextInt(2000),
-                Manufacturer.PHILIPS
-        );
+        toaster = new Toaster.ToasterBuilder()
+                .setTitle("Title-" + random.nextInt(1000))
+                .setCount(random.nextInt(500))
+                .setPrice(random.nextDouble() * 1000)
+                .setModel("Model-" + random.nextInt(10))
+                .setPower(1000 + random.nextInt(2000))
+                .setManufacturer(Manufacturer.PHILIPS)
+                .build();
     }
 
     @Test
@@ -60,8 +62,14 @@ class ToasterRepositoryTest {
 
     @Test
     void saveAll_manyToasters() {
-        final Toaster otherToaster = new Toaster("Title", 300, 700.0,
-                "Model", 2000, Manufacturer.PHILIPS);
+        final Toaster otherToaster = new Toaster.ToasterBuilder()
+                .setTitle("Title")
+                .setCount(300)
+                .setPrice(700.0)
+                .setModel("Model")
+                .setPower(2000)
+                .setManufacturer(Manufacturer.PHILIPS)
+                .build();
         target.saveAll(List.of(toaster, otherToaster));
         final List<Toaster> toasters = target.getAll();
         Assertions.assertEquals(2, toasters.size());
@@ -98,8 +106,14 @@ class ToasterRepositoryTest {
     @Test
     void update_noToaster() {
         target.save(toaster);
-        final Toaster noToaster = new Toaster("Title", 200, 1500,
-                "Model", 2000, Manufacturer.PHILIPS);
+        final Toaster noToaster = new Toaster.ToasterBuilder()
+                .setTitle("Title")
+                .setCount(300)
+                .setPrice(700.0)
+                .setModel("Model")
+                .setPower(2000)
+                .setManufacturer(Manufacturer.PHILIPS)
+                .build();
         final boolean result = target.update(noToaster);
 
         Assertions.assertFalse(result);
@@ -121,8 +135,14 @@ class ToasterRepositoryTest {
     @Test
     void delete_noToaster() {
         target.save(toaster);
-        final Toaster noToaster = new Toaster("Title", 400, 1200,
-                "Model", 2000, Manufacturer.PHILIPS);
+        final Toaster noToaster = new Toaster.ToasterBuilder()
+                .setTitle("Title")
+                .setCount(300)
+                .setPrice(700.0)
+                .setModel("Model")
+                .setPower(2000)
+                .setManufacturer(Manufacturer.PHILIPS)
+                .build();
         final boolean result = target.delete(noToaster.getId());
         Assertions.assertFalse(result);
         final List<Toaster> actualResult = target.getAll();
@@ -178,8 +198,14 @@ class ToasterRepositoryTest {
 
     @Test
     void hasToaster_Negative() {
-        Toaster otherToaster = new Toaster("Title-2", 200, 1000.0,
-                "Model-2", 1400, Manufacturer.PHILIPS);
+        Toaster otherToaster = new Toaster.ToasterBuilder()
+                .setTitle("Title")
+                .setCount(300)
+                .setPrice(700.0)
+                .setModel("Model")
+                .setPower(2000)
+                .setManufacturer(Manufacturer.PHILIPS)
+                .build();
         target.save(toaster);
         Assertions.assertFalse(target.hasProduct(otherToaster.getId()));
     }
