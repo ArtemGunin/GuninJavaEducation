@@ -18,9 +18,9 @@ public class Toaster extends Product {
     private LocalDateTime created;
     private Body body;
 
-    public Toaster(String id, String title, int count, double price, String currency,
-                   String model, int power, Manufacturer manufacturer,
-                   LocalDateTime created, Body body, List<String> details) {
+    private Toaster(String id, String title, int count, double price, String currency,
+                    String model, int power, Manufacturer manufacturer,
+                    LocalDateTime created, Body body, List<String> details) {
         super(id, title, count, price, ProductType.TOASTER);
         this.model = model;
         this.power = power;
@@ -61,11 +61,7 @@ public class Toaster extends Product {
         private Body body;
 
         public ToasterBuilder setId(String id) {
-            if (id == null) {
-                this.id = UUID.randomUUID().toString();
-            } else {
-                this.id = id;
-            }
+            this.id = id;
             return this;
         }
 
@@ -139,6 +135,9 @@ public class Toaster extends Product {
             }
             if (body == null) {
                 body = new Body("", "");
+            }
+            if (id == null) {
+                this.id = UUID.randomUUID().toString();
             }
             return new Toaster(id, title, count, price, currency,
                     model, power, manufacturer, created, body, details);

@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public abstract class ProductImpl implements Product {
     protected long id;
+    protected ProductType type;
     protected boolean available;
     protected String title;
     protected double price;

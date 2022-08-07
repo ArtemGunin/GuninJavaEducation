@@ -1,6 +1,7 @@
 package solid.com.example.service;
 
 import solid.com.example.model.ProductBundle;
+import solid.com.example.model.ProductType;
 import solid.com.example.repository.ProductRepositoryImpl;
 
 import java.util.Random;
@@ -16,6 +17,7 @@ public class ProductBundleService extends ProductService {
         ProductBundle productBundle = new ProductBundle();
         productBundle.setAmount(random.nextInt(15));
         productBundle.setAvailable(random.nextBoolean());
+        productBundle.setType(ProductType.PRODUCT_BUNDLE);
         productBundle.setPrice(random.nextDouble());
         productBundle.setId(random.nextLong());
         productBundle.setTitle(random.nextFloat() + "" + random.nextDouble());
