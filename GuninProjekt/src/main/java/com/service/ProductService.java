@@ -49,7 +49,7 @@ public abstract class ProductService<T extends Product> {
 
     protected abstract T getProductWithModifiedId(String originalId, String newId);
 
-    protected abstract T createProductFromMap(Map<String, Object> Container);
+    protected abstract T createProductFromMap(Map<String, Object> container);
 
     protected abstract Map<String, Object> convertStringsToObjectParameters(Map<String, String> parameters);
 
@@ -125,8 +125,7 @@ public abstract class ProductService<T extends Product> {
                         repository.save(createDefaultProduct());
                     }
                 },
-                ()
-                        -> repository.save(createDefaultProduct())
+                () -> repository.save(createDefaultProduct())
         );
     }
 

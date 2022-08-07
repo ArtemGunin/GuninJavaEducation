@@ -37,50 +37,51 @@ public class ToasterService extends ProductService<Toaster> {
 
     @Override
     protected Toaster createProduct() {
-        return new Toaster(
-                "Title-" + RANDOM.nextInt(1000),
-                RANDOM.nextInt(500),
-                RANDOM.nextDouble() * 1000,
-                "Model-" + RANDOM.nextInt(10),
-                1000 + RANDOM.nextInt(2000),
-                getRandomManufacturer()
-        );
+        return new Toaster.ToasterBuilder()
+                .setTitle("Title-" + RANDOM.nextInt(1000))
+                .setCount(RANDOM.nextInt(500))
+                .setPrice(RANDOM.nextDouble() * 1000)
+                .setModel("Model-" + RANDOM.nextInt(10))
+                .setPower(1000 + RANDOM.nextInt(2000))
+                .setManufacturer(Manufacturer.PHILIPS)
+                .build();
     }
 
     @Override
     protected Toaster getProductWithModifiedId(String originalId, String newId) {
         Toaster copiedToaster = repository.findById(originalId).orElseThrow(()
                 -> new IllegalArgumentException("The base does not contain a product with this id - " + originalId));
-        return new Toaster(newId,
-                copiedToaster.getTitle(),
-                copiedToaster.getCount(),
-                copiedToaster.getPrice(),
-                copiedToaster.getModel(),
-                copiedToaster.getPower(),
-                copiedToaster.getManufacturer());
+        return new Toaster.ToasterBuilder()
+                .setId(newId)
+                .setTitle(copiedToaster.getTitle())
+                .setCount(copiedToaster.getCount())
+                .setPrice(copiedToaster.getPrice())
+                .setModel(copiedToaster.getModel())
+                .setPower(copiedToaster.getPower())
+                .setManufacturer(copiedToaster.getManufacturer())
+                .build();
     }
 
-    @Override
     public Toaster createProductFromMap(Map<String, Object> container) {
-        Function<Map<String, Object>, Toaster> createToaster = fields -> new Toaster(
-                fields.getOrDefault("title", "Default").toString(),
-                ((Integer) fields.getOrDefault("count", 0)),
-                ((Double) fields.getOrDefault("price", 0.0)),
-                fields.getOrDefault("currency", "").toString(),
-                fields.getOrDefault("model", "Model").toString(),
-                ((Integer) fields.getOrDefault("power", 0)),
-                ((Manufacturer) fields.getOrDefault("manufacturer", Manufacturer.APPLE)),
-                (LocalDateTime) fields.getOrDefault("created", LocalDateTime.now()),
-                (Body) fields.getOrDefault("body", new Body()));
+        Function<Map<String, Object>, Toaster> createToaster = fields -> new Toaster.ToasterBuilder()
+                .setTitle(fields.getOrDefault("title", "Default").toString())
+                .setCount((Integer) fields.getOrDefault("count", 0))
+                .setPrice((Double) fields.getOrDefault("price", 0.0))
+                .setCurrency(fields.getOrDefault("currency", "").toString())
+                .setModel(fields.getOrDefault("model", "Model").toString())
+                .setPower((Integer) fields.getOrDefault("power", 0))
+                .setManufacturer((Manufacturer) fields.getOrDefault("manufacturer", Manufacturer.APPLE))
+                .setLocalDateTime((LocalDateTime) fields.getOrDefault("created", LocalDateTime.now()))
+                .setBody((Body) fields.getOrDefault("body", new Body("", "")))
+                .build();
+
         return createToaster.apply(container);
     }
 
     @Override
     protected Map<String, Object> convertStringsToObjectParameters(Map<String, String> parameters) {
         Map<String, Object> phoneContainer = new HashMap<>();
-        Body body = new Body();
-        body.setMaterial(parameters.get("material"));
-        body.setColor(parameters.get("color"));
+        Body body = new Body(parameters.get("material"), parameters.get("color"));
         phoneContainer.put("title", parameters.get("title"));
         phoneContainer.put("count", Integer.parseInt(parameters.get("count")));
         phoneContainer.put("price", Double.parseDouble(parameters.get("price")));
@@ -94,11 +95,24 @@ public class ToasterService extends ProductService<Toaster> {
 
     @Override
     protected Toaster createDefaultProduct() {
-        return new Toaster("Custom", 0, 0.0, "Model", 0, Manufacturer.SONY);
+        return new Toaster.ToasterBuilder()
+                .setTitle("Custom")
+                .setCount(0)
+                .setPrice(0.0)
+                .setModel("Model")
+                .setManufacturer(Manufacturer.SONY)
+                .build();
     }
 
     @Override
     protected Toaster createProductWithId(String id) {
-        return new Toaster(id, "Custom", 0, 0.0, "Model", 0, Manufacturer.SONY);
+        return new Toaster.ToasterBuilder()
+                .setId(id)
+                .setTitle("Custom")
+                .setCount(0)
+                .setPrice(0.0)
+                .setModel("Model")
+                .setManufacturer(Manufacturer.SONY)
+                .build();
     }
 }
