@@ -27,6 +27,9 @@ public class ShopService {
     }
 
     public void createAndSaveInvoices(int invoiceCount, String file, long costLimit) {
+        if (invoiceCount < 1) {
+            throw new IllegalArgumentException("count must been bigger then 0");
+        }
         int count = invoiceCount;
         do {
             createAndSaveInvoice(file, costLimit);
