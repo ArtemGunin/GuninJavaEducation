@@ -1,0 +1,11 @@
+type,series,model,diagonal,screen type,country,price
+Telephone,S-10,Samsung,none,QLED,none,200
+Telephone,Xperia-XA2,SONY,none,AMOLED,none,700
+Telephone,13-Pro,Apple,none,LCD,none,2000
+Telephone,A-96,OPPO,none,TFT,none,350
+Telephone,Nova-9,Huawei,none,IPS,none,470
+Television,RTI-14,none,25,LED,,1500
+Television,UE43AU7100,none,25,TN,Japan,2700
+Television,50UN265,none,25,P_OLED,South Korea,1100
+Television,65PUS8506/12,none,25,PM_OLED,India,3600
+Television,P1-50/Black,none,25,IPS,Germany,1700
