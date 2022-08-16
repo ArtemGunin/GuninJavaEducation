@@ -13,7 +13,6 @@ public class Telephone extends Product {
     private ProductType productType;
 
     private Telephone(String model, String series, ScreenType screenType, long price) {
-        super();
         this.series = series;
         this.screenType = screenType;
         this.price = price;
@@ -58,9 +57,9 @@ public class Telephone extends Product {
         }
 
         public Telephone build() {
-                if (price < 0.0) {
-                    throw new IllegalStateException("Price can not be less then 0");
-                }
+            if (price < 0.0) {
+                throw new IllegalStateException("Price can not be less then 0");
+            }
             return new Telephone(model, series, screenType, price);
         }
     }

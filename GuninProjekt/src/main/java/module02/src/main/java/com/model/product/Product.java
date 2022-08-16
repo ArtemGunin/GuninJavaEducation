@@ -10,7 +10,4 @@ public abstract class Product {
     protected ScreenType screenType;
     protected long price;
     protected ProductType productType;
-
-    protected Product() {
-    }
 }

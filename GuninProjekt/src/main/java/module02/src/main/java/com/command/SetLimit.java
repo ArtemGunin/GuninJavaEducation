@@ -36,7 +36,7 @@ public class SetLimit implements Command {
                     System.out.println("Input is not valid\n");
                     continue;
                 }
-                    userChoice = Long.parseLong(line);
+                userChoice = Long.parseLong(line);
             } catch (IOException e) {
                 e.printStackTrace();
             }

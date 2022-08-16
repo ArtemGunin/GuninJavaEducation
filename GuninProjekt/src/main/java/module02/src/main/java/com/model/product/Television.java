@@ -14,7 +14,6 @@ public class Television extends Product {
     private ProductType productType;
 
     private Television(String series, ScreenType screenType, double diagonal, String country, long price) {
-        super();
         this.series = series;
         this.screenType = screenType;
         this.price = price;
@@ -33,6 +32,7 @@ public class Television extends Product {
                 ", price=" + price +
                 '}';
     }
+
     public static class TelevisionBuilder {
         private String series;
         private ScreenType screenType;

@@ -7,6 +7,7 @@ import com.model.product.ScreenType;
 import com.model.product.Telephone;
 import com.service.PersonService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,12 +18,12 @@ import java.util.Optional;
 
 class InvoiceRepositoryTest {
 
-    private InvoiceRepository target;
+    private static InvoiceRepository target;
 
-    private Invoice invoice;
+    private static Invoice invoice;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         target = InvoiceRepository.getInstance();
         List<Product> productList = new LinkedList<>();
         productList.add(new Telephone.TelephoneBuilder()
@@ -38,6 +39,11 @@ class InvoiceRepositoryTest {
                 LocalDateTime.now());
     }
 
+    @BeforeEach
+    void setUp() {
+        target.getAllToList().clear();
+    }
+
     @Test
     void save() {
         target.save(invoice);
@@ -50,7 +56,7 @@ class InvoiceRepositoryTest {
     void save_putNull() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> target.save(null));
         final List<Invoice> actualResult = target.getAllToList();
-        Assertions.assertEquals(0, actualResult.size());
+        Assertions.assertEquals(1, actualResult.size());
     }
 
     @Test
