@@ -1,6 +1,6 @@
 package com;
 
-import com.model.command.ConsoleMenu;
+import com.command.ConsoleMenu;
 
 import java.io.IOException;
 

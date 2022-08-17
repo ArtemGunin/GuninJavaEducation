@@ -4,7 +4,9 @@ import com.model.product.TV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 public class TVRepository implements CrudRepository<TV> {
     private static final Logger LOGGER = LoggerFactory.getLogger(TVRepository.class);
@@ -37,9 +39,7 @@ public class TVRepository implements CrudRepository<TV> {
 
     @Override
     public void saveAll(List<TV> tvs) {
-        for (TV tv : tvs) {
-            save(tv);
-        }
+        tvs.forEach(this::save);
     }
 
     @Override
@@ -55,35 +55,25 @@ public class TVRepository implements CrudRepository<TV> {
 
     @Override
     public boolean delete(String id) {
-        final Iterator<TV> iterator = tvs.iterator();
-        while (iterator.hasNext()) {
-            final TV tv = iterator.next();
+        return tvs.removeIf(tv -> {
             if (tv.getId().equals(id)) {
                 LOGGER.info("Remote TV - {}", tv);
-                iterator.remove();
                 return true;
             }
-        }
-        return false;
+            return false;
+        });
     }
 
     @Override
     public List<TV> getAll() {
-        if (tvs.isEmpty()) {
-            return Collections.emptyList();
-        }
         return tvs;
     }
 
     @Override
     public Optional<TV> findById(String id) {
-        TV result = null;
-        for (TV tv : tvs) {
-            if (tv.getId().equals(id)) {
-                result = tv;
-            }
-        }
-        return Optional.ofNullable(result);
+        return tvs.stream()
+                .filter(tv -> tv.getId().equals(id))
+                .findAny();
     }
 
     @Override
@@ -101,11 +91,7 @@ public class TVRepository implements CrudRepository<TV> {
 
     @Override
     public boolean hasProduct(String id) {
-        for (TV tv : tvs) {
-            if (tv.getId().equals(id)) {
-                return true;
-            }
-        }
-        return false;
+        return tvs.stream()
+                .anyMatch(tv -> tv.getId().equals(id));
     }
 }

@@ -74,7 +74,7 @@ public class Toaster extends Product {
         }
 
         public ToasterBuilder setCount(int count) {
-            if (count <= 0) {
+            if (count < 0) {
                 throw new IllegalArgumentException("Count must be more than 0 characters");
             }
             this.count = count;
@@ -130,7 +130,7 @@ public class Toaster extends Product {
         }
 
         public Toaster build() {
-            if (price <= 0.0) {
+            if (price < 0.0) {
                 throw new IllegalStateException("Price must be present");
             }
             if (body == null) {

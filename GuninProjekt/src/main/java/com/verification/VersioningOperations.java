@@ -18,45 +18,61 @@ public class VersioningOperations {
     private static final Random random = new Random();
 
     public void versioning() {
-        productVersioningLinkedList
-                .addNewVersion(new Phone("Custom15", 0, 0.0, "Model", Manufacturer.SONY),
-                        15);
-        productVersioningLinkedList
-                .addNewVersion(new Phone("Custom20", 0, 0.0, "Model", Manufacturer.SONY),
-                        20);
-        productVersioningLinkedList
-                .addNewVersion(new Phone("Custom25", 0, 0.0, "Model", Manufacturer.SONY),
-                        25);
         Phone phone = new Phone("NewCustom", 0, 0.0, "Model", Manufacturer.SONY);
+
+        addedProductVersion();
+        productByVersion();
+        deleteProduct();
+        updateProduct(phone);
+        versionInformation();
+        comparingProducts();
+    }
+
+    private void addedProductVersion() {
+        productVersioningLinkedList
+                .addNewVersion(new Phone("Custom15", 0, 0.0, "Model", Manufacturer.SONY), 15);
+        productVersioningLinkedList
+                .addNewVersion(new Phone("Custom20", 0, 0.0, "Model", Manufacturer.SONY), 20);
+        productVersioningLinkedList
+                .addNewVersion(new Phone("Custom25", 0, 0.0, "Model", Manufacturer.SONY), 25);
         System.out.println("Three added products:");
         for (Phone element : productVersioningLinkedList) {
             System.out.println(element);
         }
+    }
+
+    private void productByVersion() {
         System.out.println("\nFounded product by version:");
         System.out.println(productVersioningLinkedList.findProductByVersion(20));
+    }
+
+    private void deleteProduct() {
         productVersioningLinkedList.deleteProductByVersion(20);
         System.out.println("\nProducts without deleted:");
         for (Phone element : productVersioningLinkedList) {
             System.out.println(element);
         }
+    }
+
+    private void updateProduct(Phone phone) {
         productVersioningLinkedList.updateProductByVersion(phone, 15);
         System.out.println("\nUpdated products:");
         for (Phone element :
                 productVersioningLinkedList) {
             System.out.println(element);
         }
-        System.out.println("\nUsing foreach:");
-        for (Phone element :
-                productVersioningLinkedList) {
-            System.out.println(element.getTitle());
-        }
+    }
+
+    private void versionInformation() {
         System.out.println("\nCount of versions:");
         System.out.println(productVersioningLinkedList.getVersionsCount());
         System.out.println("\nFirst version date:");
         System.out.println(productVersioningLinkedList.getFirstVersionDate());
         System.out.println("\nLast version date:");
         System.out.println(productVersioningLinkedList.getLastVersionDate());
+    }
 
+    private void comparingProducts() {
         PHONE_SERVICE.createAndSaveProducts(10);
         List<Phone> arrayListPhones = new ArrayList<>(PHONE_SERVICE.getAll());
         Comparator<Phone> comparator = new ProductComparator<>();

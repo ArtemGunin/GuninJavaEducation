@@ -72,14 +72,14 @@ public class TVService extends ProductService<TV> {
                 ((Manufacturer) fields.getOrDefault("manufacturer", Manufacturer.APPLE)),
                 ((Integer) fields.getOrDefault("diagonal", 0)),
                 (LocalDateTime) fields.getOrDefault("created", LocalDateTime.now()),
-                (OperatingSystem) fields.getOrDefault("operatingSystem", new OperatingSystem()));
+                (OperatingSystem) fields.getOrDefault("operatingSystem", new OperatingSystem("", 0)));
         return createTV.apply(container);
     }
 
     @Override
     protected Map<String, Object> convertStringsToObjectParameters(Map<String, String> parameters) {
         Map<String, Object> phoneContainer = new HashMap<>();
-        OperatingSystem operatingSystem = new OperatingSystem();
+        OperatingSystem operatingSystem = new OperatingSystem("", 0);
         operatingSystem.setDesignation(parameters.get("designation"));
         operatingSystem.setVersion(Integer.parseInt(parameters.get("version")));
         phoneContainer.put("title", parameters.get("title"));

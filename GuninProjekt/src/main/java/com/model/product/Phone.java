@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -18,33 +20,36 @@ public class Phone extends Product {
 
     public Phone(String title, int count, double price,
                  String model, Manufacturer manufacturer) {
-        super(title, count, price, ProductType.PHONE);
-        this.model = model;
-        this.manufacturer = manufacturer;
+        this(UUID.randomUUID().toString(), title, count, price, "", model,
+                manufacturer, Collections.emptyList(), LocalDateTime.now(), new OperatingSystem("", 0));
     }
 
     public Phone(String id, String title, int count, double price,
                  String model, Manufacturer manufacturer) {
-        super(id, title, count, price, ProductType.PHONE);
-        this.model = model;
-        this.manufacturer = manufacturer;
+        this(id, title, count, price, "", model,
+                manufacturer, Collections.emptyList(), LocalDateTime.now(), new OperatingSystem("", 0));
     }
 
     public Phone(String title, int count, double price,
                  String model, Manufacturer manufacturer, List<String> details) {
-        super(title, count, price, ProductType.PHONE);
-        this.model = model;
-        this.manufacturer = manufacturer;
-        this.details = details;
+        this(UUID.randomUUID().toString(), title, count, price, "", model,
+                manufacturer, details, LocalDateTime.now(), new OperatingSystem("", 0));
     }
 
-    public Phone(String title, int count, double price, String currency,
-                 String model, Manufacturer manufacturer, LocalDateTime created,
+    public Phone(String title, int count, double price, String currency, String model,
+                 Manufacturer manufacturer, LocalDateTime created, OperatingSystem operatingSystem) {
+        this(UUID.randomUUID().toString(), title, count, price, currency, model,
+                manufacturer, Collections.emptyList(), created, operatingSystem);
+    }
+
+    public Phone(String id, String title, int count, double price, String currency, String model,
+                 Manufacturer manufacturer, List<String> details, LocalDateTime created,
                  OperatingSystem operatingSystem) {
-        super(title, count, price, ProductType.PHONE);
+        super(id, title, count, price, ProductType.PHONE);
         this.model = model;
         this.manufacturer = manufacturer;
         this.currency = currency;
+        this.details = details;
         this.created = created;
         this.operatingSystem = operatingSystem;
     }

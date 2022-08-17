@@ -4,6 +4,7 @@ import com.model.product.Manufacturer;
 import com.model.product.TV;
 import com.repository.TVRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -12,13 +13,17 @@ import java.util.Optional;
 
 class TVServiceTest {
 
-    private TVService target;
-    private TVRepository repository;
+    private static TVService target;
+    private static TVRepository repository;
+
+    @BeforeAll
+    static void beforeAll() {
+        repository = Mockito.mock(TVRepository.class);
+        target = TVService.getInstance(repository);
+    }
 
     @BeforeEach
     void setUp() {
-        repository = Mockito.mock(TVRepository.class);
-        target = TVService.getInstance(repository);
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.model.product.Manufacturer;
 import com.model.product.Phone;
 import com.repository.PhoneRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -12,13 +13,17 @@ import java.util.Optional;
 
 class PhoneServiceTest {
 
-    private PhoneService target;
-    private PhoneRepository repository;
+    private static PhoneService target;
+    private static PhoneRepository repository;
+
+    @BeforeAll
+    static void beforeAll() {
+        repository = Mockito.mock(PhoneRepository.class);
+        target = PhoneService.getInstance(repository);
+    }
 
     @BeforeEach
     void setUp() {
-        repository = Mockito.mock(PhoneRepository.class);
-        target = PhoneService.getInstance(repository);
     }
 
     @Test

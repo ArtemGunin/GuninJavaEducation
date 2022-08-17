@@ -3,6 +3,7 @@ package com.repository;
 import com.model.product.Manufacturer;
 import com.model.product.TV;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,12 +11,12 @@ import java.util.*;
 
 class TVRepositoryTest {
 
-    private TVRepository target;
+    private static TVRepository target;
 
-    private TV tv;
+    private static TV tv;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         final Random random = new Random();
         target = TVRepository.getInstance();
         tv = new TV(
@@ -26,6 +27,11 @@ class TVRepositoryTest {
                 Manufacturer.HISENSE,
                 14 + random.nextInt(52)
         );
+    }
+
+    @BeforeEach
+    void setUp() {
+        target.getAll().clear();
     }
 
     @Test

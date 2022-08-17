@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public abstract class ProductService<T extends Product> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
     protected static final Random RANDOM = new Random();
     protected final CrudRepository<T> repository;
 
@@ -71,9 +71,7 @@ public abstract class ProductService<T extends Product> {
     }
 
     public void printAll() {
-        for (T t : repository.getAll()) {
-            System.out.println(t);
-        }
+        repository.getAll().forEach(System.out::println);
     }
 
     public T useProductWithIndex(int index) {

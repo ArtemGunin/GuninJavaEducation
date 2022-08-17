@@ -1,4 +1,4 @@
-package com.model.command;
+package com.command;
 
 import com.model.product.ProductType;
 import com.service.ProductFactory;
@@ -13,8 +13,8 @@ public class Create implements Command {
         final ProductType[] values = ProductType.values();
         final List<String> names = Utils.getNamesOfType(values);
         final int userInput = Utils.getUserInput(names, whatProduct);
-        if (userInput != 0) {
-            ProductFactory.createAndSave(values[userInput - 1]);
+        if (userInput != -1) {
+            ProductFactory.createAndSave(values[userInput]);
             return true;
         }
         return false;

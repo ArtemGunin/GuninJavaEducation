@@ -1,8 +1,8 @@
-package solid.com.example.service;
+package com.example.service;
 
-import solid.com.example.model.NotifiableProduct;
-import solid.com.example.model.ProductType;
-import solid.com.example.repository.ProductRepositoryImpl;
+import com.example.model.NotifiableProduct;
+import com.example.model.ProductType;
+import com.example.repository.ProductRepositoryImpl;
 
 import java.util.List;
 import java.util.Random;

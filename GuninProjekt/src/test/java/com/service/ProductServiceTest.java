@@ -329,7 +329,6 @@ class ProductServiceTest {
     void getProductWithIdOrCreatedIfProductMiss_PhoneMiss() {
         final TV tv = target.createProductWithId("123");
         Mockito.when(repository.findById("123")).thenReturn(Optional.empty());
-        Assertions.assertNotEquals(tv, target.getProductWithIdOrCreatedIfProductMiss("123"));
         Assertions.assertEquals("123", target.getProductWithIdOrCreatedIfProductMiss("123").getId());
     }
 

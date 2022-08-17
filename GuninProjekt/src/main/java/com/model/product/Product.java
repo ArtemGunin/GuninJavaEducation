@@ -3,6 +3,7 @@ package com.model.product;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -18,23 +19,19 @@ public abstract class Product {
     protected List<String> details;
 
     protected Product(String title, int count, double price, ProductType type) {
-        this.id = UUID.randomUUID().toString();
-        this.title = title;
-        this.count = count;
-        this.price = price;
-        this.type = type;
+        this(UUID.randomUUID().toString(), title, count, price, type, Collections.emptyList());
     }
 
     protected Product(String id, String title, int count, double price, ProductType type) {
-        this.id = id;
-        this.title = title;
-        this.count = count;
-        this.price = price;
-        this.type = type;
+        this(id, title, count, price, type, Collections.emptyList());
     }
 
     protected Product(String title, int count, double price, ProductType type, List<String> details) {
-        this.id = UUID.randomUUID().toString();
+        this(UUID.randomUUID().toString(), title, count, price, type, details);
+    }
+
+    protected Product(String id, String title, int count, double price, ProductType type, List<String> details) {
+        this.id = id;
         this.title = title;
         this.count = count;
         this.price = price;

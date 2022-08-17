@@ -1,4 +1,4 @@
-package com.model.command;
+package com.command;
 
 import com.model.product.ProductType;
 import com.service.PhoneService;
@@ -19,9 +19,9 @@ public class Delete implements Command {
         final ProductType[] values = ProductType.values();
         final List<String> names = Utils.getNamesOfType(values);
         final int userTypeInput = Utils.getUserInput(names, whatTypeProduct);
-        if (userTypeInput != 0) {
-            List<String> stringProducts = Utils.getProductStringList(values[userTypeInput - 1]);
-            return deleteProduct(stringProducts, values[userTypeInput - 1]);
+        if (userTypeInput != -1) {
+            List<String> stringProducts = Utils.getProductStringList(values[userTypeInput]);
+            return deleteProduct(stringProducts, values[userTypeInput]);
         }
         return false;
     }
@@ -29,13 +29,12 @@ public class Delete implements Command {
     private static boolean deleteProduct(List<String> stringProducts, ProductType productType) {
         final int userInput;
         String whatProduct = "What product do you want to delete:";
-        System.out.println(whatProduct);
         userInput = Utils.getUserInput(stringProducts, whatProduct);
-        if (userInput != 0) {
+        if (userInput != -1) {
             switch (productType) {
-                case PHONE -> PHONE_SERVICE.deleteProduct(PHONE_SERVICE.useProductWithIndex(userInput - 1));
-                case TOASTER -> TOASTER_SERVICE.deleteProduct(TOASTER_SERVICE.useProductWithIndex(userInput - 1));
-                case TV -> TV_SERVICE.deleteProduct(TV_SERVICE.useProductWithIndex(userInput - 1));
+                case PHONE -> PHONE_SERVICE.deleteProduct(PHONE_SERVICE.useProductWithIndex(userInput));
+                case TOASTER -> TOASTER_SERVICE.deleteProduct(TOASTER_SERVICE.useProductWithIndex(userInput));
+                case TV -> TV_SERVICE.deleteProduct(TV_SERVICE.useProductWithIndex(userInput));
                 default -> throw new IllegalArgumentException("Unknown Product " + productType);
             }
             return true;

@@ -4,7 +4,9 @@ import com.model.product.Toaster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 public class ToasterRepository implements CrudRepository<Toaster> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ToasterRepository.class);
@@ -37,9 +39,7 @@ public class ToasterRepository implements CrudRepository<Toaster> {
 
     @Override
     public void saveAll(List<Toaster> toasters) {
-        for (Toaster toaster : toasters) {
-            save(toaster);
-        }
+        toasters.forEach(this::save);
     }
 
     @Override
@@ -55,35 +55,25 @@ public class ToasterRepository implements CrudRepository<Toaster> {
 
     @Override
     public boolean delete(String id) {
-        final Iterator<Toaster> iterator = toasters.iterator();
-        while (iterator.hasNext()) {
-            final Toaster toaster = iterator.next();
+        return toasters.removeIf(toaster -> {
             if (toaster.getId().equals(id)) {
                 LOGGER.info("Remote toaster - {}", toaster);
-                iterator.remove();
                 return true;
             }
-        }
-        return false;
+            return false;
+        });
     }
 
     @Override
     public List<Toaster> getAll() {
-        if (toasters.isEmpty()) {
-            return Collections.emptyList();
-        }
         return toasters;
     }
 
     @Override
     public Optional<Toaster> findById(String id) {
-        Toaster result = null;
-        for (Toaster toaster : toasters) {
-            if (toaster.getId().equals(id)) {
-                result = toaster;
-            }
-        }
-        return Optional.ofNullable(result);
+        return toasters.stream()
+                .filter(toaster -> toaster.getId().equals(id))
+                .findAny();
     }
 
     @Override
@@ -101,11 +91,7 @@ public class ToasterRepository implements CrudRepository<Toaster> {
 
     @Override
     public boolean hasProduct(String id) {
-        for (Toaster toaster : toasters) {
-            if (toaster.getId().equals(id)) {
-                return true;
-            }
-        }
-        return false;
+        return toasters.stream()
+                .anyMatch(toaster -> toaster.getId().equals(id));
     }
 }

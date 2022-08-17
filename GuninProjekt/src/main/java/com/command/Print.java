@@ -1,4 +1,4 @@
-package com.model.command;
+package com.command;
 
 import com.model.product.ProductType;
 import com.service.PhoneService;
@@ -19,8 +19,8 @@ public class Print implements Command {
         final ProductType[] values = ProductType.values();
         final List<String> names = Utils.getNamesOfType(values);
         final int userInput = Utils.getUserInput(names, whatPrint);
-        if (userInput != 0) {
-            switch (values[userInput - 1]) {
+        if (userInput != -1) {
+            switch (values[userInput]) {
                 case PHONE -> PHONE_SERVICE.printAll();
                 case TOASTER -> TOASTER_SERVICE.printAll();
                 case TV -> TV_SERVICE.printAll();

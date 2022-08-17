@@ -96,12 +96,12 @@ public class ProductVersioningLinkedList<E extends Product> implements Iterable<
         return size;
     }
 
-    public static class ProductElement<E> {
-        E product;
-        int version;
-        LocalDateTime dateOfAdding;
-        ProductElement<E> next;
-        ProductElement<E> prev;
+    private static class ProductElement<E> {
+        private E product;
+        private final int version;
+        private final LocalDateTime dateOfAdding;
+        private ProductElement<E> next;
+        private ProductElement<E> prev;
 
         ProductElement(ProductElement<E> prev, E product, ProductElement<E> next, int version) {
             this.prev = prev;
