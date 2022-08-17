@@ -1,6 +1,6 @@
-package solid.com.example;
+package com.example;
 
-import solid.com.example.service.ProductUtils;
+import com.example.service.ProductUtils;
 
 public class Main {
     public static void main(String[] args) {

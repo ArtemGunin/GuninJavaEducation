@@ -1,4 +1,4 @@
-package com.model.command;
+package com.command;
 
 import com.model.product.*;
 import com.service.PhoneService;
@@ -20,7 +20,7 @@ public class CreateProductFromFile implements Command {
     @Override
     public boolean execute() {
         String createFrom = "Enter the file name you want to create the product from:";
-        int userInput = -1;
+        boolean continueOperations = true;
         Product product = null;
         do {
             try {
@@ -47,7 +47,7 @@ public class CreateProductFromFile implements Command {
                         default -> throw new IllegalArgumentException("Unknown Product " + productType);
                     }
                 } else {
-                    userInput = 0;
+                    continueOperations = false;
                 }
             } catch (IOException | IllegalArgumentException e) {
                 e.printStackTrace();
@@ -56,7 +56,7 @@ public class CreateProductFromFile implements Command {
                 System.out.println("\nCreated product: \n" + product + "\n");
                 return true;
             }
-        } while (userInput == -1);
+        } while (continueOperations);
         return false;
     }
 }

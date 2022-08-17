@@ -69,14 +69,14 @@ public class PhoneService extends ProductService<Phone> {
                 fields.getOrDefault("model", "Model").toString(),
                 ((Manufacturer) fields.getOrDefault("manufacturer", Manufacturer.APPLE)),
                 (LocalDateTime) fields.getOrDefault("created", LocalDateTime.now()),
-                (OperatingSystem) fields.getOrDefault("operatingSystem", new OperatingSystem()));
+                (OperatingSystem) fields.getOrDefault("operatingSystem", new OperatingSystem("", 0)));
         return createPhone.apply(container);
     }
 
     @Override
     protected Map<String, Object> convertStringsToObjectParameters(Map<String, String> parameters) {
         Map<String, Object> phoneContainer = new HashMap<>();
-        OperatingSystem operatingSystem = new OperatingSystem();
+        OperatingSystem operatingSystem = new OperatingSystem("", 0);
         operatingSystem.setDesignation(parameters.get("designation"));
         operatingSystem.setVersion(Integer.parseInt(parameters.get("version")));
         phoneContainer.put("title", parameters.get("title"));

@@ -72,7 +72,7 @@ public class SimpleBinaryTree<E extends Product> {
             stringBuilder.append("\n");
             stringBuilder.append(padding);
             stringBuilder.append(pointer);
-            stringBuilder.append(node.toString());
+            stringBuilder.append(node);
 
             StringBuilder paddingBuilder = new StringBuilder(padding);
             if (hasRightSibling) {
@@ -133,9 +133,9 @@ public class SimpleBinaryTree<E extends Product> {
     @Getter
     @Setter
     private static class Node<T extends Product> {
-        T item;
-        Node<T> left;
-        Node<T> right;
+        private T item;
+        private Node<T> left;
+        private Node<T> right;
 
         Node(T item) {
             this.item = item;

@@ -1,8 +1,9 @@
-package com.model.command;
+package com.command;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConsoleMenu {
 
@@ -13,10 +14,10 @@ public class ConsoleMenu {
         final List<String> names = getNamesOfCommands(values);
         do {
             final int userCommand = Utils.getUserInput(names, operation);
-            if (userCommand == 0) {
+            if (userCommand == -1) {
                 exit = true;
             } else {
-                Command command = values[userCommand - 1].getCommand();
+                Command command = values[userCommand].getCommand();
                 if (!command.execute()) {
                     exit = true;
                 }
@@ -25,10 +26,8 @@ public class ConsoleMenu {
     }
 
     private static List<String> getNamesOfCommands(final Commands[] values) {
-        final List<String> names = new ArrayList<>(values.length);
-        for (Commands type : values) {
-            names.add(type.getName());
-        }
-        return names;
+        return Arrays.stream(values)
+                .map(Commands::getName)
+                .collect(Collectors.toList());
     }
 }

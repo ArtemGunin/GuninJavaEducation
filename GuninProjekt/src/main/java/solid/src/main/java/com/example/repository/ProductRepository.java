@@ -1,6 +1,6 @@
-package solid.com.example.repository;
+package com.example.repository;
 
-import solid.com.example.model.ProductImpl;
+import com.example.model.ProductImpl;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package solid.com.example.model;
+package com.example.model;
 
 public interface Product {
     String getBasicInfo();

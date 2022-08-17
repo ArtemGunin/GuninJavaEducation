@@ -1,6 +1,6 @@
-package solid.com.example.service;
+package com.example.service;
 
-import solid.com.example.model.ProductImpl;
+import com.example.model.ProductImpl;
 
 import java.util.Random;
 

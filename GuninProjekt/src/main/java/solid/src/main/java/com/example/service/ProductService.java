@@ -1,7 +1,7 @@
-package solid.com.example.service;
+package com.example.service;
 
-import solid.com.example.model.ProductImpl;
-import solid.com.example.repository.ProductRepositoryImpl;
+import com.example.model.ProductImpl;
+import com.example.repository.ProductRepositoryImpl;
 
 import java.util.List;
 

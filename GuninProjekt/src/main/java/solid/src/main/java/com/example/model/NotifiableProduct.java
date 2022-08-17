@@ -1,4 +1,4 @@
-package solid.com.example.model;
+package com.example.model;
 
 import lombok.Setter;
 

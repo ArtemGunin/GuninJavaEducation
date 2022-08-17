@@ -6,7 +6,6 @@
 
     <groupId>org.example</groupId>
     <artifactId>GuninProjekt</artifactId>
-    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -36,6 +35,11 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>1.2.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>

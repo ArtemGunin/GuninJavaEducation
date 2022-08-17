@@ -1,4 +1,4 @@
-package com.model.command;
+package com.command;
 
 import lombok.Getter;
 

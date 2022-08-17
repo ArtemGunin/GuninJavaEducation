@@ -56,7 +56,7 @@ class ProductVersioningLinkedListTest {
     void findProductElementByVersion() {
         target.addNewVersion(tv, 0);
 
-        Assertions.assertEquals(tv, target.findProductElementByVersion(0).product);
+        Assertions.assertEquals(tv, target.findProductByVersion(0));
     }
 
     @Test

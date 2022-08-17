@@ -19,19 +19,34 @@ public class StreamOperations {
         PHONE_SERVICE.createAndSaveProducts(10);
         System.out.println("***".repeat(10));
 
+        expensiveThenProducts();
+        summaryProducts();
+        sortedMap();
+        checkDetail();
+        summaryStatistic();
+        checkPrice();
+    }
+
+    private void expensiveThenProducts() {
         PHONE_SERVICE.printProductsExpensiveThen(600.0);
         System.out.println("***".repeat(10));
+    }
 
+    private void summaryProducts() {
         System.out.println("Counts summary: " + PHONE_SERVICE.sumCounts());
         System.out.println("***".repeat(10));
+    }
 
+    private void sortedMap() {
         System.out.println("Map collection");
         Map<String, ProductType> productMap = PHONE_SERVICE.sortByTitleClearDuplicatesConvertToMap();
         for (Map.Entry<String, ProductType> entry : productMap.entrySet()) {
             System.out.println("Key - " + entry.getKey() + ", Value - " + entry.getValue());
         }
         System.out.println("***".repeat(10));
+    }
 
+    private void checkDetail() {
         System.out.println("Products without details:");
         System.out.println("Detail is present - " + PHONE_SERVICE.detailIsPresent("camera"));
         String[] detailsWithoutEqual = {"bottom", "screen", "processor", "video card"};
@@ -47,16 +62,22 @@ public class StreamOperations {
         System.out.println("Products with details, and with equal detail:");
         System.out.println("Detail is present - " + PHONE_SERVICE.detailIsPresent("camera"));
         System.out.println("***");
+    }
 
+    private void summaryStatistic() {
         System.out.println(PHONE_SERVICE.getPriceSummaryStatistic());
         System.out.println("***".repeat(10));
+    }
 
+    private void checkPrice() {
         System.out.println("Do all products have a price?");
         System.out.println("All products with price - " + PHONE_SERVICE.allProductsHasPrice());
         PHONE_SERVICE.useProductWithIndex(0).setPrice(0.0);
         System.out.println("One product has no price - " + PHONE_SERVICE.allProductsHasPrice());
         System.out.println("***".repeat(10));
+    }
 
+    private void productFromMap() {
         Map<String, Object> productContainer = new HashMap<>();
         productContainer.put("productType", ProductType.PHONE);
         productContainer.put("title", "Title - 357");

@@ -3,6 +3,7 @@ package com.repository;
 import com.model.product.Manufacturer;
 import com.model.product.Toaster;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,14 +11,12 @@ import java.util.*;
 
 class ToasterRepositoryTest {
 
-    private ToasterRepository target;
+    private static ToasterRepository target;
 
-    private Toaster toaster;
+    private static Toaster toaster;
 
-
-
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         final Random random = new Random();
         target = ToasterRepository.getInstance();
         toaster = new Toaster.ToasterBuilder()
@@ -28,6 +27,11 @@ class ToasterRepositoryTest {
                 .setPower(1000 + random.nextInt(2000))
                 .setManufacturer(Manufacturer.PHILIPS)
                 .build();
+    }
+
+    @BeforeEach
+    void setUp() {
+        target.getAll().clear();
     }
 
     @Test
