@@ -1,5 +1,7 @@
 package com.service;
 
+import com.context.Autowired;
+import com.context.Singleton;
 import com.model.product.Body;
 import com.model.product.Manufacturer;
 import com.model.product.Toaster;
@@ -13,10 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Singleton
 public class ToasterService extends ProductService<Toaster> {
 
     private static ToasterService instance;
 
+    @Autowired
     private ToasterService(CrudRepository<Toaster> repository) {
         super(repository);
     }
