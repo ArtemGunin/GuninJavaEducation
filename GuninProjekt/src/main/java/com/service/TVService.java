@@ -5,7 +5,6 @@ import com.context.Singleton;
 import com.model.product.Manufacturer;
 import com.model.product.OperatingSystem;
 import com.model.product.TV;
-import com.repository.CrudRepository;
 import com.repository.TVRepository;
 
 import java.time.Instant;
@@ -21,7 +20,7 @@ public class TVService extends ProductService<TV> {
     private static TVService instance;
 
     @Autowired
-    private TVService(CrudRepository<TV> repository) {
+    private TVService(final TVRepository repository) {
         super(repository);
     }
 

@@ -5,10 +5,9 @@ import org.reflections.Reflections;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Context {
 
@@ -24,18 +23,15 @@ public class Context {
         final Reflections reflections = new Reflections("com");
         Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(Singleton.class);
         annotatedClasses.forEach(aClass -> {
-            try {
-                if (aClass.getSimpleName().endsWith("Repository")) {
-                    Constructor<?> constructor = aClass.getDeclaredConstructor();
-                    cache.add(createRepository(constructor));
-                } else if (aClass.getSimpleName().endsWith("Service")) {
-                    Constructor<?>[] constructorsService = aClass.getDeclaredConstructors();
-                    Constructor<?> constructorService = constructorsService[0];
-                    cache.add(createService(constructorService));
-                }
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
+            Constructor<?>[] constructors = aClass.getDeclaredConstructors();
+            Arrays.stream(constructors)
+                    .forEach(constructor -> {
+                        switch (constructor.getParameterCount()) {
+                            case 0 -> cache.add(createRepository(constructor));
+                            case 1 -> cache.add(createService(constructor));
+                            default -> throw new IllegalArgumentException("Correct constructor don't present!");
+                        }
+                    });
         });
     }
 
@@ -88,30 +84,30 @@ public class Context {
 
     private Object createService(Constructor<?> constructor) {
         constructor.setAccessible(true);
-        Pattern pattern = Pattern.compile("\\.([a-zA-Z]+)Service");
-        Matcher matcher = pattern.matcher(constructor.getName());
-        String productName = "";
         Object createdObject = null;
-        if (matcher.find()) {
-            productName = matcher.group(1);
+        Object repository = null;
+        Class<?>[] parameterType = constructor.getParameterTypes();
+        for (Object hashSetObject : cache) {
+            if (hashSetObject.getClass().equals(Class.class)) {
+                repository = hashSetObject;
+            }
         }
-        Class<?> repository;
-        try {
-            repository = Class.forName("com.repository." + productName + "Repository");
-            Constructor<?> constructorRepository = repository.getDeclaredConstructor();
-            constructorRepository.setAccessible(true);
-            Object o = constructorRepository.newInstance();
-            createdObject = constructor.newInstance(o);
-            Field instance = createdObject.getClass().getDeclaredField("instance");
-            instance.setAccessible(true);
-            instance.set(createdObject, createdObject);
-        } catch (ClassNotFoundException
-                | NoSuchMethodException
-                | InstantiationException
-                | IllegalAccessException
-                | InvocationTargetException
-                | NoSuchFieldException e) {
-            e.printStackTrace();
+        if (repository == null) {
+            try {
+                Constructor<?> repositoryConstructor = parameterType[0].getDeclaredConstructor();
+                repositoryConstructor.setAccessible(true);
+                repository = createRepository(repositoryConstructor);
+                createdObject = constructor.newInstance(repository);
+                Field instance = createdObject.getClass().getDeclaredField("instance");
+                instance.setAccessible(true);
+                instance.set(createdObject, createdObject);
+            } catch (InstantiationException
+                    | IllegalAccessException
+                    | InvocationTargetException
+                    | NoSuchFieldException
+                    | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
         return createdObject;
     }

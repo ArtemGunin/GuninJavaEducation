@@ -5,7 +5,6 @@ import com.context.Singleton;
 import com.model.product.Manufacturer;
 import com.model.product.OperatingSystem;
 import com.model.product.Phone;
-import com.repository.CrudRepository;
 import com.repository.PhoneRepository;
 
 import java.time.Instant;
@@ -21,7 +20,7 @@ public class PhoneService extends ProductService<Phone> {
     private static PhoneService instance;
 
     @Autowired
-    private PhoneService(CrudRepository<Phone> repository) {
+    private PhoneService(final PhoneRepository repository) {
         super(repository);
     }
 

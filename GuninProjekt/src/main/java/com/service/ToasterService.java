@@ -5,7 +5,6 @@ import com.context.Singleton;
 import com.model.product.Body;
 import com.model.product.Manufacturer;
 import com.model.product.Toaster;
-import com.repository.CrudRepository;
 import com.repository.ToasterRepository;
 
 import java.time.Instant;
@@ -21,7 +20,7 @@ public class ToasterService extends ProductService<Toaster> {
     private static ToasterService instance;
 
     @Autowired
-    private ToasterService(CrudRepository<Toaster> repository) {
+    private ToasterService(final ToasterRepository repository) {
         super(repository);
     }
 
