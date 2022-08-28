@@ -1,5 +1,6 @@
 package com.repository;
 
+import com.context.Singleton;
 import com.model.product.Phone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@Singleton
 public class PhoneRepository implements CrudRepository<Phone> {
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneRepository.class);
 
