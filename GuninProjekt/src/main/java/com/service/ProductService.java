@@ -89,11 +89,11 @@ public abstract class ProductService<T extends Product> {
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
-        System.out.println("Updated product " + repository.findById(t.getId()));
+        System.out.println("Updated product " + repository.getById(t.getId()));
     }
 
     public void resetProductIfPresent(String id) {
-        repository.findById(id).ifPresent(originalProduct -> {
+        repository.getById(id).ifPresent(originalProduct -> {
             originalProduct.setCount(0);
             originalProduct.setPrice(0.0);
             originalProduct.setTitle("Custom");
@@ -101,11 +101,11 @@ public abstract class ProductService<T extends Product> {
     }
 
     public boolean productIsPresent(String id) {
-        return repository.findById(id).isPresent();
+        return repository.getById(id).isPresent();
     }
 
     public T getProductOrCreate(String id) {
-        return repository.findById(id).orElse(createProductWithId(id));
+        return repository.getById(id).orElse(createProductWithId(id));
     }
 
     public void saveProductOrCreate(T t) {
@@ -128,20 +128,20 @@ public abstract class ProductService<T extends Product> {
     }
 
     public Double getCoastOfProducts(String id) {
-        return repository.findById(id)
+        return repository.getById(id)
                 .map(product -> product.getPrice() * product.getCount())
                 .orElseThrow(() -> new IllegalArgumentException
                         ("The base does not contain a phone with this id - " + id));
     }
 
     public Boolean productPriceMiddleBounds(String id, double lowPrice, double highPrice) {
-        return repository.findById(id).filter(product -> product.getPrice() >= lowPrice)
+        return repository.getById(id).filter(product -> product.getPrice() >= lowPrice)
                 .filter(product -> product.getPrice() < highPrice)
                 .isPresent();
     }
 
     public T getProductWithIdOrCreatedIfProductMiss(String id) {
-        return repository.findById(id).or(() -> Optional.of(createProductWithId(id)))
+        return repository.getById(id).or(() -> Optional.of(createProductWithId(id)))
                 .orElseThrow(() -> new NullPointerException("Can not return the product"));
     }
 

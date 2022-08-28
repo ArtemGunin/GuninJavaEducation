@@ -50,7 +50,7 @@ class ProductServiceTest {
 
             @Override
             protected TV getProductWithModifiedId(String originalId, String newId) {
-                TV copiedTV = repository.findById(originalId).orElseThrow(()
+                TV copiedTV = repository.getById(originalId).orElseThrow(()
                         -> new IllegalArgumentException("The base does not contain a product with this id - " + originalId));
                 return new TV(newId,
                         copiedTV.getTitle(),
@@ -205,40 +205,40 @@ class ProductServiceTest {
     @Test
     void resetProductIfPresent() {
         target.resetProductIfPresent("123");
-        Mockito.verify(repository).findById("123");
+        Mockito.verify(repository).getById("123");
     }
 
     @Test
     void resetProductIfPresent_NotPresent() {
         target.createAndSaveProducts(2);
         List<TV> beforeReset = target.getAll();
-        Mockito.when(repository.findById("123")).thenReturn(Optional.empty());
+        Mockito.when(repository.getById("123")).thenReturn(Optional.empty());
         target.resetProductIfPresent("123");
         Assertions.assertEquals(beforeReset, target.getAll());
     }
 
     @Test
     void productIsPresent_True() {
-        Mockito.when(repository.findById("123")).thenReturn(Optional.of(target.createDefaultProduct()));
+        Mockito.when(repository.getById("123")).thenReturn(Optional.of(target.createDefaultProduct()));
         Assertions.assertTrue(target.productIsPresent("123"));
     }
 
     @Test
     void productIsPresent_False() {
-        Mockito.when(repository.findById("123")).thenReturn(Optional.empty());
+        Mockito.when(repository.getById("123")).thenReturn(Optional.empty());
         Assertions.assertFalse(target.productIsPresent("123"));
     }
 
     @Test
     void getProductOrCreate_GetActual() {
         final TV tv = target.createDefaultProduct();
-        Mockito.when(repository.findById("123")).thenReturn(Optional.of(tv));
+        Mockito.when(repository.getById("123")).thenReturn(Optional.of(tv));
         Assertions.assertEquals(tv, target.getProductOrCreate("123"));
     }
 
     @Test
     void getProductOrCreate_Create() {
-        Mockito.when(repository.findById("123")).thenReturn(Optional.empty());
+        Mockito.when(repository.getById("123")).thenReturn(Optional.empty());
         Assertions.assertEquals("123", target.getProductOrCreate("123").getId());
     }
 
@@ -269,7 +269,7 @@ class ProductServiceTest {
         tv.setPrice(100.0);
         Mockito.when(repository.hasProduct(tv.getId())).thenReturn(true);
         Mockito.when(repository.update(tv)).thenCallRealMethod();
-        Mockito.when(repository.findById(tv.getId())).thenReturn(Optional.of(originalTV));
+        Mockito.when(repository.getById(tv.getId())).thenReturn(Optional.of(originalTV));
         target.updateProductOrCreateDefault(tv);
         Assertions.assertEquals(tv.getTitle(), originalTV.getTitle());
         Assertions.assertEquals(tv.getCount(), originalTV.getCount());
@@ -292,7 +292,7 @@ class ProductServiceTest {
     @Test
     void getCoastOfProducts() {
         final TV tv = target.createProductWithId("123");
-        Mockito.when(repository.findById("123")).thenReturn(Optional.of(tv));
+        Mockito.when(repository.getById("123")).thenReturn(Optional.of(tv));
         final double expected = tv.getCount() * tv.getPrice();
         Assertions.assertEquals(expected, target.getCoastOfProducts(tv.getId()));
     }
@@ -307,34 +307,34 @@ class ProductServiceTest {
     void productPriceMiddleBounds_True() {
         final TV tv = target.createProductWithId("123");
         tv.setPrice(800);
-        Mockito.when(repository.findById("123")).thenReturn(Optional.of(tv));
+        Mockito.when(repository.getById("123")).thenReturn(Optional.of(tv));
         Assertions.assertTrue(target.productPriceMiddleBounds("123", 500, 1000));
     }
 
     @Test
     void productPriceMiddleBounds_False() {
         final TV tv = target.createProductWithId("123");
-        Mockito.when(repository.findById("123")).thenReturn(Optional.of(tv));
+        Mockito.when(repository.getById("123")).thenReturn(Optional.of(tv));
         Assertions.assertFalse(target.productPriceMiddleBounds("123", 500, 1000));
     }
 
     @Test
     void getProductWithIdOrCreatedIfProductMiss_PhonePresent() {
         final TV tv = target.createProductWithId("123");
-        Mockito.when(repository.findById("123")).thenReturn(Optional.of(tv));
+        Mockito.when(repository.getById("123")).thenReturn(Optional.of(tv));
         Assertions.assertEquals(tv, target.getProductWithIdOrCreatedIfProductMiss("123"));
     }
 
     @Test
     void getProductWithIdOrCreatedIfProductMiss_PhoneMiss() {
         final TV tv = target.createProductWithId("123");
-        Mockito.when(repository.findById("123")).thenReturn(Optional.empty());
+        Mockito.when(repository.getById("123")).thenReturn(Optional.empty());
         Assertions.assertEquals("123", target.getProductWithIdOrCreatedIfProductMiss("123").getId());
     }
 
     @Test
     void getProductWithIdOrCreatedIfProductMiss_Trowing() {
-        Mockito.when(repository.findById("123")).thenReturn(null);
+        Mockito.when(repository.getById("123")).thenReturn(null);
         Assertions.assertThrows(NullPointerException.class,
                 () -> target.getProductWithIdOrCreatedIfProductMiss("123"));
     }

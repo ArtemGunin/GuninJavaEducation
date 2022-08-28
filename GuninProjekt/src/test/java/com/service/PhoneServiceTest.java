@@ -2,7 +2,7 @@ package com.service;
 
 import com.model.product.Manufacturer;
 import com.model.product.Phone;
-import com.repository.PhoneRepository;
+import com.repository.PhoneRepositoryDB;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +14,11 @@ import java.util.Optional;
 class PhoneServiceTest {
 
     private static PhoneService target;
-    private static PhoneRepository repository;
+    private static PhoneRepositoryDB repository;
 
     @BeforeAll
     static void beforeAll() {
-        repository = Mockito.mock(PhoneRepository.class);
+        repository = Mockito.mock(PhoneRepositoryDB.class);
         target = PhoneService.getInstance(repository);
     }
 
@@ -34,7 +34,7 @@ class PhoneServiceTest {
     @Test
     void getProductWithModifiedId() {
         final Phone phone = target.createProductWithId("000");
-        Mockito.when(repository.findById("000")).thenReturn(Optional.of(phone));
+        Mockito.when(repository.getById("000")).thenReturn(Optional.of(phone));
         Phone modifiedPhone = target.getProductWithModifiedId("000", "123");
         Assertions.assertEquals("123", modifiedPhone.getId());
         Assertions.assertEquals(phone.getTitle(), modifiedPhone.getTitle());
@@ -43,7 +43,7 @@ class PhoneServiceTest {
 
     @Test
     void getProductWithModifiedId_throwing() {
-        Mockito.when(repository.findById("123")).thenReturn(Optional.empty());
+        Mockito.when(repository.getById("123")).thenReturn(Optional.empty());
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> target.getProductWithModifiedId("123", "321"));
     }

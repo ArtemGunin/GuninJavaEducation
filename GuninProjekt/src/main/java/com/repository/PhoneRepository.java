@@ -44,7 +44,7 @@ public class PhoneRepository implements CrudRepository<Phone> {
 
     @Override
     public boolean update(Phone phone) {
-        final Optional<Phone> result = findById(phone.getId());
+        final Optional<Phone> result = getById(phone.getId());
         if (result.isEmpty()) {
             return false;
         }
@@ -70,7 +70,7 @@ public class PhoneRepository implements CrudRepository<Phone> {
     }
 
     @Override
-    public Optional<Phone> findById(String id) {
+    public Optional<Phone> getById(String id) {
         return phones.stream()
                 .filter(phone -> phone.getId().equals(id))
                 .findAny();
