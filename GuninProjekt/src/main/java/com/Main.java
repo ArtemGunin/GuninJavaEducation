@@ -1,6 +1,6 @@
 package com;
 
-import com.command.ConsoleMenu;
+import com.context.Context;
 
 import java.io.IOException;
 
@@ -8,6 +8,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        ConsoleMenu.menu();
+        Context context = new Context();
+        context.run();
     }
 }

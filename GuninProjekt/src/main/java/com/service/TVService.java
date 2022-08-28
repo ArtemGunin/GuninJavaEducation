@@ -1,9 +1,10 @@
 package com.service;
 
+import com.context.Autowired;
+import com.context.Singleton;
 import com.model.product.Manufacturer;
 import com.model.product.OperatingSystem;
 import com.model.product.TV;
-import com.repository.CrudRepository;
 import com.repository.TVRepository;
 
 import java.time.Instant;
@@ -13,11 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Singleton
 public class TVService extends ProductService<TV> {
 
     private static TVService instance;
 
-    private TVService(CrudRepository<TV> repository) {
+    @Autowired
+    private TVService(final TVRepository repository) {
         super(repository);
     }
 

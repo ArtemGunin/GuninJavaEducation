@@ -1,9 +1,10 @@
 package com.service;
 
+import com.context.Autowired;
+import com.context.Singleton;
 import com.model.product.Manufacturer;
 import com.model.product.OperatingSystem;
 import com.model.product.Phone;
-import com.repository.CrudRepository;
 import com.repository.PhoneRepository;
 
 import java.time.Instant;
@@ -13,11 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Singleton
 public class PhoneService extends ProductService<Phone> {
 
     private static PhoneService instance;
 
-    private PhoneService(CrudRepository<Phone> repository) {
+    @Autowired
+    private PhoneService(final PhoneRepository repository) {
         super(repository);
     }
 
