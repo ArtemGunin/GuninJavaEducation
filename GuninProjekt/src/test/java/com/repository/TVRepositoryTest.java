@@ -151,7 +151,7 @@ class TVRepositoryTest {
     @Test
     void findById() {
         target.save(tv);
-        final Optional<TV> optionalPhone = target.findById(tv.getId());
+        final Optional<TV> optionalPhone = target.getById(tv.getId());
         Assertions.assertTrue(optionalPhone.isPresent());
         final TV actualTV = optionalPhone.get();
         Assertions.assertEquals(tv.getId(), actualTV.getId());

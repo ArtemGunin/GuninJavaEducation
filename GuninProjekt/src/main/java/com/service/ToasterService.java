@@ -5,7 +5,7 @@ import com.context.Singleton;
 import com.model.product.Body;
 import com.model.product.Manufacturer;
 import com.model.product.Toaster;
-import com.repository.ToasterRepository;
+import com.repository.ToasterRepositoryDB;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -17,21 +17,24 @@ import java.util.function.Function;
 @Singleton
 public class ToasterService extends ProductService<Toaster> {
 
+    private final ToasterRepositoryDB repository;
+
     private static ToasterService instance;
 
     @Autowired
-    private ToasterService(final ToasterRepository repository) {
+    private ToasterService(final ToasterRepositoryDB repository) {
         super(repository);
+        this.repository = repository;
     }
 
     public static ToasterService getInstance() {
         if (instance == null) {
-            instance = new ToasterService(ToasterRepository.getInstance());
+            instance = new ToasterService(ToasterRepositoryDB.getInstance());
         }
         return instance;
     }
 
-    public static ToasterService getInstance(final ToasterRepository repository) {
+    public static ToasterService getInstance(final ToasterRepositoryDB repository) {
         if (instance == null) {
             instance = new ToasterService(repository);
         }
@@ -52,7 +55,7 @@ public class ToasterService extends ProductService<Toaster> {
 
     @Override
     protected Toaster getProductWithModifiedId(String originalId, String newId) {
-        Toaster copiedToaster = repository.findById(originalId).orElseThrow(()
+        Toaster copiedToaster = repository.getById(originalId).orElseThrow(()
                 -> new IllegalArgumentException("The base does not contain a product with this id - " + originalId));
         return new Toaster.ToasterBuilder()
                 .setId(newId)

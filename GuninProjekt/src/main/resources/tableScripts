@@ -1,0 +1,93 @@
+-- Table: public.Invoice
+
+-- DROP TABLE IF EXISTS public."Invoice";
+
+CREATE TABLE IF NOT EXISTS public."Invoice"
+(
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    sum double precision NOT NULL,
+    "time" timestamp without time zone,
+    CONSTRAINT "Invoice_pkey" PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Invoice"
+    OWNER to postgres;
+
+
+
+-- Table: public.Products
+
+-- DROP TABLE IF EXISTS public."Products";
+
+CREATE TABLE IF NOT EXISTS public."Products"
+(
+    invoice character varying COLLATE pg_catalog."default" NOT NULL,
+    product character varying COLLATE pg_catalog."default" NOT NULL,
+    type character varying COLLATE pg_catalog."default"
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Products"
+    OWNER to postgres;
+
+
+
+-- Table: public.Phone
+
+-- DROP TABLE IF EXISTS public."Phone";
+
+CREATE TABLE IF NOT EXISTS public."Phone"
+(
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    model character varying COLLATE pg_catalog."default",
+    manufacturer character varying COLLATE pg_catalog."default",
+    price double precision
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Phone"
+    OWNER to postgres;
+
+
+
+    -- Table: public.TV
+
+    -- DROP TABLE IF EXISTS public."TV";
+
+    CREATE TABLE IF NOT EXISTS public."TV"
+    (
+        id character varying COLLATE pg_catalog."default" NOT NULL,
+        model character varying COLLATE pg_catalog."default" NOT NULL,
+        manufacturer character varying COLLATE pg_catalog."default" NOT NULL,
+        price double precision,
+        CONSTRAINT "TV_pkey" PRIMARY KEY (id)
+    )
+
+    TABLESPACE pg_default;
+
+    ALTER TABLE IF EXISTS public."TV"
+        OWNER to postgres;
+
+
+
+        -- Table: public.Toaster
+
+        -- DROP TABLE IF EXISTS public."Toaster";
+
+        CREATE TABLE IF NOT EXISTS public."Toaster"
+        (
+            id character varying COLLATE pg_catalog."default" NOT NULL,
+            model character varying COLLATE pg_catalog."default" NOT NULL,
+            manufacturer character varying COLLATE pg_catalog."default" NOT NULL,
+            price double precision,
+            CONSTRAINT "Toaster_pkey" PRIMARY KEY (id)
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS public."Toaster"
+            OWNER to postgres;

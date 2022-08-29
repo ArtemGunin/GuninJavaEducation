@@ -46,7 +46,7 @@ public class ToasterRepository implements CrudRepository<Toaster> {
 
     @Override
     public boolean update(Toaster toaster) {
-        final Optional<Toaster> result = findById(toaster.getId());
+        final Optional<Toaster> result = getById(toaster.getId());
         if (result.isEmpty()) {
             return false;
         }
@@ -72,7 +72,7 @@ public class ToasterRepository implements CrudRepository<Toaster> {
     }
 
     @Override
-    public Optional<Toaster> findById(String id) {
+    public Optional<Toaster> getById(String id) {
         return toasters.stream()
                 .filter(toaster -> toaster.getId().equals(id))
                 .findAny();

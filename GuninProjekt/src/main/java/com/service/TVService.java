@@ -5,8 +5,7 @@ import com.context.Singleton;
 import com.model.product.Manufacturer;
 import com.model.product.OperatingSystem;
 import com.model.product.TV;
-import com.repository.TVRepository;
-
+import com.repository.TVRepositoryDB;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -17,21 +16,24 @@ import java.util.function.Function;
 @Singleton
 public class TVService extends ProductService<TV> {
 
+    private final TVRepositoryDB repository;
+
     private static TVService instance;
 
     @Autowired
-    private TVService(final TVRepository repository) {
+    private TVService(TVRepositoryDB repository) {
         super(repository);
+        this.repository = repository;
     }
 
     public static TVService getInstance() {
         if (instance == null) {
-            instance = new TVService(TVRepository.getInstance());
+            instance = new TVService(TVRepositoryDB.getInstance());
         }
         return instance;
     }
 
-    public static TVService getInstance(final TVRepository repository) {
+    public static TVService getInstance(final TVRepositoryDB repository) {
         if (instance == null) {
             instance = new TVService(repository);
         }
@@ -52,7 +54,7 @@ public class TVService extends ProductService<TV> {
 
     @Override
     protected TV getProductWithModifiedId(String originalId, String newId) {
-        TV copiedTV = repository.findById(originalId).orElseThrow(()
+        TV copiedTV = repository.getById(originalId).orElseThrow(()
                 -> new IllegalArgumentException("The base does not contain a product with this id - " + originalId));
         return new TV(newId,
                 copiedTV.getTitle(),

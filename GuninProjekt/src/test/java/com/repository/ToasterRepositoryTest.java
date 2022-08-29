@@ -169,7 +169,7 @@ class ToasterRepositoryTest {
     @Test
     void findById() {
         target.save(toaster);
-        final Optional<Toaster> optionalToaster = target.findById(toaster.getId());
+        final Optional<Toaster> optionalToaster = target.getById(toaster.getId());
         Assertions.assertTrue(optionalToaster.isPresent());
         final Toaster actualToaster = optionalToaster.get();
         Assertions.assertEquals(toaster.getId(), actualToaster.getId());

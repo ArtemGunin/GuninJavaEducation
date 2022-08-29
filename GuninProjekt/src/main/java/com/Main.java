@@ -1,6 +1,7 @@
 package com;
 
-import com.context.Context;
+import com.repository.InvoiceRepositoryDB;
+import com.verification.OperationsJDBC;
 
 import java.io.IOException;
 
@@ -8,7 +9,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Context context = new Context();
-        context.run();
+        new InvoiceRepositoryDB().clearAllDB();
+
+        new OperationsJDBC().run();
     }
 }

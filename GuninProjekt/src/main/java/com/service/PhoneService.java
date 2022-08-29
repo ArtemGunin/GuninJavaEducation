@@ -5,7 +5,7 @@ import com.context.Singleton;
 import com.model.product.Manufacturer;
 import com.model.product.OperatingSystem;
 import com.model.product.Phone;
-import com.repository.PhoneRepository;
+import com.repository.PhoneRepositoryDB;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -17,21 +17,24 @@ import java.util.function.Function;
 @Singleton
 public class PhoneService extends ProductService<Phone> {
 
+    private final PhoneRepositoryDB repository;
+
     private static PhoneService instance;
 
     @Autowired
-    private PhoneService(final PhoneRepository repository) {
+    private PhoneService(final PhoneRepositoryDB repository) {
         super(repository);
+        this.repository = repository;
     }
 
     public static PhoneService getInstance() {
         if (instance == null) {
-            instance = new PhoneService(PhoneRepository.getInstance());
+            instance = new PhoneService(PhoneRepositoryDB.getInstance());
         }
         return instance;
     }
 
-    public static PhoneService getInstance(final PhoneRepository repository) {
+    public static PhoneService getInstance(final PhoneRepositoryDB repository) {
         if (instance == null) {
             instance = new PhoneService(repository);
         }
@@ -51,7 +54,7 @@ public class PhoneService extends ProductService<Phone> {
 
     @Override
     public Phone getProductWithModifiedId(String originalId, String newId) {
-        Phone copiedPhone = repository.findById(originalId).orElseThrow(()
+        Phone copiedPhone = repository.getById(originalId).orElseThrow(()
                 -> new IllegalArgumentException("The base does not contain a product with this id - " + originalId));
         return new Phone(newId,
                 copiedPhone.getTitle(),

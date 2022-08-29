@@ -46,7 +46,7 @@ public class TVRepository implements CrudRepository<TV> {
 
     @Override
     public boolean update(TV tv) {
-        final Optional<TV> result = findById(tv.getId());
+        final Optional<TV> result = getById(tv.getId());
         if (result.isEmpty()) {
             return false;
         }
@@ -72,7 +72,7 @@ public class TVRepository implements CrudRepository<TV> {
     }
 
     @Override
-    public Optional<TV> findById(String id) {
+    public Optional<TV> getById(String id) {
         return tvs.stream()
                 .filter(tv -> tv.getId().equals(id))
                 .findAny();

@@ -2,7 +2,7 @@ package com.service;
 
 import com.model.product.Manufacturer;
 import com.model.product.Toaster;
-import com.repository.ToasterRepository;
+import com.repository.ToasterRepositoryDB;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +14,11 @@ import java.util.Optional;
 class ToasterServiceTest {
 
     private static ToasterService target;
-    private static ToasterRepository repository;
+    private static ToasterRepositoryDB repository;
 
     @BeforeAll
     static void beforeAll() {
-        repository = Mockito.mock(ToasterRepository.class);
+        repository = Mockito.mock(ToasterRepositoryDB.class);
         target = ToasterService.getInstance(repository);
     }
 
@@ -34,7 +34,7 @@ class ToasterServiceTest {
     @Test
     void getProductWithModifiedId() {
         final Toaster toaster = target.createProductWithId("000");
-        Mockito.when(repository.findById("000")).thenReturn(Optional.of(toaster));
+        Mockito.when(repository.getById("000")).thenReturn(Optional.of(toaster));
         Toaster modifiedToaster = target.getProductWithModifiedId("000", "123");
         Assertions.assertEquals("123", modifiedToaster.getId());
         Assertions.assertEquals(toaster.getTitle(), modifiedToaster.getTitle());
@@ -43,7 +43,7 @@ class ToasterServiceTest {
 
     @Test
     void getProductWithModifiedId_throwing() {
-        Mockito.when(repository.findById("123")).thenReturn(Optional.empty());
+        Mockito.when(repository.getById("123")).thenReturn(Optional.empty());
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> target.getProductWithModifiedId("123", "321"));
     }

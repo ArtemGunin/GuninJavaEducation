@@ -149,7 +149,7 @@ class PhoneRepositoryTest {
     @Test
     void findById() {
         target.save(phone);
-        final Optional<Phone> optionalPhone = target.findById(phone.getId());
+        final Optional<Phone> optionalPhone = target.getById(phone.getId());
         Assertions.assertTrue(optionalPhone.isPresent());
         final Phone actualPhone = optionalPhone.get();
         Assertions.assertEquals(phone.getId(), actualPhone.getId());
