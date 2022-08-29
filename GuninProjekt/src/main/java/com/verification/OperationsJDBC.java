@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class JDBC_Operations {
+public class OperationsJDBC {
 
     private static final InvoiceServiceDB INVOICE_SERVICE_DB = new InvoiceServiceDB(new InvoiceRepositoryDB());
     private static final ProductService<Phone> PHONE_SERVICE = PhoneService.getInstance();

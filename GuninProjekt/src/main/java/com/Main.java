@@ -1,7 +1,7 @@
 package com;
 
 import com.repository.InvoiceRepositoryDB;
-import com.verification.JDBC_Operations;
+import com.verification.OperationsJDBC;
 
 import java.io.IOException;
 
@@ -11,6 +11,6 @@ public class Main {
 
         new InvoiceRepositoryDB().clearAllDB();
 
-        new JDBC_Operations().run();
+        new OperationsJDBC().run();
     }
 }
