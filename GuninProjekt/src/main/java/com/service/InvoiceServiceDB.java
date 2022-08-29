@@ -29,14 +29,11 @@ public class InvoiceServiceDB {
     }
 
     public List<Invoice> getInvoicesWithSumMoreThen(double lowerBound) {
-        String sql = "SELECT * FROM \"public\".\"Invoice\" WHERE sum > ?";
-        return invoiceRepositoryDB.getInvoiceListWithSumConditions(sql, lowerBound);
+        return invoiceRepositoryDB.getInvoiceListWithSumConditions(lowerBound);
     }
 
     public int getCountOfInvoices() {
-        String parameter = "total";
-        String sql = "SELECT COUNT(id) AS " + parameter + " FROM \"public\".\"Invoice\"";
-        return invoiceRepositoryDB.getCountBy(sql, parameter);
+        return invoiceRepositoryDB.getCount();
     }
 
     public boolean updateTime(String id, LocalDateTime localDateTime) {
@@ -44,12 +41,7 @@ public class InvoiceServiceDB {
     }
 
     public Map<Double, Integer> groupInvoicesBySum() {
-        String numericColumn = "sum";
-        String function = "COUNT";
-        String sql = "SELECT " + function + "(id) AS " + function + ", " + numericColumn +
-                " FROM \"public\".\"Invoice\" " +
-                "GROUP BY " + numericColumn;
-        return invoiceRepositoryDB.groupInvoicesBy(sql, numericColumn, function);
+        return invoiceRepositoryDB.groupInvoices();
     }
 
     public List<Invoice> getAllInvoices() {

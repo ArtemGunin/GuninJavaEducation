@@ -20,7 +20,7 @@ public class InvoiceRepositoryDB {
     private static final Connection CONNECTION = JDBCConfig.getConnection();
 
     public void save(Invoice invoice) {
-        String sqlInvoice = "INSERT INTO \"public\".\"Invoice\" (id, sum, time, date) VALUES (?, ?, ?, ?)";
+        String sqlInvoice = "INSERT INTO \"public\".\"Invoice\" (id, sum, time) VALUES (?, ?, ?)";
         try (final PreparedStatement invoiceStatement = CONNECTION.prepareStatement(sqlInvoice)) {
             setObjectFields(invoiceStatement, invoice);
             invoiceStatement.execute();
@@ -30,7 +30,7 @@ public class InvoiceRepositoryDB {
     }
 
     public void saveAll(List<Invoice> invoices) {
-        String sqlInvoice = "INSERT INTO \"public\".\"Invoice\" (id, sum, time, date) VALUES (?, ?, ?, ?)";
+        String sqlInvoice = "INSERT INTO \"public\".\"Invoice\" (id, sum, time) VALUES (?, ?, ?)";
 
         try (final PreparedStatement invoiceStatement = CONNECTION.prepareStatement(sqlInvoice)) {
             for (Invoice invoice : invoices) {
@@ -51,8 +51,7 @@ public class InvoiceRepositoryDB {
 
         invoiceStatement.setString(1, invoice.getId());
         invoiceStatement.setDouble(2, invoice.getSum());
-        invoiceStatement.setTime(3, Time.valueOf(invoice.getTime().toLocalTime()));
-        invoiceStatement.setDate(4, Date.valueOf(invoice.getTime().toLocalDate()));
+        invoiceStatement.setTimestamp(3, Timestamp.valueOf(invoice.getTime()));
 
         setInvoiceProducts(invoice);
     }
@@ -95,8 +94,7 @@ public class InvoiceRepositoryDB {
         Invoice invoice = new Invoice();
         invoice.setId(invoiceId);
         invoice.setSum(resultSet.getDouble("sum"));
-        invoice.setTime(resultSet.getTime("time").toLocalTime()
-                .atDate(resultSet.getDate("date").toLocalDate()));
+        invoice.setTime(resultSet.getTimestamp("time").toLocalDateTime());
         invoice.setProducts(getInvoiceProducts(invoiceId));
         return invoice;
     }
@@ -227,19 +225,17 @@ public class InvoiceRepositoryDB {
     }
 
     public boolean updateTime(String id, LocalDateTime time) {
-        String sql = "UPDATE \"public\".\"Invoice\" SET time = ?, date = ? WHERE id = ?";
+        String sql = "UPDATE \"public\".\"Invoice\" SET time = ? WHERE id = ?";
         boolean hasUpdated = false;
         try (PreparedStatement statement = CONNECTION.prepareStatement(sql);
              PreparedStatement statement1 = CONNECTION.prepareStatement("SELECT * FROM \"public\".\"Invoice\" WHERE id = ?")) {
-            statement.setTime(1, Time.valueOf(time.toLocalTime()));
-            statement.setDate(2, Date.valueOf(time.toLocalDate()));
-            statement.setString(3, id);
+            statement.setTimestamp(1, Timestamp.valueOf(time));
+            statement.setString(2, id);
             statement.execute();
             statement1.setString(1, id);
             final ResultSet resultSet = statement1.executeQuery();
             while (resultSet.next()) {
-                if (resultSet.getTime("time").equals(Time.valueOf(time.toLocalTime()))
-                        && resultSet.getDate("date").equals(Date.valueOf(time.toLocalDate()))) {
+                if (resultSet.getTimestamp("time").toLocalDateTime().equals(time)) {
                     hasUpdated = true;
                 }
             }
@@ -333,7 +329,8 @@ public class InvoiceRepositoryDB {
         return false;
     }
 
-    public List<Invoice> getInvoiceListWithSumConditions(String sql, double sumCondition) {
+    public List<Invoice> getInvoiceListWithSumConditions(double sumCondition) {
+        String sql = "SELECT * FROM \"public\".\"Invoice\" WHERE sum > ?";
         final List<Invoice> result = new LinkedList<>();
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
             statement.setDouble(1, sumCondition);
@@ -347,12 +344,13 @@ public class InvoiceRepositoryDB {
         return result;
     }
 
-    public int getCountBy(String sql, String parameter) {
+    public int getCount() {
+        String sql = "SELECT COUNT(id) AS total FROM \"public\".\"Invoice\"";
         int result = 0;
         try (final Statement statement = CONNECTION.createStatement()) {
             final ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                result = resultSet.getInt(parameter);
+                result = resultSet.getInt("total");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -360,12 +358,14 @@ public class InvoiceRepositoryDB {
         return result;
     }
 
-    public Map<Double, Integer> groupInvoicesBy(String sql, String numericColumn, String function) {
+    public Map<Double, Integer> groupInvoices() {
         Map<Double, Integer> groups = new HashMap<>();
+        String sql = "SELECT COUNT(id) AS COUNT, sum FROM \"public\".\"Invoice\" GROUP BY sum";
+
         try (final Statement statement = CONNECTION.createStatement()) {
             final ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                groups.put(resultSet.getDouble(numericColumn), resultSet.getInt(function));
+                groups.put(resultSet.getDouble("sum"), resultSet.getInt("COUNT"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

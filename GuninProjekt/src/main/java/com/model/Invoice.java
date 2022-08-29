@@ -12,7 +12,7 @@ import java.util.List;
 public class Invoice {
     private String id;
     private double sum;
-    private List<? extends Product> products;
+    private List<Product> products;
     private LocalDateTime time;
 
     @Override
