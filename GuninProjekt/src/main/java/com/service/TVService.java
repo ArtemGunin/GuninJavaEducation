@@ -1,10 +1,11 @@
 package com.service;
 
+import com.context.Autowired;
+import com.context.Singleton;
 import com.model.product.Manufacturer;
 import com.model.product.OperatingSystem;
 import com.model.product.TV;
 import com.repository.TVRepositoryDB;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Singleton
 public class TVService extends ProductService<TV> {
 
     private final TVRepositoryDB repository;
