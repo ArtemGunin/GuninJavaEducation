@@ -21,6 +21,7 @@ public class ToasterService extends ProductService<Toaster> {
 
     private static ToasterService instance;
 
+    @Autowired
     private ToasterService(final ToasterRepositoryDB repository) {
         super(repository);
         this.repository = repository;

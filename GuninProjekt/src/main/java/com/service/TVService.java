@@ -20,6 +20,7 @@ public class TVService extends ProductService<TV> {
 
     private static TVService instance;
 
+    @Autowired
     private TVService(TVRepositoryDB repository) {
         super(repository);
         this.repository = repository;

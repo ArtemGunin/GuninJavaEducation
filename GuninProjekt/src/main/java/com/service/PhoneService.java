@@ -21,6 +21,7 @@ public class PhoneService extends ProductService<Phone> {
 
     private static PhoneService instance;
 
+    @Autowired
     private PhoneService(final PhoneRepositoryDB repository) {
         super(repository);
         this.repository = repository;
