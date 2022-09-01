@@ -1,8 +1,10 @@
-package com.repository;
+package com.repository.JDBC;
 
 import com.config.JDBCConfig;
+import com.context.Singleton;
 import com.model.product.Manufacturer;
-import com.model.product.Toaster;
+import com.model.product.Phone;
+import com.repository.CrudRepository;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.EnumUtils;
 
@@ -11,23 +13,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class ToasterRepositoryDB implements CrudRepository<Toaster> {
+@Singleton
+public class PhoneRepositoryDB implements CrudRepository<Phone> {
     private static final Connection CONNECTION = JDBCConfig.getConnection();
 
-    private static ToasterRepositoryDB instance;
+    private static PhoneRepositoryDB instance;
 
-    public static ToasterRepositoryDB getInstance() {
+    public static PhoneRepositoryDB getInstance() {
         if (instance == null) {
-            instance = new ToasterRepositoryDB();
+            instance = new PhoneRepositoryDB();
         }
         return instance;
     }
 
     @Override
-    public void save(Toaster toaster) {
-        String sql = "INSERT INTO \"public\".\"Toaster\" (id, model, manufacturer, price) VALUES (?, ?, ?, ?)";
+    public void save(Phone phone) {
+        String sql = "INSERT INTO \"public\".\"Phone\" (id, model, manufacturer, price) VALUES (?, ?, ?, ?)";
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
-            setObjectFields(statement, toaster);
+            setObjectFields(statement, phone);
             statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -35,12 +38,12 @@ public class ToasterRepositoryDB implements CrudRepository<Toaster> {
     }
 
     @Override
-    public void saveAll(List<Toaster> toasters) {
-        String sql = "INSERT INTO \"public\".\"Toaster\" (id, model, manufacturer, price) VALUES (?, ?, ?, ?)";
+    public void saveAll(List<Phone> phones) {
+        String sql = "INSERT INTO \"public\".\"Phone\" (id, model, manufacturer, price) VALUES (?, ?, ?, ?)";
 
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
-            for (Toaster toaster : toasters) {
-                setObjectFields(statement, toaster);
+            for (Phone phone : phones) {
+                setObjectFields(statement, phone);
                 CONNECTION.setAutoCommit(false);
                 statement.addBatch();
             }
@@ -53,30 +56,30 @@ public class ToasterRepositoryDB implements CrudRepository<Toaster> {
     }
 
     @SneakyThrows
-    private void setObjectFields(final PreparedStatement statement, final Toaster toaster) {
-        statement.setString(1, toaster.getId());
-        statement.setString(2, toaster.getModel());
-        statement.setString(3, toaster.getManufacturer().name());
-        statement.setDouble(4, toaster.getPrice());
+    private void setObjectFields(final PreparedStatement statement, final Phone phone) {
+        statement.setString(1, phone.getId());
+        statement.setString(2, phone.getModel());
+        statement.setString(3, phone.getManufacturer().name());
+        statement.setDouble(4, phone.getPrice());
     }
 
     @Override
-    public boolean update(Toaster toaster) {
-        String sql = "UPDATE \"public\".\"Toaster\" SET model = ?, manufacturer = ?, price = ? WHERE id = ?";
+    public boolean update(Phone phone) {
+        String sql = "UPDATE \"public\".\"Phone\" SET model = ?, manufacturer = ?, price = ? WHERE id = ?";
         boolean hasUpdated = false;
         try (PreparedStatement statement = CONNECTION.prepareStatement(sql);
-             PreparedStatement statement1 = CONNECTION.prepareStatement("SELECT * FROM \"public\".\"Toaster\"")) {
-            statement.setString(1, toaster.getModel());
-            statement.setString(2, toaster.getManufacturer().name());
-            statement.setDouble(3, toaster.getPrice());
-            statement.setString(4, toaster.getId());
+             PreparedStatement statement1 = CONNECTION.prepareStatement("SELECT * FROM \"public\".\"Phone\"")) {
+            statement.setString(1, phone.getModel());
+            statement.setString(2, phone.getManufacturer().name());
+            statement.setDouble(3, phone.getPrice());
+            statement.setString(4, phone.getId());
             statement.execute();
             final ResultSet resultSet = statement1.executeQuery();
             while (resultSet.next()) {
-                if (resultSet.getString("id").equals(toaster.getId())
-                        && resultSet.getString("model").equals(toaster.getModel())
-                        && resultSet.getString("manufacturer").equals(toaster.getManufacturer().name())
-                        && resultSet.getDouble("price") == (toaster.getPrice())) {
+                if (resultSet.getString("id").equals(phone.getId())
+                        && resultSet.getString("model").equals(phone.getModel())
+                        && resultSet.getString("manufacturer").equals(phone.getManufacturer().name())
+                        && resultSet.getDouble("price") == phone.getPrice()) {
                     hasUpdated = true;
                 }
             }
@@ -88,10 +91,10 @@ public class ToasterRepositoryDB implements CrudRepository<Toaster> {
 
     @Override
     public boolean delete(String id) {
-        String sql = "DELETE FROM  \"public\".\"Toaster\" WHERE id = ?";
+        String sql = "DELETE FROM  \"public\".\"Phone\" WHERE id = ?";
         boolean hasDeleted = true;
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql);
-             PreparedStatement statement1 = CONNECTION.prepareStatement("SELECT * FROM \"public\".\"Toaster\"")) {
+             PreparedStatement statement1 = CONNECTION.prepareStatement("SELECT * FROM \"public\".\"Phone\"")) {
             boolean hasBeforeDeleted = hasProduct(id);
             if (!hasBeforeDeleted) {
                 return false;
@@ -111,10 +114,10 @@ public class ToasterRepositoryDB implements CrudRepository<Toaster> {
     }
 
     @Override
-    public List<Toaster> getAll() {
-        final List<Toaster> result = new LinkedList<>();
+    public List<Phone> getAll() {
+        final List<Phone> result = new LinkedList<>();
         try (final Statement statement = CONNECTION.createStatement()) {
-            final ResultSet resultSet = statement.executeQuery("SELECT * FROM \"public\".\"Toaster\"");
+            final ResultSet resultSet = statement.executeQuery("SELECT * FROM \"public\".\"Phone\"");
             while (resultSet.next()) {
                 result.add(setFieldsToObject(resultSet));
             }
@@ -125,7 +128,7 @@ public class ToasterRepositoryDB implements CrudRepository<Toaster> {
     }
 
     @SneakyThrows
-    private Toaster setFieldsToObject(final ResultSet resultSet) {
+    private Phone setFieldsToObject(final ResultSet resultSet) {
         final String id = resultSet.getString("id");
         final String model = resultSet.getString("model");
         final Manufacturer manufacturer = EnumUtils.getEnum(
@@ -133,68 +136,63 @@ public class ToasterRepositoryDB implements CrudRepository<Toaster> {
                 resultSet.getString("manufacturer"),
                 Manufacturer.NONE);
         final double price = resultSet.getDouble("price");
-        return new Toaster.ToasterBuilder()
-                .setModel(model)
-                .setManufacturer(manufacturer)
-                .setId(id)
-                .setPrice(price)
-                .build();
+        return new Phone(id, "", 0, price, model, manufacturer);
     }
 
     @Override
-    public Optional<Toaster> getById(String id) {
-        String sql = "SELECT * FROM  \"public\".\"Toaster\" WHERE id = ?";
-        Optional<Toaster> toaster = Optional.empty();
+    public Optional<Phone> getById(String id) {
+        String sql = "SELECT * FROM \"public\".\"Phone\" WHERE id = ?";
+        Optional<Phone> phone = Optional.empty();
 
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
             statement.setString(1, id);
             final ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                toaster = Optional.of(setFieldsToObject(resultSet));
+                phone = Optional.of(setFieldsToObject(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return toaster;
+        return phone;
     }
 
     @Override
-    public Optional<Toaster> getByIndex(int index) {
-        String sql = "SELECT * FROM  \"public\".\"Toaster\" LIMIT 1 OFFSET ?";
-        Optional<Toaster> toaster = Optional.empty();
+    public Optional<Phone> getByIndex(int index) {
+        String sql = "SELECT * FROM  \"public\".\"Phone\" LIMIT 1 OFFSET ?";
+        Optional<Phone> phone = Optional.empty();
 
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
             int rowNumber = index - 1;
             statement.setLong(1, rowNumber);
             final ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                toaster = Optional.of(setFieldsToObject(resultSet));
+                phone = Optional.of(setFieldsToObject(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return toaster;
+        return phone;
     }
 
     @Override
     public boolean hasProduct(String id) {
-        String sql = "SELECT * FROM  \"public\".\"Toaster\" WHERE id = ?";
-        boolean toasterPresent = false;
+        String sql = "SELECT * FROM  \"public\".\"Phone\" WHERE id = ?";
+        boolean phonePresent = false;
 
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
             statement.setString(1, id);
             final ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                toasterPresent = resultSet.getString("id").equals(id);
+                phonePresent = resultSet.getString("id").equals(id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return toasterPresent;
+        return phonePresent;
     }
 
-    public void clearToaster() {
-        String sql = "DELETE FROM \"public\".\"Toaster\"";
+    public void clearPhone() {
+        String sql = "DELETE FROM \"public\".\"Phone\"";
         try (final Statement statement = CONNECTION.createStatement()) {
             statement.execute(sql);
 

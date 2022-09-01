@@ -2,6 +2,7 @@ package com.repository;
 
 import com.model.product.Manufacturer;
 import com.model.product.Phone;
+import com.repository.simple.PhoneRepository;
 import org.junit.jupiter.api.*;
 
 import java.util.*;

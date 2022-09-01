@@ -1,8 +1,10 @@
-package com.repository;
+package com.repository.JDBC;
 
 import com.config.JDBCConfig;
+import com.context.Singleton;
 import com.model.product.Manufacturer;
-import com.model.product.Phone;
+import com.model.product.TV;
+import com.repository.CrudRepository;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.EnumUtils;
 
@@ -11,23 +13,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class PhoneRepositoryDB implements CrudRepository<Phone> {
+@Singleton
+public class TVRepositoryDB implements CrudRepository<TV> {
     private static final Connection CONNECTION = JDBCConfig.getConnection();
 
-    private static PhoneRepositoryDB instance;
+    private static TVRepositoryDB instance;
 
-    public static PhoneRepositoryDB getInstance() {
+    public static TVRepositoryDB getInstance() {
         if (instance == null) {
-            instance = new PhoneRepositoryDB();
+            instance = new TVRepositoryDB();
         }
         return instance;
     }
 
     @Override
-    public void save(Phone phone) {
-        String sql = "INSERT INTO \"public\".\"Phone\" (id, model, manufacturer, price) VALUES (?, ?, ?, ?)";
+    public void save(TV tv) {
+        String sql = "INSERT INTO \"public\".\"TV\" (id, model, manufacturer, price) VALUES (?, ?, ?, ?)";
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
-            setObjectFields(statement, phone);
+            setObjectFields(statement, tv);
             statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -35,12 +38,12 @@ public class PhoneRepositoryDB implements CrudRepository<Phone> {
     }
 
     @Override
-    public void saveAll(List<Phone> phones) {
-        String sql = "INSERT INTO \"public\".\"Phone\" (id, model, manufacturer, price) VALUES (?, ?, ?, ?)";
+    public void saveAll(List<TV> tvs) {
+        String sql = "INSERT INTO \"public\".\"TV\" (id, model, manufacturer, price) VALUES (?, ?, ?, ?)";
 
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
-            for (Phone phone : phones) {
-                setObjectFields(statement, phone);
+            for (TV tv : tvs) {
+                setObjectFields(statement, tv);
                 CONNECTION.setAutoCommit(false);
                 statement.addBatch();
             }
@@ -53,30 +56,30 @@ public class PhoneRepositoryDB implements CrudRepository<Phone> {
     }
 
     @SneakyThrows
-    private void setObjectFields(final PreparedStatement statement, final Phone phone) {
-        statement.setString(1, phone.getId());
-        statement.setString(2, phone.getModel());
-        statement.setString(3, phone.getManufacturer().name());
-        statement.setDouble(4, phone.getPrice());
+    private void setObjectFields(final PreparedStatement statement, final TV tv) {
+        statement.setString(1, tv.getId());
+        statement.setString(2, tv.getModel());
+        statement.setString(3, tv.getManufacturer().name());
+        statement.setDouble(4, tv.getPrice());
     }
 
     @Override
-    public boolean update(Phone phone) {
-        String sql = "UPDATE \"public\".\"Phone\" SET model = ?, manufacturer = ?, price = ? WHERE id = ?";
+    public boolean update(TV tv) {
+        String sql = "UPDATE \"public\".\"TV\" SET model = ?, manufacturer = ?, price = ? WHERE id = ?";
         boolean hasUpdated = false;
         try (PreparedStatement statement = CONNECTION.prepareStatement(sql);
-             PreparedStatement statement1 = CONNECTION.prepareStatement("SELECT * FROM \"public\".\"Phone\"")) {
-            statement.setString(1, phone.getModel());
-            statement.setString(2, phone.getManufacturer().name());
-            statement.setDouble(3, phone.getPrice());
-            statement.setString(4, phone.getId());
+             PreparedStatement statement1 = CONNECTION.prepareStatement("SELECT * FROM \"public\".\"TV\"")) {
+            statement.setString(1, tv.getModel());
+            statement.setString(2, tv.getManufacturer().name());
+            statement.setDouble(3, tv.getPrice());
+            statement.setString(4, tv.getId());
             statement.execute();
             final ResultSet resultSet = statement1.executeQuery();
             while (resultSet.next()) {
-                if (resultSet.getString("id").equals(phone.getId())
-                        && resultSet.getString("model").equals(phone.getModel())
-                        && resultSet.getString("manufacturer").equals(phone.getManufacturer().name())
-                        && resultSet.getDouble("price") == phone.getPrice()) {
+                if (resultSet.getString("id").equals(tv.getId())
+                        && resultSet.getString("model").equals(tv.getModel())
+                        && resultSet.getString("manufacturer").equals(tv.getManufacturer().name())
+                        && resultSet.getDouble("price") == (tv.getPrice())) {
                     hasUpdated = true;
                 }
             }
@@ -88,10 +91,10 @@ public class PhoneRepositoryDB implements CrudRepository<Phone> {
 
     @Override
     public boolean delete(String id) {
-        String sql = "DELETE FROM  \"public\".\"Phone\" WHERE id = ?";
+        String sql = "DELETE FROM  \"public\".\"TV\" WHERE id = ?";
         boolean hasDeleted = true;
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql);
-             PreparedStatement statement1 = CONNECTION.prepareStatement("SELECT * FROM \"public\".\"Phone\"")) {
+             PreparedStatement statement1 = CONNECTION.prepareStatement("SELECT * FROM \"public\".\"TV\"")) {
             boolean hasBeforeDeleted = hasProduct(id);
             if (!hasBeforeDeleted) {
                 return false;
@@ -111,10 +114,10 @@ public class PhoneRepositoryDB implements CrudRepository<Phone> {
     }
 
     @Override
-    public List<Phone> getAll() {
-        final List<Phone> result = new LinkedList<>();
+    public List<TV> getAll() {
+        final List<TV> result = new LinkedList<>();
         try (final Statement statement = CONNECTION.createStatement()) {
-            final ResultSet resultSet = statement.executeQuery("SELECT * FROM \"public\".\"Phone\"");
+            final ResultSet resultSet = statement.executeQuery("SELECT * FROM \"public\".\"TV\"");
             while (resultSet.next()) {
                 result.add(setFieldsToObject(resultSet));
             }
@@ -125,71 +128,71 @@ public class PhoneRepositoryDB implements CrudRepository<Phone> {
     }
 
     @SneakyThrows
-    private Phone setFieldsToObject(final ResultSet resultSet) {
+    private TV setFieldsToObject(final ResultSet resultSet) {
         final String id = resultSet.getString("id");
         final String model = resultSet.getString("model");
         final Manufacturer manufacturer = EnumUtils.getEnum(
                 Manufacturer.class,
                 resultSet.getString("manufacturer"),
                 Manufacturer.NONE);
-        final double price = resultSet.getDouble("price");
-        return new Phone(id, "", 0, price, model, manufacturer);
+        double price = resultSet.getDouble("price");
+        return new TV(id, "", 0, price, model, manufacturer, 0);
     }
 
     @Override
-    public Optional<Phone> getById(String id) {
-        String sql = "SELECT * FROM \"public\".\"Phone\" WHERE id = ?";
-        Optional<Phone> phone = Optional.empty();
+    public Optional<TV> getById(String id) {
+        String sql = "SELECT * FROM  \"public\".\"TV\" WHERE id = ?";
+        Optional<TV> tv = Optional.empty();
 
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
             statement.setString(1, id);
             final ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                phone = Optional.of(setFieldsToObject(resultSet));
+                tv = Optional.of(setFieldsToObject(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return phone;
+        return tv;
     }
 
     @Override
-    public Optional<Phone> getByIndex(int index) {
-        String sql = "SELECT * FROM  \"public\".\"Phone\" LIMIT 1 OFFSET ?";
-        Optional<Phone> phone = Optional.empty();
+    public Optional<TV> getByIndex(int index) {
+        String sql = "SELECT * FROM  \"public\".\"TV\" LIMIT 1 OFFSET ?";
+        Optional<TV> tv = Optional.empty();
 
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
             int rowNumber = index - 1;
             statement.setLong(1, rowNumber);
             final ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                phone = Optional.of(setFieldsToObject(resultSet));
+                tv = Optional.of(setFieldsToObject(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return phone;
+        return tv;
     }
 
     @Override
     public boolean hasProduct(String id) {
-        String sql = "SELECT * FROM  \"public\".\"Phone\" WHERE id = ?";
-        boolean phonePresent = false;
+        String sql = "SELECT * FROM  \"public\".\"TV\" WHERE id = ?";
+        boolean tvPresent = false;
 
         try (final PreparedStatement statement = CONNECTION.prepareStatement(sql)) {
             statement.setString(1, id);
             final ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                phonePresent = resultSet.getString("id").equals(id);
+                tvPresent = resultSet.getString("id").equals(id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return phonePresent;
+        return tvPresent;
     }
 
-    public void clearPhone() {
-        String sql = "DELETE FROM \"public\".\"Phone\"";
+    public void clearTV() {
+        String sql = "DELETE FROM \"public\".\"TV\"";
         try (final Statement statement = CONNECTION.createStatement()) {
             statement.execute(sql);
 

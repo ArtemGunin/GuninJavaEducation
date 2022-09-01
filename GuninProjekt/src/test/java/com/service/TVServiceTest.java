@@ -2,7 +2,8 @@ package com.service;
 
 import com.model.product.Manufacturer;
 import com.model.product.TV;
-import com.repository.TVRepositoryDB;
+import com.repository.JDBC.TVRepositoryDB;
+import com.repository.hibernate.TVRepositoryDBHibernate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +15,11 @@ import java.util.Optional;
 class TVServiceTest {
 
     private static TVService target;
-    private static TVRepositoryDB repository;
+    private static TVRepositoryDBHibernate repository;
 
     @BeforeAll
     static void beforeAll() {
-        repository = Mockito.mock(TVRepositoryDB.class);
+        repository = Mockito.mock(TVRepositoryDBHibernate.class);
         target = TVService.getInstance(repository);
     }
 

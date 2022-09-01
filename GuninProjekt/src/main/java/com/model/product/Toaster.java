@@ -1,21 +1,31 @@
 package com.model.product;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Entity
 public class Toaster extends Product {
-    private final String model;
-    private final int power;
-    private final Manufacturer manufacturer;
+    private String model;
+    private int power;
+    private Manufacturer manufacturer;
+    @Transient
     private List<String> details;
+    @Transient
     private String currency;
     private LocalDateTime created;
+    @Transient
     private Body body;
 
     private Toaster(String id, String title, int count, double price, String currency,
@@ -33,6 +43,11 @@ public class Toaster extends Product {
 
     @Override
     public String toString() {
+        String corpus = "Unknown";
+        if (body != null) {
+            corpus = body.getColor() + " " + body.getMaterial();
+        }
+
         return "Toaster{" +
                 "id='" + id + '\'' +
                 ", manufacturer=" + manufacturer +
@@ -42,7 +57,7 @@ public class Toaster extends Product {
                 ", count=" + count +
                 ", price=" + String.format("%.2f", price) +
                 ", power=" + power +
-                ", body = " + body.getColor() + " " + body.getMaterial() +
+                ", body=" + corpus +
                 "}\n";
     }
 

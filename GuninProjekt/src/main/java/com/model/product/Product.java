@@ -1,22 +1,37 @@
 package com.model.product;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.model.Invoice;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@ToString
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     protected String id;
     protected String title;
     protected int count;
     protected double price;
-    protected final ProductType type;
+    protected ProductType type;
+    @Transient
     protected List<String> details;
+    @ManyToOne
+    @JoinColumn(name = "invoice_id")
+    protected Invoice invoice;
 
     protected Product(String title, int count, double price, ProductType type) {
         this(UUID.randomUUID().toString(), title, count, price, type, Collections.emptyList());

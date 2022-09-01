@@ -1,22 +1,32 @@
 package com.model.product;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Entity
 public class TV extends Product {
-    private final String model;
-    private final Manufacturer manufacturer;
-    private final int diagonal;
+    private String model;
+    private Manufacturer manufacturer;
+    private int diagonal;
+    @Transient
     private List<String> details;
+    @Transient
     private String currency;
     private LocalDateTime created;
+    @Transient
     private OperatingSystem operatingSystem;
 
     public TV(String title, int count, double price, String model,
@@ -59,6 +69,10 @@ public class TV extends Product {
 
     @Override
     public String toString() {
+        String OS = "Unknown";
+        if (operatingSystem != null) {
+            OS = operatingSystem.getDesignation() + " " + operatingSystem.getVersion();
+        }
         return "TV{" +
                 "id='" + id + '\'' +
                 ", manufacturer=" + manufacturer +
@@ -67,8 +81,8 @@ public class TV extends Product {
                 ", title='" + title + '\'' +
                 ", count=" + count +
                 ", price=" + String.format("%.2f", price) +
-                ", diagonal" + diagonal +
-                ", operating System = " + operatingSystem.getDesignation() + " " + operatingSystem.getVersion() +
+                ", diagonal=" + diagonal +
+                ", operating System=" + OS +
                 "}\n";
     }
 }

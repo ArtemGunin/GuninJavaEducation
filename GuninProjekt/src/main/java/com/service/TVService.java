@@ -5,7 +5,8 @@ import com.context.Singleton;
 import com.model.product.Manufacturer;
 import com.model.product.OperatingSystem;
 import com.model.product.TV;
-import com.repository.TVRepositoryDB;
+import com.repository.hibernate.TVRepositoryDBHibernate;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -16,24 +17,24 @@ import java.util.function.Function;
 @Singleton
 public class TVService extends ProductService<TV> {
 
-    private final TVRepositoryDB repository;
+    private final TVRepositoryDBHibernate repository;
 
     private static TVService instance;
 
     @Autowired
-    private TVService(TVRepositoryDB repository) {
+    private TVService(TVRepositoryDBHibernate repository) {
         super(repository);
         this.repository = repository;
     }
 
     public static TVService getInstance() {
         if (instance == null) {
-            instance = new TVService(TVRepositoryDB.getInstance());
+            instance = new TVService(TVRepositoryDBHibernate.getInstance());
         }
         return instance;
     }
 
-    public static TVService getInstance(final TVRepositoryDB repository) {
+    public static TVService getInstance(final TVRepositoryDBHibernate repository) {
         if (instance == null) {
             instance = new TVService(repository);
         }
