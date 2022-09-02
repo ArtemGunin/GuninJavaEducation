@@ -2,9 +2,9 @@ package com.verification;
 
 import com.model.Invoice;
 import com.model.product.Product;
-import com.repository.hibernate.PhoneRepositoryDBHibernate;
-import com.repository.hibernate.TVRepositoryDBHibernate;
-import com.repository.hibernate.ToasterRepositoryDBHibernate;
+import com.repository.mongoDB.PhoneRepositoryDBMongo;
+import com.repository.mongoDB.TVRepositoryDBMongo;
+import com.repository.mongoDB.ToasterRepositoryDBMongo;
 import com.service.InvoiceServiceDB;
 import com.service.PhoneService;
 import com.service.TVService;
@@ -19,9 +19,9 @@ public class OperationsDB {
     private static final PhoneService PHONE_SERVICE = PhoneService.getInstance();
     private static final ToasterService TOASTER_SERVICE = ToasterService.getInstance();
     private static final TVService TV_SERVICE = TVService.getInstance();
-    private static final PhoneRepositoryDBHibernate PHONE_REPOSITORY_DB = PhoneRepositoryDBHibernate.getInstance();
-    private static final ToasterRepositoryDBHibernate TOASTER_REPOSITORY_DB = ToasterRepositoryDBHibernate.getInstance();
-    private static final TVRepositoryDBHibernate TV_REPOSITORY_DB = TVRepositoryDBHibernate.getInstance();
+    private static final PhoneRepositoryDBMongo PHONE_REPOSITORY_DB = PhoneRepositoryDBMongo.getInstance();
+    private static final ToasterRepositoryDBMongo TOASTER_REPOSITORY_DB = ToasterRepositoryDBMongo.getInstance();
+    private static final TVRepositoryDBMongo TV_REPOSITORY_DB = TVRepositoryDBMongo.getInstance();
     private static final Random RANDOM = new Random();
 
     public void run() {

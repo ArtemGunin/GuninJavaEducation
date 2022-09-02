@@ -32,7 +32,7 @@ public class Invoice {
     )
 
     private List<Product> products = new ArrayList<>();
-    private LocalDateTime time;
+    private transient LocalDateTime time;
 
     @Override
     public String toString() {

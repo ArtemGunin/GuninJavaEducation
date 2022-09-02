@@ -4,7 +4,7 @@ import com.context.Autowired;
 import com.context.Singleton;
 import com.model.Invoice;
 import com.model.product.Product;
-import com.repository.hibernate.InvoiceRepositoryDBHibernate;
+import com.repository.mongoDB.InvoiceRepositoryDBMongo;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,23 +13,23 @@ import java.util.Map;
 @Singleton
 public class InvoiceServiceDB {
 
-    private final InvoiceRepositoryDBHibernate invoiceRepositoryDBHibernate;
+    private final InvoiceRepositoryDBMongo invoiceRepositoryDB;
 
     private static InvoiceServiceDB instance;
 
     @Autowired
-    private InvoiceServiceDB(InvoiceRepositoryDBHibernate invoiceRepositoryDBHibernate) {
-        this.invoiceRepositoryDBHibernate = invoiceRepositoryDBHibernate;
+    private InvoiceServiceDB(InvoiceRepositoryDBMongo invoiceRepositoryDB) {
+        this.invoiceRepositoryDB = invoiceRepositoryDB;
     }
 
     public static InvoiceServiceDB getInstance() {
         if (instance == null) {
-            instance = new InvoiceServiceDB(InvoiceRepositoryDBHibernate.getInstance());
+            instance = new InvoiceServiceDB(InvoiceRepositoryDBMongo.getInstance());
         }
         return instance;
     }
 
-    public static InvoiceServiceDB getInstance(final InvoiceRepositoryDBHibernate repository) {
+    public static InvoiceServiceDB getInstance(final InvoiceRepositoryDBMongo repository) {
         if (instance == null) {
             instance = new InvoiceServiceDB(repository);
         }
@@ -45,34 +45,34 @@ public class InvoiceServiceDB {
         productList.forEach(product -> product
                 .setInvoice(invoice));
         invoice.setProducts(productList);
-        invoiceRepositoryDBHibernate.save(invoice);
+        invoiceRepositoryDB.save(invoice);
     }
 
     public List<Invoice> getInvoicesWithSumMoreThen(double lowerBound) {
-        return invoiceRepositoryDBHibernate.getInvoiceListWithSumConditions(lowerBound);
+        return invoiceRepositoryDB.getInvoiceListWithSumConditions(lowerBound);
     }
 
     public long getCountOfInvoices() {
-        return invoiceRepositoryDBHibernate.getCount();
+        return invoiceRepositoryDB.getCount();
     }
 
     public boolean updateTime(String id, LocalDateTime localDateTime) {
-        return invoiceRepositoryDBHibernate.updateTime(id, localDateTime);
+        return invoiceRepositoryDB.updateTime(id, localDateTime);
     }
 
     public Map<Double, List<Invoice>> groupInvoicesBySum() {
-        return invoiceRepositoryDBHibernate.groupInvoices();
+        return invoiceRepositoryDB.groupInvoices();
     }
 
     public List<Invoice> getAllInvoices() {
-        return invoiceRepositoryDBHibernate.getAll();
+        return invoiceRepositoryDB.getAll();
     }
 
     public Invoice getInvoiceByIndex(int index) {
-        return invoiceRepositoryDBHibernate.getByIndex(index).orElseThrow();
+        return invoiceRepositoryDB.getByIndex(index).orElseThrow();
     }
 
     public Invoice getInvoiceById(String id) {
-        return invoiceRepositoryDBHibernate.getById(id).orElseThrow();
+        return invoiceRepositoryDB.getById(id).orElseThrow();
     }
 }
