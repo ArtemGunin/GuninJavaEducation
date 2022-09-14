@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class JDBCConfig {
-    private static final String URL = "jdbc:postgresql://localhost:5432/test";
+    private static final String URL = "jdbc:postgresql://localhost:5432/hibernate";
     private static final String USER = "postgres";
     private static final String PASSWORD = "root";
 

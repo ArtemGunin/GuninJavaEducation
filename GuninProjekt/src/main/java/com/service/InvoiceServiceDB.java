@@ -42,9 +42,10 @@ public class InvoiceServiceDB {
         invoice.setSum(productList.stream()
                 .mapToDouble(Product::getPrice)
                 .sum());
-        productList.forEach(product -> product
-                .setInvoice(invoice));
         invoice.setProducts(productList);
+        for (Product product : productList) {
+            product.setInvoice(invoice);
+        }
         invoiceRepositoryDBHibernate.save(invoice);
     }
 

@@ -7,7 +7,7 @@ public class FlywayConfig {
     private static final String USER = "postgres";
     private static final String PASSWORD = "root";
     private static final String SCHEMAS = "public";
-    private static final String LOCATIONS = "classpath:db/migration";
+    private static final String LOCATIONS = "db.migration";
 
     public static Flyway getFlywayConfig() {
         return Flyway.configure()
