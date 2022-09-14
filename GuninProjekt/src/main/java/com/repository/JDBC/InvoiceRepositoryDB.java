@@ -1,24 +1,28 @@
-package com.repository;
+package com.repository.JDBC;
 
 import com.config.JDBCConfig;
+import com.context.Singleton;
 import com.model.Invoice;
 import com.model.product.Product;
 import com.model.product.ProductType;
+import com.repository.InvoiceRepository;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.EnumUtils;
 
-import java.sql.*;
 import java.sql.Date;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class InvoiceRepositoryDB {
+@Singleton
+public class InvoiceRepositoryDB implements InvoiceRepository {
 
     private static final PhoneRepositoryDB PHONE_DB = PhoneRepositoryDB.getInstance();
     private static final ToasterRepositoryDB TOASTER_DB = ToasterRepositoryDB.getInstance();
     private static final TVRepositoryDB TV_DB = TVRepositoryDB.getInstance();
     private static final Connection CONNECTION = JDBCConfig.getConnection();
 
+    @Override
     public void save(Invoice invoice) {
         String sqlInvoice = "INSERT INTO \"public\".\"Invoice\" (id, sum, time) VALUES (?, ?, ?)";
         try (final PreparedStatement invoiceStatement = CONNECTION.prepareStatement(sqlInvoice)) {
@@ -29,6 +33,7 @@ public class InvoiceRepositoryDB {
         }
     }
 
+    @Override
     public void saveAll(List<Invoice> invoices) {
         String sqlInvoice = "INSERT INTO \"public\".\"Invoice\" (id, sum, time) VALUES (?, ?, ?)";
 
@@ -75,6 +80,7 @@ public class InvoiceRepositoryDB {
         }
     }
 
+    @Override
     public List<Invoice> getAll() {
         final List<Invoice> result = new LinkedList<>();
         try (final Statement statement = CONNECTION.createStatement()) {
@@ -119,6 +125,7 @@ public class InvoiceRepositoryDB {
         return result;
     }
 
+    @Override
     public Optional<Invoice> getById(String id) {
         String sql = "SELECT * FROM \"public\".\"Invoice\" WHERE id = ?";
         Optional<Invoice> invoice = Optional.empty();
@@ -135,6 +142,7 @@ public class InvoiceRepositoryDB {
         return invoice;
     }
 
+    @Override
     public Optional<Invoice> getByIndex(int index) {
         String sql = "SELECT * FROM \"public\".\"Invoice\" LIMIT 1 OFFSET ?";
         Optional<Invoice> invoice = Optional.empty();
@@ -152,6 +160,7 @@ public class InvoiceRepositoryDB {
         return invoice;
     }
 
+    @Override
     public boolean hasInvoice(String id) {
         String sql = "SELECT * FROM \"public\".\"Invoice\" WHERE id = ?";
         boolean invoicePresent = false;
@@ -197,6 +206,7 @@ public class InvoiceRepositoryDB {
         System.out.println("Data base cleaned!");
     }
 
+    @Override
     public boolean update(Invoice invoice) {
         String sql = "UPDATE \"public\".\"Invoice\" SET sum = ?, time = ?, date = ? WHERE id = ?";
         boolean hasUpdated = false;
@@ -224,6 +234,7 @@ public class InvoiceRepositoryDB {
         return hasUpdated;
     }
 
+    @Override
     public boolean updateTime(String id, LocalDateTime time) {
         String sql = "UPDATE \"public\".\"Invoice\" SET time = ? WHERE id = ?";
         boolean hasUpdated = false;
@@ -245,6 +256,7 @@ public class InvoiceRepositoryDB {
         return hasUpdated;
     }
 
+    @Override
     public boolean delete(String id) {
         String sql = "DELETE FROM \"public\".\"Invoice\" WHERE id = ?";
         boolean hasDeleted = true;
@@ -329,6 +341,7 @@ public class InvoiceRepositoryDB {
         return false;
     }
 
+    @Override
     public List<Invoice> getInvoiceListWithSumConditions(double sumCondition) {
         String sql = "SELECT * FROM \"public\".\"Invoice\" WHERE sum > ?";
         final List<Invoice> result = new LinkedList<>();
@@ -344,13 +357,14 @@ public class InvoiceRepositoryDB {
         return result;
     }
 
-    public int getCount() {
+    @Override
+    public long getCount() {
         String sql = "SELECT COUNT(id) AS total FROM \"public\".\"Invoice\"";
-        int result = 0;
+        long result = 0;
         try (final Statement statement = CONNECTION.createStatement()) {
             final ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                result = resultSet.getInt("total");
+                result = resultSet.getLong("total");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -358,15 +372,30 @@ public class InvoiceRepositoryDB {
         return result;
     }
 
-    public Map<Double, Integer> groupInvoices() {
-        Map<Double, Integer> groups = new HashMap<>();
-        String sql = "SELECT COUNT(id) AS COUNT, sum FROM \"public\".\"Invoice\" GROUP BY sum";
-
-        try (final Statement statement = CONNECTION.createStatement()) {
-            final ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                groups.put(resultSet.getDouble("sum"), resultSet.getInt("COUNT"));
+    @Override
+    public Map<Double, List<Invoice>> groupInvoices() {
+        Map<Double, List<Invoice>> groups = new HashMap<>();
+        List<Double> sums = new LinkedList<>();
+        String sqlGetSums = "SELECT sum FROM \"public\".\"Invoice\" GROUP BY sum";
+        String sqlGetInvoices = "SELECT * FROM \"public\".\"Invoice\" WHERE sum = ?";
+        try (final Statement statementSums = CONNECTION.createStatement();
+             final PreparedStatement statementInvoices = CONNECTION.prepareStatement(sqlGetInvoices)) {
+            final ResultSet resultSetSums = statementSums.executeQuery(sqlGetSums);
+            while (resultSetSums.next()) {
+                sums.add(resultSetSums.getDouble("sum"));
             }
+            sums.forEach(sum -> {
+                try {
+                    groups.put(sum, new LinkedList<>());
+                    statementInvoices.setDouble(1, sum);
+                    ResultSet resultSetInvoices = statementInvoices.executeQuery();
+                    while (resultSetInvoices.next()) {
+                        groups.get(sum).add(setFieldsToObject(resultSetInvoices));
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

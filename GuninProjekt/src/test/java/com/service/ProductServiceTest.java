@@ -2,7 +2,7 @@ package com.service;
 
 import com.model.product.Manufacturer;
 import com.model.product.TV;
-import com.repository.TVRepository;
+import com.repository.simple.TVRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

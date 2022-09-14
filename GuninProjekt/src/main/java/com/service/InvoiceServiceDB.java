@@ -1,58 +1,78 @@
 package com.service;
 
+import com.context.Autowired;
+import com.context.Singleton;
 import com.model.Invoice;
 import com.model.product.Product;
-import com.repository.InvoiceRepositoryDB;
+import com.repository.hibernate.InvoiceRepositoryDBHibernate;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
+@Singleton
 public class InvoiceServiceDB {
 
-    private final InvoiceRepositoryDB invoiceRepositoryDB;
+    private final InvoiceRepositoryDBHibernate invoiceRepositoryDBHibernate;
 
-    public InvoiceServiceDB(InvoiceRepositoryDB invoiceRepositoryDB) {
-        this.invoiceRepositoryDB = invoiceRepositoryDB;
+    private static InvoiceServiceDB instance;
+
+    @Autowired
+    private InvoiceServiceDB(InvoiceRepositoryDBHibernate invoiceRepositoryDBHibernate) {
+        this.invoiceRepositoryDBHibernate = invoiceRepositoryDBHibernate;
+    }
+
+    public static InvoiceServiceDB getInstance() {
+        if (instance == null) {
+            instance = new InvoiceServiceDB(InvoiceRepositoryDBHibernate.getInstance());
+        }
+        return instance;
+    }
+
+    public static InvoiceServiceDB getInstance(final InvoiceRepositoryDBHibernate repository) {
+        if (instance == null) {
+            instance = new InvoiceServiceDB(repository);
+        }
+        return instance;
     }
 
     public void createAndSaveInvoice(List<Product> productList) {
         Invoice invoice = new Invoice();
-        invoice.setId(UUID.randomUUID().toString());
-        invoice.setProducts(productList);
         invoice.setTime(LocalDateTime.now());
         invoice.setSum(productList.stream()
                 .mapToDouble(Product::getPrice)
                 .sum());
-        invoiceRepositoryDB.save(invoice);
+        productList.forEach(product -> product
+                .setInvoice(invoice));
+        invoice.setProducts(productList);
+        invoiceRepositoryDBHibernate.save(invoice);
     }
 
     public List<Invoice> getInvoicesWithSumMoreThen(double lowerBound) {
-        return invoiceRepositoryDB.getInvoiceListWithSumConditions(lowerBound);
+        return invoiceRepositoryDBHibernate.getInvoiceListWithSumConditions(lowerBound);
     }
 
-    public int getCountOfInvoices() {
-        return invoiceRepositoryDB.getCount();
+    public long getCountOfInvoices() {
+        return invoiceRepositoryDBHibernate.getCount();
     }
 
     public boolean updateTime(String id, LocalDateTime localDateTime) {
-        return invoiceRepositoryDB.updateTime(id, localDateTime);
+        return invoiceRepositoryDBHibernate.updateTime(id, localDateTime);
     }
 
-    public Map<Double, Integer> groupInvoicesBySum() {
-        return invoiceRepositoryDB.groupInvoices();
+    public Map<Double, List<Invoice>> groupInvoicesBySum() {
+        return invoiceRepositoryDBHibernate.groupInvoices();
     }
 
     public List<Invoice> getAllInvoices() {
-        return invoiceRepositoryDB.getAll();
+        return invoiceRepositoryDBHibernate.getAll();
     }
 
     public Invoice getInvoiceByIndex(int index) {
-        return invoiceRepositoryDB.getByIndex(index).orElseThrow();
+        return invoiceRepositoryDBHibernate.getByIndex(index).orElseThrow();
     }
 
     public Invoice getInvoiceById(String id) {
-        return invoiceRepositoryDB.getById(id).orElseThrow();
+        return invoiceRepositoryDBHibernate.getById(id).orElseThrow();
     }
 }

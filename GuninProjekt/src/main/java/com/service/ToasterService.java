@@ -5,7 +5,7 @@ import com.context.Singleton;
 import com.model.product.Body;
 import com.model.product.Manufacturer;
 import com.model.product.Toaster;
-import com.repository.ToasterRepositoryDB;
+import com.repository.hibernate.ToasterRepositoryDBHibernate;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -17,24 +17,24 @@ import java.util.function.Function;
 @Singleton
 public class ToasterService extends ProductService<Toaster> {
 
-    private final ToasterRepositoryDB repository;
+    private final ToasterRepositoryDBHibernate repository;
 
     private static ToasterService instance;
 
     @Autowired
-    private ToasterService(final ToasterRepositoryDB repository) {
+    private ToasterService(final ToasterRepositoryDBHibernate repository) {
         super(repository);
         this.repository = repository;
     }
 
     public static ToasterService getInstance() {
         if (instance == null) {
-            instance = new ToasterService(ToasterRepositoryDB.getInstance());
+            instance = new ToasterService(ToasterRepositoryDBHibernate.getInstance());
         }
         return instance;
     }
 
-    public static ToasterService getInstance(final ToasterRepositoryDB repository) {
+    public static ToasterService getInstance(final ToasterRepositoryDBHibernate repository) {
         if (instance == null) {
             instance = new ToasterService(repository);
         }
@@ -50,6 +50,7 @@ public class ToasterService extends ProductService<Toaster> {
                 .setModel("Model-" + RANDOM.nextInt(10))
                 .setPower(1000 + RANDOM.nextInt(2000))
                 .setManufacturer(Manufacturer.PHILIPS)
+                .setLocalDateTime(LocalDateTime.now())
                 .build();
     }
 

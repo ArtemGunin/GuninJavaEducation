@@ -5,7 +5,8 @@ import com.context.Singleton;
 import com.model.product.Manufacturer;
 import com.model.product.OperatingSystem;
 import com.model.product.Phone;
-import com.repository.PhoneRepositoryDB;
+import com.repository.JDBC.PhoneRepositoryDB;
+import com.repository.hibernate.PhoneRepositoryDBHibernate;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -17,24 +18,24 @@ import java.util.function.Function;
 @Singleton
 public class PhoneService extends ProductService<Phone> {
 
-    private final PhoneRepositoryDB repository;
+    private final PhoneRepositoryDBHibernate repository;
 
     private static PhoneService instance;
 
     @Autowired
-    private PhoneService(final PhoneRepositoryDB repository) {
+    private PhoneService(PhoneRepositoryDBHibernate repository) {
         super(repository);
         this.repository = repository;
     }
 
     public static PhoneService getInstance() {
         if (instance == null) {
-            instance = new PhoneService(PhoneRepositoryDB.getInstance());
+            instance = new PhoneService(PhoneRepositoryDBHibernate.getInstance());
         }
         return instance;
     }
 
-    public static PhoneService getInstance(final PhoneRepositoryDB repository) {
+    public static PhoneService getInstance(final PhoneRepositoryDBHibernate repository) {
         if (instance == null) {
             instance = new PhoneService(repository);
         }

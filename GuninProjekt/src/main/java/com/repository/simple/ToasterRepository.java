@@ -1,7 +1,8 @@
-package com.repository;
+package com.repository.simple;
 
 import com.context.Singleton;
 import com.model.product.Toaster;
+import com.repository.CrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
