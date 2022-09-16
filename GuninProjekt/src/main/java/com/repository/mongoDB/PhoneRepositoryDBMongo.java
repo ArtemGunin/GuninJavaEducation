@@ -19,7 +19,7 @@ public class PhoneRepositoryDBMongo implements CrudRepository<Phone> {
     private static PhoneRepositoryDBMongo instance;
 
     public PhoneRepositoryDBMongo() {
-        this.collection = DATABASE.getCollection(PhoneRepositoryDBMongo.class.getSimpleName());
+        this.collection = DATABASE.getCollection(Phone.class.getSimpleName());
     }
 
     public static PhoneRepositoryDBMongo getInstance() {

@@ -47,9 +47,9 @@ public class OperationsDB {
     }
 
     private void createProducts() {
-        PHONE_SERVICE.createAndSaveProducts(30);
-        TOASTER_SERVICE.createAndSaveProducts(30);
-        TV_SERVICE.createAndSaveProducts(30);
+        PHONE_SERVICE.createAndSaveProducts(1);
+        TOASTER_SERVICE.createAndSaveProducts(1);
+        TV_SERVICE.createAndSaveProducts(1);
     }
 
     private List<List<Product>> createProductLists() {

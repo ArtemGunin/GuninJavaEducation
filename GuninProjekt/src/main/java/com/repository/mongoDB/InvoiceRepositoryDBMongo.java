@@ -22,7 +22,7 @@ public class InvoiceRepositoryDBMongo implements InvoiceRepository {
     private static InvoiceRepositoryDBMongo instance;
 
     public InvoiceRepositoryDBMongo() {
-        this.collection = DATABASE.getCollection(InvoiceRepositoryDBMongo.class.getSimpleName());
+        this.collection = DATABASE.getCollection(Invoice.class.getSimpleName());
     }
 
     public static InvoiceRepositoryDBMongo getInstance() {

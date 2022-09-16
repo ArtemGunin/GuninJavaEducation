@@ -21,7 +21,7 @@ public class TVRepositoryDBMongo implements CrudRepository<TV> {
     private static TVRepositoryDBMongo instance;
 
     public TVRepositoryDBMongo() {
-        this.collection = DATABASE.getCollection(TVRepositoryDBMongo.class.getSimpleName());
+        this.collection = DATABASE.getCollection(TV.class.getSimpleName());
     }
 
     public static TVRepositoryDBMongo getInstance() {

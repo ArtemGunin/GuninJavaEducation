@@ -19,7 +19,7 @@ public class ToasterRepositoryDBMongo implements CrudRepository<Toaster> {
     private static ToasterRepositoryDBMongo instance;
 
     public ToasterRepositoryDBMongo() {
-        this.collection = DATABASE.getCollection(ToasterRepositoryDBMongo.class.getSimpleName());
+        this.collection = DATABASE.getCollection(Toaster.class.getSimpleName());
     }
 
     public static ToasterRepositoryDBMongo getInstance() {
