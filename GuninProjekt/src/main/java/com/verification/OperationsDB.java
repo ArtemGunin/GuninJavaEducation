@@ -29,13 +29,10 @@ public class OperationsDB {
         System.out.println("Invoices List:\n" + INVOICE_SERVICE_DB.getAllInvoices().toString());
         Invoice invoiceToTimeUpdate = INVOICE_SERVICE_DB.getInvoiceByIndex(1);
         System.out.println("\nTime of invoice before updating: " + invoiceToTimeUpdate.getTime());
-        System.out.println("Time updated - "
-                + INVOICE_SERVICE_DB.updateTime(invoiceToTimeUpdate.getId(), LocalDateTime.now()));
-        System.out.println("Time of invoice after updating: "
-                + INVOICE_SERVICE_DB.getInvoiceById(invoiceToTimeUpdate.getId()).getTime());
+        System.out.println("Time updated - " + INVOICE_SERVICE_DB.updateTime(invoiceToTimeUpdate.getId(), LocalDateTime.now()));
+        System.out.println("Time of invoice after updating: " + INVOICE_SERVICE_DB.getInvoiceById(invoiceToTimeUpdate.getId()).getTime());
         System.out.println("\n\nInvoices with sum, more then 3500: ");
-        INVOICE_SERVICE_DB.getInvoicesWithSumMoreThen(3500.0)
-                .forEach(invoice -> System.out.println("Id: " + invoice.getId() + "\nSum: " + invoice.getSum()));
+        INVOICE_SERVICE_DB.getInvoicesWithSumMoreThen(3500.0).forEach(invoice -> System.out.println("Id: " + invoice.getId() + "\nSum: " + invoice.getSum()));
         System.out.println("\nCount of invoices = " + INVOICE_SERVICE_DB.getCountOfInvoices());
         System.out.println("\nInvoice groups by sum: ");
         Map<Double, List<Invoice>> groupingInvoices = INVOICE_SERVICE_DB.groupInvoicesBySum();
@@ -47,9 +44,9 @@ public class OperationsDB {
     }
 
     private void createProducts() {
-        PHONE_SERVICE.createAndSaveProducts(1);
-        TOASTER_SERVICE.createAndSaveProducts(1);
-        TV_SERVICE.createAndSaveProducts(1);
+        PHONE_SERVICE.createAndSaveProducts(30);
+        TOASTER_SERVICE.createAndSaveProducts(30);
+        TV_SERVICE.createAndSaveProducts(30);
     }
 
     private List<List<Product>> createProductLists() {

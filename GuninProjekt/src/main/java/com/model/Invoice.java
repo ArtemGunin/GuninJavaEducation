@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,8 +19,8 @@ import java.util.List;
 @Entity
 public class Invoice {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue
+    @UuidGenerator
     private String id;
     private double sum;
 
@@ -30,9 +30,10 @@ public class Invoice {
             joinColumns = {@JoinColumn(name = "invoice", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "product", referencedColumnName = "id")}
     )
-
-    private List<Product> products = new ArrayList<>();
-    private transient LocalDateTime time;
+    @Transient
+    private transient List<Product> products = new ArrayList<>();
+    private List<String> productIds;
+    private LocalDateTime time;
 
     @Override
     public String toString() {

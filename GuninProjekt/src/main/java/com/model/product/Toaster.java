@@ -21,12 +21,11 @@ public class Toaster extends Product {
     private int power;
     private Manufacturer manufacturer;
     @Transient
-    private List<String> details;
-    @Transient
+    private transient List<String> details;
     private String currency;
     private LocalDateTime created;
     @Transient
-    private Body body;
+    private transient Body body;
 
     private Toaster(String id, String title, int count, double price, String currency,
                     String model, int power, Manufacturer manufacturer,

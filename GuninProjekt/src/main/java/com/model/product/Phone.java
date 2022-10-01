@@ -22,9 +22,8 @@ public class Phone extends Product {
     private Manufacturer manufacturer;
     @Transient
     private transient List<String> details;
-    @Transient
-    private transient String currency;
-    private transient LocalDateTime created;
+    private String currency;
+    private LocalDateTime created;
     @Transient
     private transient OperatingSystem operatingSystem;
 

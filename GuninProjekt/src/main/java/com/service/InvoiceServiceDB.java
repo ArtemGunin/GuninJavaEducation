@@ -9,13 +9,13 @@ import com.repository.mongoDB.InvoiceRepositoryDBMongo;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Singleton
 public class InvoiceServiceDB {
 
-    private final InvoiceRepositoryDBMongo invoiceRepositoryDB;
-
     private static InvoiceServiceDB instance;
+    private final InvoiceRepositoryDBMongo invoiceRepositoryDB;
 
     @Autowired
     private InvoiceServiceDB(InvoiceRepositoryDBMongo invoiceRepositoryDB) {
@@ -38,12 +38,16 @@ public class InvoiceServiceDB {
 
     public void createAndSaveInvoice(List<Product> productList) {
         Invoice invoice = new Invoice();
+        invoice.setId(UUID.randomUUID().toString());
         invoice.setTime(LocalDateTime.now());
         invoice.setSum(productList.stream()
                 .mapToDouble(Product::getPrice)
                 .sum());
         productList.forEach(product -> product
                 .setInvoice(invoice));
+        invoice.setProductIds(productList.stream()
+                .map(Product::getId)
+                .toList());
         invoice.setProducts(productList);
         invoiceRepositoryDB.save(invoice);
     }
