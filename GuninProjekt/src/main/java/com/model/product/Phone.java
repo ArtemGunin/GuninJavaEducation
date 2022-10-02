@@ -21,12 +21,11 @@ public class Phone extends Product {
     private String model;
     private Manufacturer manufacturer;
     @Transient
-    private List<String> details;
-    @Transient
+    private transient List<String> details;
     private String currency;
     private LocalDateTime created;
     @Transient
-    private OperatingSystem operatingSystem;
+    private transient OperatingSystem operatingSystem;
 
     public Phone(String title, int count, double price,
                  String model, Manufacturer manufacturer) {

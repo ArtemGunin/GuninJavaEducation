@@ -1,8 +1,7 @@
 package com.service;
 
 import com.model.product.TV;
-import com.repository.JDBC.TVRepositoryDB;
-import com.repository.hibernate.TVRepositoryDBHibernate;
+import com.repository.mongoDB.TVRepositoryDBMongo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ class ProductContainerTest {
 
     @BeforeEach
     void setUp() {
-        TVRepositoryDBHibernate repository = Mockito.mock(TVRepositoryDBHibernate.class);
+        TVRepositoryDBMongo repository = Mockito.mock(TVRepositoryDBMongo.class);
         target = TVService.getInstance(repository);
     }
 

@@ -22,12 +22,11 @@ public class TV extends Product {
     private Manufacturer manufacturer;
     private int diagonal;
     @Transient
-    private List<String> details;
-    @Transient
+    private transient List<String> details;
     private String currency;
     private LocalDateTime created;
     @Transient
-    private OperatingSystem operatingSystem;
+    private transient OperatingSystem operatingSystem;
 
     public TV(String title, int count, double price, String model,
               Manufacturer manufacturer, int diagonal) {

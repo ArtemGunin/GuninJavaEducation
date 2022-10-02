@@ -2,8 +2,7 @@ package com.service;
 
 import com.model.product.Manufacturer;
 import com.model.product.Phone;
-import com.repository.JDBC.PhoneRepositoryDB;
-import com.repository.hibernate.PhoneRepositoryDBHibernate;
+import com.repository.mongoDB.PhoneRepositoryDBMongo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,11 +14,11 @@ import java.util.Optional;
 class PhoneServiceTest {
 
     private static PhoneService target;
-    private static PhoneRepositoryDBHibernate repository;
+    private static PhoneRepositoryDBMongo repository;
 
     @BeforeAll
     static void beforeAll() {
-        repository = Mockito.mock(PhoneRepositoryDBHibernate.class);
+        repository = Mockito.mock(PhoneRepositoryDBMongo.class);
         target = PhoneService.getInstance(repository);
     }
 
