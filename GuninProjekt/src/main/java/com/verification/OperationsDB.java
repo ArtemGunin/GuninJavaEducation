@@ -2,9 +2,9 @@ package com.verification;
 
 import com.model.Invoice;
 import com.model.product.Product;
-import com.repository.hibernate.PhoneRepositoryDBHibernate;
-import com.repository.hibernate.TVRepositoryDBHibernate;
-import com.repository.hibernate.ToasterRepositoryDBHibernate;
+import com.repository.mongoDB.PhoneRepositoryDBMongo;
+import com.repository.mongoDB.TVRepositoryDBMongo;
+import com.repository.mongoDB.ToasterRepositoryDBMongo;
 import com.service.InvoiceServiceDB;
 import com.service.PhoneService;
 import com.service.TVService;
@@ -19,9 +19,9 @@ public class OperationsDB {
     private static final PhoneService PHONE_SERVICE = PhoneService.getInstance();
     private static final ToasterService TOASTER_SERVICE = ToasterService.getInstance();
     private static final TVService TV_SERVICE = TVService.getInstance();
-    private static final PhoneRepositoryDBHibernate PHONE_REPOSITORY_DB = PhoneRepositoryDBHibernate.getInstance();
-    private static final ToasterRepositoryDBHibernate TOASTER_REPOSITORY_DB = ToasterRepositoryDBHibernate.getInstance();
-    private static final TVRepositoryDBHibernate TV_REPOSITORY_DB = TVRepositoryDBHibernate.getInstance();
+    private static final PhoneRepositoryDBMongo PHONE_REPOSITORY_DB = PhoneRepositoryDBMongo.getInstance();
+    private static final ToasterRepositoryDBMongo TOASTER_REPOSITORY_DB = ToasterRepositoryDBMongo.getInstance();
+    private static final TVRepositoryDBMongo TV_REPOSITORY_DB = TVRepositoryDBMongo.getInstance();
     private static final Random RANDOM = new Random();
 
     public void run() {
@@ -29,13 +29,10 @@ public class OperationsDB {
         System.out.println("Invoices List:\n" + INVOICE_SERVICE_DB.getAllInvoices().toString());
         Invoice invoiceToTimeUpdate = INVOICE_SERVICE_DB.getInvoiceByIndex(1);
         System.out.println("\nTime of invoice before updating: " + invoiceToTimeUpdate.getTime());
-        System.out.println("Time updated - "
-                + INVOICE_SERVICE_DB.updateTime(invoiceToTimeUpdate.getId(), LocalDateTime.now()));
-        System.out.println("Time of invoice after updating: "
-                + INVOICE_SERVICE_DB.getInvoiceById(invoiceToTimeUpdate.getId()).getTime());
+        System.out.println("Time updated - " + INVOICE_SERVICE_DB.updateTime(invoiceToTimeUpdate.getId(), LocalDateTime.now()));
+        System.out.println("Time of invoice after updating: " + INVOICE_SERVICE_DB.getInvoiceById(invoiceToTimeUpdate.getId()).getTime());
         System.out.println("\n\nInvoices with sum, more then 3500: ");
-        INVOICE_SERVICE_DB.getInvoicesWithSumMoreThen(3500.0)
-                .forEach(invoice -> System.out.println("Id: " + invoice.getId() + "\nSum: " + invoice.getSum()));
+        INVOICE_SERVICE_DB.getInvoicesWithSumMoreThen(3500.0).forEach(invoice -> System.out.println("Id: " + invoice.getId() + "\nSum: " + invoice.getSum()));
         System.out.println("\nCount of invoices = " + INVOICE_SERVICE_DB.getCountOfInvoices());
         System.out.println("\nInvoice groups by sum: ");
         Map<Double, List<Invoice>> groupingInvoices = INVOICE_SERVICE_DB.groupInvoicesBySum();

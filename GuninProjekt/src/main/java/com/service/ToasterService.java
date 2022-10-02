@@ -5,7 +5,7 @@ import com.context.Singleton;
 import com.model.product.Body;
 import com.model.product.Manufacturer;
 import com.model.product.Toaster;
-import com.repository.hibernate.ToasterRepositoryDBHibernate;
+import com.repository.mongoDB.ToasterRepositoryDBMongo;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -17,24 +17,24 @@ import java.util.function.Function;
 @Singleton
 public class ToasterService extends ProductService<Toaster> {
 
-    private final ToasterRepositoryDBHibernate repository;
+    private final ToasterRepositoryDBMongo repository;
 
     private static ToasterService instance;
 
     @Autowired
-    private ToasterService(final ToasterRepositoryDBHibernate repository) {
+    private ToasterService(final ToasterRepositoryDBMongo repository) {
         super(repository);
         this.repository = repository;
     }
 
     public static ToasterService getInstance() {
         if (instance == null) {
-            instance = new ToasterService(ToasterRepositoryDBHibernate.getInstance());
+            instance = new ToasterService(ToasterRepositoryDBMongo.getInstance());
         }
         return instance;
     }
 
-    public static ToasterService getInstance(final ToasterRepositoryDBHibernate repository) {
+    public static ToasterService getInstance(final ToasterRepositoryDBMongo repository) {
         if (instance == null) {
             instance = new ToasterService(repository);
         }

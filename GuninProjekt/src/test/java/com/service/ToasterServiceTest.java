@@ -2,8 +2,7 @@ package com.service;
 
 import com.model.product.Manufacturer;
 import com.model.product.Toaster;
-import com.repository.JDBC.ToasterRepositoryDB;
-import com.repository.hibernate.ToasterRepositoryDBHibernate;
+import com.repository.mongoDB.ToasterRepositoryDBMongo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,11 +14,11 @@ import java.util.Optional;
 class ToasterServiceTest {
 
     private static ToasterService target;
-    private static ToasterRepositoryDBHibernate repository;
+    private static ToasterRepositoryDBMongo repository;
 
     @BeforeAll
     static void beforeAll() {
-        repository = Mockito.mock(ToasterRepositoryDBHibernate.class);
+        repository = Mockito.mock(ToasterRepositoryDBMongo.class);
         target = ToasterService.getInstance(repository);
     }
 

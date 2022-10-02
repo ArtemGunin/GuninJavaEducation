@@ -1,25 +1,17 @@
 package com;
 
-import com.config.FlywayConfig;
-import com.config.HibernateFactoryUtils;
-import lombok.SneakyThrows;
-import org.flywaydb.core.Flyway;
+import com.verification.OperationsDB;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class Main {
+    protected static final Random RANDOM = new Random();
 
     @SneakyThrows
     public static void main(String[] args) throws IOException {
 
-        Class.forName("org.postgresql.Driver");
+        new OperationsDB().run();
 
-        Flyway flyway = FlywayConfig.getFlywayConfig();
-
-        flyway.clean();
-
-        HibernateFactoryUtils.getSessionFactory();
-
-        flyway.migrate();
     }
 }

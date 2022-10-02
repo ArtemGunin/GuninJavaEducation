@@ -28,7 +28,7 @@ public abstract class Product {
     protected double price;
     protected ProductType type;
     @Transient
-    protected List<String> details;
+    protected transient List<String> details;
     @ManyToOne
     @JoinColumn(name = "invoice_id")
     protected Invoice invoice;
