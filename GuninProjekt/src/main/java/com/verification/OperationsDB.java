@@ -69,6 +69,4 @@ public class OperationsDB {
         createProducts();
         createProductLists().forEach(INVOICE_SERVICE_DB::createAndSaveInvoice);
     }
-
-
 }

@@ -9,6 +9,7 @@ import com.repository.mongoDB.InvoiceRepositoryDBMongo;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Singleton
 public class InvoiceServiceDB {
@@ -52,7 +53,7 @@ public class InvoiceServiceDB {
     }
 
     public List<Invoice> getInvoicesWithSumMoreThen(double lowerBound) {
-        return invoiceRepositoryDBHibernate.getInvoiceListWithSumConditions(lowerBound);
+        return invoiceRepositoryDB.getInvoiceListWithSumConditions(lowerBound);
     }
 
     public long getCountOfInvoices() {
@@ -60,7 +61,7 @@ public class InvoiceServiceDB {
     }
 
     public boolean updateTime(String id, LocalDateTime localDateTime) {
-        return invoiceRepositoryDBHibernate.updateTime(id, localDateTime);
+        return invoiceRepositoryDB.updateTime(id, localDateTime);
     }
 
     public Map<Double, List<Invoice>> groupInvoicesBySum() {
@@ -68,14 +69,14 @@ public class InvoiceServiceDB {
     }
 
     public List<Invoice> getAllInvoices() {
-        return invoiceRepositoryDBHibernate.getAll();
+        return invoiceRepositoryDB.getAll();
     }
 
     public Invoice getInvoiceByIndex(int index) {
-        return invoiceRepositoryDBHibernate.getByIndex(index).orElseThrow();
+        return invoiceRepositoryDB.getByIndex(index).orElseThrow();
     }
 
     public Invoice getInvoiceById(String id) {
-        return invoiceRepositoryDBHibernate.getById(id).orElseThrow();
+        return invoiceRepositoryDB.getById(id).orElseThrow();
     }
 }
